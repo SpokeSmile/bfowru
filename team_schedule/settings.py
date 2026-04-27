@@ -98,7 +98,11 @@ WSGI_APPLICATION = 'team_schedule.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-database_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
+database_url = (
+    os.environ.get('DATABASE_URL')
+    or os.environ.get('POSTGRES_URL_NON_POOLING')
+    or os.environ.get('POSTGRES_URL')
+)
 
 if database_url:
     DATABASES = {
