@@ -117,7 +117,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = '/home/owruteam/WEB_Scheduler_BLACKFLOCK/static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     ('design_assets', BASE_DIR / 'design_assets'),
