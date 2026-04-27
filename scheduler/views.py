@@ -1,0 +1,116 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
+from .forms import ScheduleSlotForm
+from .models import Player, ScheduleSlot
+
+
+def get_current_player(user):
+    return Player.objects.filter(user=user).first()
+
+
+@login_required
+def schedule_view(request):
+    players = Player.objects.prefetch_related('slots')
+    current_player = get_current_player(request.user)
+    days = [{'value': value, 'label': label} for value, label in ScheduleSlot.DAY_CHOICES]
+    grid = []
+
+    for player in players:
+        cells = []
+        player_slots = list(player.slots.all())
+
+        for day in days:
+            day_slots = [
+                slot for slot in player_slots
+                if slot.day_of_week == day['value']
+            ]
+            unavailable_slots = [slot for slot in day_slots if slot.is_unavailable]
+
+            cells.append({
+                'day': day,
+                'slots': [slot for slot in day_slots if slot.is_available],
+                'unavailable_slots': unavailable_slots,
+                'is_unavailable': bool(unavailable_slots),
+            })
+
+        grid.append({
+            'player': player,
+            'cells': cells,
+            'can_edit': current_player == player,
+        })
+
+    return render(request, 'scheduler/schedule.html', {
+        'current_player': current_player,
+        'days': days,
+        'grid': grid,
+    })
+
+
+@login_required
+def slot_create(request):
+    current_player = get_current_player(request.user)
+
+    if current_player is None:
+        messages.error(request, 'Ваш аккаунт не привязан к игроку. Обратитесь к администратору.')
+        return redirect('schedule')
+
+    initial = {}
+    if request.GET.get('day') in {str(value) for value, _ in ScheduleSlot.DAY_CHOICES}:
+        initial['day_of_week'] = int(request.GET['day'])
+
+    form = ScheduleSlotForm(request.POST or None, initial=initial)
+
+    if request.method == 'POST' and form.is_valid():
+        slot = form.save(commit=False)
+        slot.player = current_player
+        slot.full_clean()
+        slot.save()
+        messages.success(request, 'Запись добавлена в расписание.')
+        return redirect('schedule')
+
+    return render(request, 'scheduler/slot_form.html', {
+        'form': form,
+        'title': 'Добавить время',
+        'submit_label': 'Добавить',
+    })
+
+
+@login_required
+def slot_edit(request, pk):
+    current_player = get_current_player(request.user)
+    slot = get_object_or_404(ScheduleSlot, pk=pk, player=current_player)
+    form = ScheduleSlotForm(request.POST or None, instance=slot)
+
+    if request.method == 'POST' and form.is_valid():
+        slot = form.save(commit=False)
+        slot.player = current_player
+        slot.full_clean()
+        slot.save()
+        messages.success(request, 'Запись обновлена.')
+        return redirect('schedule')
+
+    return render(request, 'scheduler/slot_form.html', {
+        'form': form,
+        'title': 'Редактировать время',
+        'submit_label': 'Сохранить',
+    })
+
+
+@login_required
+def slot_delete(request, pk):
+    current_player = get_current_player(request.user)
+    slot = get_object_or_404(ScheduleSlot, pk=pk, player=current_player)
+
+    if request.method == 'POST':
+        slot.delete()
+        messages.success(request, 'Запись удалена.')
+        return redirect('schedule')
+
+    return render(request, 'scheduler/slot_confirm_delete.html', {'slot': slot})
+
+
+def next_url_or_schedule(request):
+    return request.POST.get('next') or request.GET.get('next') or reverse('schedule')

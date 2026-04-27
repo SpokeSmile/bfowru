@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Black Flock{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'schedule' %}">
+                <span class="brand-mark"></span>
+                <span>Black Flock</span>
+            </a>
+
+            <div class="clock-strip" aria-label="Мировое время">
+                <div class="clock-pill">
+                    <span>UTC</span>
+                    <strong data-clock="utc">--:--</strong>
+                </div>
+                <div class="clock-pill">
+                    <span>GMT+3</span>
+                    <strong data-clock="gmt3">--:--</strong>
+                </div>
+                <div class="clock-pill">
+                    <span>CEST</span>
+                    <strong data-clock="cest">--:--</strong>
+                </div>
+            </div>
+
+            <nav class="topbar-actions">
+                {% if user.is_authenticated %}
+                    <span class="user-chip">{{ user.username }}</span>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button class="button button-ghost" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a class="button button-primary" href="{% url 'login' %}">Войти</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message message-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script src="{% static 'js/clocks.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

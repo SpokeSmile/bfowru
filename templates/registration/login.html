@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход - Black Flock{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-panel animated-border">
+        <div class="section-kicker">Командный доступ</div>
+        <h1>Вход в Black Flock</h1>
+
+        {% if form.errors %}
+            <div class="form-alert">Логин или пароль указаны неверно.</div>
+        {% endif %}
+
+        <form class="form-stack" method="post">
+            {% csrf_token %}
+            <label>
+                Логин
+                {{ form.username }}
+            </label>
+            <label>
+                Пароль
+                {{ form.password }}
+            </label>
+            <button class="button button-primary button-wide" type="submit">Войти</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

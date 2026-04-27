@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Неделя команды{% endblock %}
+
+{% block content %}
+<section class="hero-strip animated-border">
+    <div class="hero-copy">
+        <div class="section-kicker">Black Flock squad</div>
+        <h1>Weekly roster</h1>
+    </div>
+
+    {% if current_player %}
+        <a class="button button-primary" href="{% url 'slot_create' %}">Добавить время</a>
+    {% else %}
+        <span class="status-pill">Аккаунт не привязан к игроку</span>
+    {% endif %}
+</section>
+
+<section class="roster-board">
+    {% for row in grid %}
+        <article class="roster-row animated-border">
+            <aside class="player-card">
+                {% if row.player.avatar %}
+                    <img class="player-avatar" src="{{ row.player.avatar.url }}" alt="{{ row.player.name }}">
+                {% else %}
+                    <div class="player-avatar avatar-fallback">{{ row.player.initial }}</div>
+                {% endif %}
+
+                <div class="player-meta">
+                    <h2>{{ row.player.name }}</h2>
+                    {% if row.can_edit %}
+                        <span class="status-dot">Вы</span>
+                    {% else %}
+                        <span class="status-dot muted">Squad</span>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <div class="days-grid">
+                {% for cell in row.cells %}
+                    <section class="day-panel{% if cell.is_unavailable %} is-unavailable{% endif %}">
+                        <div class="day-panel-head">
+                            <span>{{ cell.day.label }}</span>
+                            {% if cell.is_unavailable %}
+                                <span class="unavailable-badge">Не могу</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="slot-stack">
+                            {% for slot in cell.unavailable_slots %}
+                                <article class="slot-card unavailable-card">
+                                    <div class="slot-time">{{ slot.label }}</div>
+                                    {% if slot.note %}
+                                        <p>{{ slot.note }}</p>
+                                    {% endif %}
+
+                                    {% if row.can_edit %}
+                                        <div class="slot-actions">
+                                            <a href="{% url 'slot_edit' slot.pk %}">Изменить</a>
+                                            <a class="danger-link" href="{% url 'slot_delete' slot.pk %}">Удалить</a>
+                                        </div>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+
+                            {% for slot in cell.slots %}
+                                <article class="slot-card">
+                                    <div class="slot-time">{{ slot.start_label }} - {{ slot.end_label }}</div>
+                                    {% if slot.note %}
+                                        <p>{{ slot.note }}</p>
+                                    {% endif %}
+
+                                    {% if row.can_edit %}
+                                        <div class="slot-actions">
+                                            <a href="{% url 'slot_edit' slot.pk %}">Изменить</a>
+                                            <a class="danger-link" href="{% url 'slot_delete' slot.pk %}">Удалить</a>
+                                        </div>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+
+                            {% if not cell.slots and not cell.unavailable_slots %}
+                                <div class="empty-slot">Свободно</div>
+                            {% endif %}
+                        </div>
+
+                        {% if row.can_edit %}
+                            <a class="mini-add" href="{% url 'slot_create' %}?day={{ cell.day.value }}">+ запись</a>
+                        {% endif %}
+                    </section>
+                {% endfor %}
+            </div>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}
