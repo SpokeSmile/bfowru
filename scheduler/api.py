@@ -77,9 +77,9 @@ def event_meta_for_day(day_of_week, day_event_map):
     if not day_event or not day_event.event_type:
         return {
             'eventType': '',
-            'eventLabel': 'Событие',
+            'eventLabel': 'Availability',
             'eventDescription': '',
-            'eventTone': 'orange',
+            'eventTone': 'fallback',
         }
 
     return {

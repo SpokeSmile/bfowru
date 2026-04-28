@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import DayEventType, ScheduleSlot
+from .models import ScheduleSlot
 
 
 def build_time_choices(start_hour, end_hour):
@@ -51,7 +51,6 @@ class ScheduleSlotForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         slot_type = cleaned_data.get('slot_type')
-        day_of_week = cleaned_data.get('day_of_week')
         start_time = cleaned_data.get('start_time_minutes')
         end_time = cleaned_data.get('end_time_minutes')
 
@@ -59,14 +58,6 @@ class ScheduleSlotForm(forms.ModelForm):
             cleaned_data['start_time_minutes'] = None
             cleaned_data['end_time_minutes'] = None
             return cleaned_data
-
-        if (
-            day_of_week is not None
-            and not DayEventType.objects.filter(day_of_week=day_of_week)
-            .exclude(event_type='')
-            .exists()
-        ):
-            self.add_error('day_of_week', 'Администратор должен настроить этот день перед добавлением времени.')
 
         if start_time is None:
             self.add_error('start_time_minutes', 'Выберите время начала.')

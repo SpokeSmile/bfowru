@@ -71,6 +71,13 @@ const EVENT_STYLES = {
   },
 };
 
+const AVAILABLE_CARD_STYLE = {
+  border: 'border-bf-cream/12',
+  bg: 'bg-bf-steel/10',
+  text: 'text-bf-cream/82',
+  glow: 'shadow-[0_0_10px_rgba(75,96,127,0.07)]',
+};
+
 function formatClock(timeZone) {
   return new Intl.DateTimeFormat('ru-RU', {
     hour: '2-digit',
@@ -180,7 +187,7 @@ function HeroBanner({ canAdd, onAdd }) {
     <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-[22px] border-bf-orange/45 px-6 py-6 lg:px-8">
       <div className="relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div className="grid gap-3 lg:max-w-[440px]">
-          <div className="text-sm font-black uppercase text-bf-orange">Black Flock squad</div>
+          <div className="text-sm font-black uppercase text-bf-orange">Black Flock team</div>
           <h1 className="text-5xl font-black uppercase leading-none text-slate-100 max-md:text-4xl">
             Weekly roster
           </h1>
@@ -238,9 +245,9 @@ function PlayerRow({ player }) {
 }
 
 function EventCard({ event, onEdit }) {
-  const style =
-    EVENT_STYLES[event.slotType === 'unavailable' ? 'unavailable' : event.eventType] || EVENT_STYLES.fallback;
-  const Icon = style.icon;
+  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
+  const style = event.slotType === 'unavailable' ? EVENT_STYLES.unavailable : AVAILABLE_CARD_STYLE;
+  const Icon = event.slotType === 'unavailable' ? EVENT_STYLES.unavailable.icon : eventStyle.icon;
   const isUnavailable = event.slotType === 'unavailable';
 
   return (
@@ -293,11 +300,11 @@ function Legend({ eventTypes }) {
         const Icon = style.icon;
         return (
           <div key={eventType.value} className="flex items-center gap-3 border-r border-bf-cream/10 pr-3 last:border-r-0 last:pr-0 max-sm:border-r-0 max-sm:pr-0">
-            <div className={`grid h-9 w-9 place-items-center rounded-lg border ${style.border} ${style.bg}`}>
-              <Icon className={style.text} size={17} />
+            <div className={`grid h-9 w-9 place-items-center rounded-lg border ${AVAILABLE_CARD_STYLE.border} ${AVAILABLE_CARD_STYLE.bg}`}>
+              <Icon className={AVAILABLE_CARD_STYLE.text} size={17} />
             </div>
             <div>
-              <div className={`text-xs font-black ${style.text}`}>{eventType.label}</div>
+              <div className="text-xs font-black text-slate-100">{eventType.label}</div>
               <div className="text-[11px] text-bf-cream/52">{eventType.description}</div>
             </div>
           </div>
@@ -369,7 +376,7 @@ function RosterTable({
                     title={hasDayType ? 'Тип события задан админом для всего дня' : 'Админ не выбрал тип события для этого дня'}
                   >
                     {hasDayType ? <Icon size={12} /> : <Clock3 size={12} />}
-                    <span className="truncate">{hasDayType ? dayEvent.eventLabel : 'Без типа'}</span>
+                    <span className="truncate">{hasDayType ? dayEvent.eventLabel : 'No type'}</span>
                   </div>
                 </div>
               </div>

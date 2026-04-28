@@ -55,30 +55,30 @@ class ScheduleSlot(models.Model):
     ]
 
     EVENT_TYPE_CHOICES = [
-        (TOURNAMENT, 'Турнир'),
-        (SCRIM, 'Скрим'),
-        (COMPETITIVE, 'Компетитив'),
-        (REVIEW, 'Разбор игр'),
+        (TOURNAMENT, 'Tournament'),
+        (SCRIM, 'Scrim'),
+        (COMPETITIVE, 'Competitive'),
+        (REVIEW, 'VOD Review'),
     ]
 
     EVENT_TYPE_META = {
         SCRIM: {
-            'label': 'Скрим',
+            'label': 'Scrim',
             'description': 'Тренировочный матч',
             'tone': 'blue',
         },
         COMPETITIVE: {
-            'label': 'Компетитив',
+            'label': 'Competitive',
             'description': 'Соревновательная игра',
             'tone': 'orange',
         },
         REVIEW: {
-            'label': 'Разбор игр',
+            'label': 'VOD Review',
             'description': 'Разбор сыгранных карт и матчей',
             'tone': 'purple',
         },
         TOURNAMENT: {
-            'label': 'Турнир',
+            'label': 'Tournament',
             'description': 'Официальные турнирные матчи',
             'tone': 'red',
         },

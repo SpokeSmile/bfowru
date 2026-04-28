@@ -38,7 +38,7 @@ class ScheduleFormTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('end_time_minutes', form.errors)
 
-    def test_rejects_available_without_day_event_type(self):
+    def test_allows_available_without_day_event_type(self):
         form = ScheduleSlotForm(data={
             'slot_type': ScheduleSlot.AVAILABLE,
             'day_of_week': ScheduleSlot.TUESDAY,
@@ -47,8 +47,7 @@ class ScheduleFormTests(TestCase):
             'note': '',
         })
 
-        self.assertFalse(form.is_valid())
-        self.assertIn('day_of_week', form.errors)
+        self.assertTrue(form.is_valid(), form.errors)
 
     def test_allows_unavailable_without_time(self):
         form = ScheduleSlotForm(data={
@@ -238,9 +237,9 @@ class ScheduleApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         slot = ScheduleSlot.objects.get(player=self.player_one, day_of_week=ScheduleSlot.SATURDAY)
         self.assertEqual(response.json()['slot']['eventType'], ScheduleSlot.TOURNAMENT)
-        self.assertEqual(response.json()['slot']['eventLabel'], 'Турнир')
+        self.assertEqual(response.json()['slot']['eventLabel'], 'Tournament')
 
-    def test_api_rejects_available_without_day_event_type(self):
+    def test_api_allows_available_without_day_event_type(self):
         self.client.login(username='player1', password='secret-pass')
         response = self.post_json('api_slot_create', {
             'slotType': ScheduleSlot.AVAILABLE,
@@ -250,8 +249,8 @@ class ScheduleApiTests(TestCase):
             'note': '',
         })
 
-        self.assertEqual(response.status_code, 400)
-        self.assertIn('day_of_week', response.json()['errors'])
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['slot']['eventLabel'], 'Availability')
 
     def test_api_creates_unavailable_day(self):
         self.client.login(username='player1', password='secret-pass')
