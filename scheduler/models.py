@@ -8,6 +8,11 @@ class Player(models.Model):
     name = models.CharField('имя игрока', max_length=80)
     role = models.CharField('роль', max_length=80, blank=True)
     avatar = models.FileField('аватар', upload_to='avatars/', blank=True)
+    avatar_link = models.URLField(
+        'ссылка на аватар',
+        blank=True,
+        help_text='Для продакшена на Vercel используйте прямую ссылку на изображение.',
+    )
     battle_tags = models.TextField(
         'battle tags',
         blank=True,
@@ -38,6 +43,14 @@ class Player(models.Model):
     @property
     def battle_tags_list(self):
         return [tag.strip() for tag in self.battle_tags.splitlines() if tag.strip()]
+
+    @property
+    def resolved_avatar_url(self):
+        if self.avatar_link:
+            return self.avatar_link
+        if self.avatar:
+            return self.avatar.url
+        return ''
 
 
 class ScheduleSlot(models.Model):

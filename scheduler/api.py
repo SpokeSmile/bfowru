@@ -43,9 +43,7 @@ def build_days():
 
 
 def avatar_url(player):
-    if player.avatar:
-        return player.avatar.url
-    return ''
+    return player.resolved_avatar_url
 
 
 def serialize_player(player, current_player):
