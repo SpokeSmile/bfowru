@@ -130,6 +130,38 @@ function buildDayEventMap(dayEventTypes = []) {
   return map;
 }
 
+function hexToRgba(hexColor, alpha) {
+  if (!hexColor || !/^#[0-9A-Fa-f]{6}$/.test(hexColor)) {
+    return `rgba(232, 216, 201, ${alpha})`;
+  }
+
+  const red = Number.parseInt(hexColor.slice(1, 3), 16);
+  const green = Number.parseInt(hexColor.slice(3, 5), 16);
+  const blue = Number.parseInt(hexColor.slice(5, 7), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function roleBadgeStyle(color) {
+  return {
+    borderColor: hexToRgba(color, 0.35),
+    backgroundColor: hexToRgba(color, 0.12),
+    color,
+  };
+}
+
+function RoleBadge({ role, color, className = '' }) {
+  if (!role) return null;
+
+  return (
+    <span
+      className={`rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`}
+      style={roleBadgeStyle(color)}
+    >
+      {role}
+    </span>
+  );
+}
+
 function Header({ user }) {
   const clocks = useClocks();
 
@@ -228,11 +260,7 @@ function PlayerRow({ player }) {
       <div className="min-w-0">
         <div className="truncate text-sm font-black text-slate-100">{player.name}</div>
         <div className="mt-1 flex flex-wrap gap-1.5">
-          {player.role ? (
-            <span className="max-w-28 truncate rounded-full border border-bf-cream/10 bg-bf-steel/20 px-2 py-0.5 text-[11px] font-bold text-bf-cream/62">
-              {player.role}
-            </span>
-          ) : null}
+          <RoleBadge role={player.role} color={player.roleColor} className="max-w-28 truncate" />
           {player.canEdit ? (
             <span className="rounded-full border border-bf-orange/30 bg-bf-orange/10 px-2 py-0.5 text-xs font-bold text-bf-orange">
               Вы
@@ -294,23 +322,29 @@ function EventCard({ event, onEdit }) {
 
 function Legend({ eventTypes }) {
   return (
-    <div className="mt-4 grid grid-cols-4 gap-3 border-t border-bf-cream/10 pt-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+    <section className="glass-panel mt-4 rounded-[20px] p-4">
+      <div className="mb-4">
+        <div className="text-sm font-black uppercase text-bf-orange">Event legend</div>
+        <h2 className="mt-1 text-xl font-black uppercase text-slate-100">Цвета событий недели</h2>
+      </div>
+      <div className="grid grid-cols-4 gap-3 border-t border-bf-cream/10 pt-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
       {eventTypes.map((eventType) => {
         const style = EVENT_STYLES[eventType.value] || EVENT_STYLES.fallback;
         const Icon = style.icon;
         return (
           <div key={eventType.value} className="flex items-center gap-3 border-r border-bf-cream/10 pr-3 last:border-r-0 last:pr-0 max-sm:border-r-0 max-sm:pr-0">
-            <div className={`grid h-9 w-9 place-items-center rounded-lg border ${AVAILABLE_CARD_STYLE.border} ${AVAILABLE_CARD_STYLE.bg}`}>
-              <Icon className={AVAILABLE_CARD_STYLE.text} size={17} />
+            <div className={`grid h-9 w-9 place-items-center rounded-lg border ${style.border} ${style.bg}`}>
+              <Icon className={style.text} size={17} />
             </div>
             <div>
-              <div className="text-xs font-black text-slate-100">{eventType.label}</div>
+              <div className={`text-xs font-black ${style.text}`}>{eventType.label}</div>
               <div className="text-[11px] text-bf-cream/52">{eventType.description}</div>
             </div>
           </div>
         );
       })}
-    </div>
+      </div>
+    </section>
   );
 }
 
@@ -318,7 +352,6 @@ function RosterTable({
   days,
   players,
   slots,
-  eventTypes,
   dayEventTypes,
   onAdd,
   onEdit,
@@ -433,11 +466,52 @@ function RosterTable({
         </div>
       </div>
 
-      <Legend eventTypes={eventTypes} />
-
       <footer className="mt-4 flex justify-end gap-4 border-t border-bf-cream/10 pt-4 text-sm text-bf-cream/48">
         <span>Дата последнего обновления: {lastUpdated}</span>
       </footer>
+    </section>
+  );
+}
+
+function StaffDirectory({ staffMembers }) {
+  return (
+    <section className="glass-panel mt-4 rounded-[20px] p-4">
+      <div className="mb-4 flex items-center justify-between gap-4 max-md:flex-col max-md:items-stretch">
+        <div>
+          <div className="text-sm font-black uppercase text-bf-orange">Operations</div>
+          <h2 className="mt-1 text-xl font-black uppercase text-slate-100">Организаторский состав</h2>
+        </div>
+        <div className="text-sm text-bf-cream/56">Участники этого блока не попадают в недельное расписание и отображаются как контактный состав команды.</div>
+      </div>
+
+      {staffMembers.length ? (
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          {staffMembers.map((staffMember) => (
+            <article key={staffMember.id} className="rounded-[18px] border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
+              <div className="flex items-start gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-full border border-bf-cream/15 bg-gradient-to-br from-bf-orange/70 to-bf-steel/70 text-base font-black text-bf-cream">
+                  {staffMember.initial}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-base font-black text-slate-100">{staffMember.name}</div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    <RoleBadge role={staffMember.role} color={staffMember.roleColor} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-bf-cream/10 bg-black/28 px-4 py-3">
+                <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/44">Discord</div>
+                <div className="mt-2 text-sm font-semibold text-slate-100">{staffMember.discordTag || 'Не указано'}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-[18px] border border-dashed border-bf-cream/12 bg-black/20 px-4 py-6 text-sm text-bf-cream/46">
+          Организаторский состав пока не заполнен в админке.
+        </div>
+      )}
     </section>
   );
 }
@@ -472,11 +546,7 @@ function PlayerProfiles({ players, onEdit }) {
                 <div className="min-w-0">
                   <div className="truncate text-base font-black text-slate-100">{player.name}</div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
-                    {player.role ? (
-                      <span className="rounded-full border border-bf-cream/10 bg-bf-steel/20 px-2 py-0.5 text-[11px] font-bold text-bf-cream/62">
-                        {player.role}
-                      </span>
-                    ) : null}
+                    <RoleBadge role={player.role} color={player.roleColor} />
                     {player.canEdit ? (
                       <span className="rounded-full border border-bf-orange/30 bg-bf-orange/10 px-2 py-0.5 text-[11px] font-bold text-bf-orange">
                         Ваш профиль
@@ -915,12 +985,13 @@ export default function App() {
         days={data.days}
         players={data.players}
         slots={data.slots}
-        eventTypes={data.eventTypes}
         dayEventTypes={data.dayEventTypes}
         onAdd={(day) => setSlotModal({ day })}
         onEdit={(event) => setSlotModal({ event })}
         lastUpdated={data.lastUpdated}
       />
+      <StaffDirectory staffMembers={data.staffMembers} />
+      <Legend eventTypes={data.eventTypes} />
       <PlayerProfiles players={data.players} onEdit={setProfileModalPlayer} />
       {slotModal ? (
         <EventModal

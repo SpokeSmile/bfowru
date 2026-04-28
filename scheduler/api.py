@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from .forms import ScheduleSlotForm
-from .models import DayEventType, Player, ScheduleSlot
+from .models import DayEventType, Player, ScheduleSlot, StaffMember
 from .views import get_current_player
 
 
@@ -51,12 +51,24 @@ def serialize_player(player, current_player):
         'id': player.id,
         'name': player.name,
         'role': player.role,
+        'roleColor': player.role_color,
         'initial': player.initial,
         'avatarUrl': avatar_url(player),
         'battleTags': player.battle_tags_list,
         'battleTagsText': '\n'.join(player.battle_tags_list),
         'discordTag': player.discord_tag,
         'canEdit': current_player == player,
+    }
+
+
+def serialize_staff_member(staff_member):
+    return {
+        'id': staff_member.id,
+        'name': staff_member.name,
+        'role': staff_member.role,
+        'roleColor': staff_member.role_color,
+        'initial': staff_member.initial,
+        'discordTag': staff_member.discord_tag,
     }
 
 
@@ -154,6 +166,7 @@ def form_errors_payload(form):
 def bootstrap(request):
     current_player = get_current_player(request.user)
     players = list(Player.objects.prefetch_related('slots'))
+    staff_members = list(StaffMember.objects.all())
     slots = ScheduleSlot.objects.select_related('player').all()
     day_events = list(DayEventType.objects.all())
     day_event_map = {day_event.day_of_week: day_event for day_event in day_events}
@@ -168,6 +181,7 @@ def bootstrap(request):
         },
         'days': build_days(),
         'players': [serialize_player(player, current_player) for player in players],
+        'staffMembers': [serialize_staff_member(staff_member) for staff_member in staff_members],
         'slots': [serialize_slot(slot, current_player, day_event_map) for slot in slots],
         'dayEventTypes': [serialize_day_event(day_event) for day_event in day_events],
         'eventTypes': ScheduleSlot.event_types_payload(),

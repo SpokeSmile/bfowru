@@ -3,13 +3,28 @@ import mimetypes
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q
+
+HEX_COLOR_VALIDATOR = RegexValidator(
+    regex=r'^#[0-9A-Fa-f]{6}$',
+    message='Укажите цвет в формате #RRGGBB.',
+)
+
+DEFAULT_ROLE_COLOR = '#4b607f'
 
 
 class Player(models.Model):
     name = models.CharField('имя игрока', max_length=80)
     role = models.CharField('роль', max_length=80, blank=True)
+    role_color = models.CharField(
+        'цвет роли',
+        max_length=7,
+        default=DEFAULT_ROLE_COLOR,
+        validators=[HEX_COLOR_VALIDATOR],
+    )
+    sort_order = models.PositiveSmallIntegerField('порядок в таблице', default=0)
     avatar = models.FileField('аватар', upload_to='avatars/', blank=True)
     avatar_link = models.URLField(
         'ссылка на аватар',
@@ -39,7 +54,7 @@ class Player(models.Model):
     )
 
     class Meta:
-        ordering = ['id']
+        ordering = ['sort_order', 'id']
         verbose_name = 'игрок'
         verbose_name_plural = 'игроки'
 
@@ -78,6 +93,31 @@ class Player(models.Model):
         if self.avatar:
             return self.avatar.url
         return ''
+
+
+class StaffMember(models.Model):
+    name = models.CharField('имя', max_length=80)
+    role = models.CharField('роль', max_length=80)
+    role_color = models.CharField(
+        'цвет роли',
+        max_length=7,
+        default=DEFAULT_ROLE_COLOR,
+        validators=[HEX_COLOR_VALIDATOR],
+    )
+    discord_tag = models.CharField('discord тег', max_length=120, blank=True)
+    sort_order = models.PositiveSmallIntegerField('порядок в списке', default=0)
+
+    class Meta:
+        ordering = ['sort_order', 'id']
+        verbose_name = 'организаторский состав'
+        verbose_name_plural = 'организаторский состав'
+
+    def __str__(self):
+        return f'{self.name} — {self.role}'
+
+    @property
+    def initial(self):
+        return (self.name.strip()[:1] or '?').upper()
 
 
 class ScheduleSlot(models.Model):

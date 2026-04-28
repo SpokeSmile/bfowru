@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from .admin import PlayerAdminForm
 from .forms import ScheduleSlotForm
-from .models import DayEventType, Player, ScheduleSlot
+from .models import DayEventType, Player, ScheduleSlot, StaffMember
 
 
 class ScheduleFormTests(TestCase):
@@ -209,7 +209,15 @@ class ScheduleApiTests(TestCase):
         )
         self.player_one.battle_tags = 'BlackFlock#1111\nAltBird#2222'
         self.player_one.discord_tag = 'blackflock_main'
+        self.player_one.role_color = '#123456'
         self.player_one.save()
+        StaffMember.objects.create(
+            name='Coach Raven',
+            role='Coach',
+            role_color='#f3701e',
+            discord_tag='coach_raven',
+            sort_order=1,
+        )
         self.client.login(username='player1', password='secret-pass')
         response = self.client.get(reverse('api_bootstrap'))
 
@@ -217,10 +225,27 @@ class ScheduleApiTests(TestCase):
         data = response.json()
         self.assertEqual(data['user']['username'], 'player1')
         self.assertTrue(any(player['role'] == 'Leader' for player in data['players']))
+        self.assertTrue(any(player['roleColor'] == '#123456' for player in data['players']))
         self.assertTrue(any(player['discordTag'] == 'blackflock_main' for player in data['players']))
         self.assertTrue(any(player['battleTags'] == ['BlackFlock#1111', 'AltBird#2222'] for player in data['players']))
+        self.assertTrue(any(staff_member['role'] == 'Coach' for staff_member in data['staffMembers']))
         self.assertTrue(any(event_type['value'] == ScheduleSlot.SCRIM for event_type in data['eventTypes']))
         self.assertTrue(any(day_event['eventType'] == ScheduleSlot.SCRIM for day_event in data['dayEventTypes']))
+
+    def test_bootstrap_returns_players_in_admin_order(self):
+        Player.objects.exclude(pk__in=[self.player_one.pk, self.player_two.pk]).update(sort_order=10)
+        self.player_one.sort_order = 5
+        self.player_one.save()
+        self.player_two.sort_order = 1
+        self.player_two.save()
+        self.client.login(username='player1', password='secret-pass')
+
+        response = self.client.get(reverse('api_bootstrap'))
+
+        self.assertEqual(response.status_code, 200)
+        players = response.json()['players']
+        self.assertEqual(players[0]['id'], self.player_two.id)
+        self.assertEqual(players[1]['id'], self.player_one.id)
 
     def test_api_creates_event_using_day_type(self):
         DayEventType.objects.update_or_create(
@@ -323,6 +348,8 @@ class PlayerAvatarTests(TestCase):
             data={
                 'name': 'Игрок формы',
                 'role': '',
+                'role_color': '#4b607f',
+                'sort_order': 0,
                 'avatar_link': '',
                 'battle_tags': '',
                 'discord_tag': '',

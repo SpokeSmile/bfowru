@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 
-from .models import DayEventType, Player, ScheduleSlot
+from .models import DayEventType, Player, ScheduleSlot, StaffMember
 
 
 MAX_AVATAR_SIZE_BYTES = 2 * 1024 * 1024
@@ -26,6 +26,9 @@ class PlayerAdminForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = '__all__'
+        widgets = {
+            'role_color': forms.TextInput(attrs={'type': 'color'}),
+        }
 
     def clean_avatar_upload(self):
         avatar_upload = self.cleaned_data.get('avatar_upload')
@@ -73,6 +76,15 @@ class AvatarAdminMixin:
         )
 
 
+class StaffMemberAdminForm(forms.ModelForm):
+    class Meta:
+        model = StaffMember
+        fields = '__all__'
+        widgets = {
+            'role_color': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+
 class PlayerInline(AvatarAdminMixin, admin.StackedInline):
     model = Player
     form = PlayerAdminForm
@@ -81,6 +93,8 @@ class PlayerInline(AvatarAdminMixin, admin.StackedInline):
     fields = (
         'name',
         'role',
+        'role_color',
+        'sort_order',
         'avatar_preview',
         'avatar_upload',
         'remove_uploaded_avatar',
@@ -103,11 +117,14 @@ class PlayerUserAdmin(UserAdmin):
 @admin.register(Player)
 class PlayerAdmin(AvatarAdminMixin, admin.ModelAdmin):
     form = PlayerAdminForm
-    list_display = ('name', 'role', 'user', 'discord_tag', 'avatar_preview')
+    list_display = ('name', 'sort_order', 'role', 'role_color', 'user', 'discord_tag', 'avatar_preview')
+    list_editable = ('sort_order', 'role_color')
     search_fields = ('name', 'role', 'user__username', 'discord_tag', 'battle_tags')
     fields = (
         'name',
         'role',
+        'role_color',
+        'sort_order',
         'user',
         'avatar_preview',
         'avatar_upload',
@@ -116,6 +133,15 @@ class PlayerAdmin(AvatarAdminMixin, admin.ModelAdmin):
         'battle_tags',
         'discord_tag',
     )
+
+
+@admin.register(StaffMember)
+class StaffMemberAdmin(admin.ModelAdmin):
+    form = StaffMemberAdminForm
+    list_display = ('name', 'sort_order', 'role', 'role_color', 'discord_tag')
+    list_editable = ('sort_order', 'role_color')
+    search_fields = ('name', 'role', 'discord_tag')
+    fields = ('name', 'role', 'role_color', 'sort_order', 'discord_tag')
 
 
 @admin.register(ScheduleSlot)
