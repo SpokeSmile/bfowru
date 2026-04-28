@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
+from .admin import PlayerAdminForm
 from .forms import ScheduleSlotForm
 from .models import DayEventType, Player, ScheduleSlot
 
@@ -298,5 +300,55 @@ class ScheduleApiTests(TestCase):
         self.assertEqual(self.player_one.battle_tags_list, ['BlackFlock#1111', 'AltBird#2222'])
         self.assertEqual(self.player_one.discord_tag, 'blackflock_main')
         self.assertEqual(response.json()['player']['discordTag'], 'blackflock_main')
+
+
+class PlayerAvatarTests(TestCase):
+    def test_resolved_avatar_url_prefers_embedded_avatar(self):
+        player = Player.objects.create(
+            name='Игрок с аватаром',
+            avatar_data=b'avatar-binary',
+            avatar_content_type='image/png',
+            avatar_link='https://example.com/fallback.png',
+        )
+
+        self.assertTrue(player.resolved_avatar_url.startswith('data:image/png;base64,'))
+
+    def test_admin_form_saves_uploaded_avatar_to_database(self):
+        avatar_upload = SimpleUploadedFile(
+            'avatar.png',
+            b'avatar-binary',
+            content_type='image/png',
+        )
+        form = PlayerAdminForm(
+            data={
+                'name': 'Игрок формы',
+                'role': '',
+                'avatar_link': '',
+                'battle_tags': '',
+                'discord_tag': '',
+                'remove_uploaded_avatar': '',
+            },
+            files={'avatar_upload': avatar_upload},
+        )
+
+        self.assertTrue(form.is_valid(), form.errors)
+        player = form.save()
+        self.assertEqual(player.avatar_content_type, 'image/png')
+        self.assertEqual(bytes(player.avatar_data), b'avatar-binary')
+
+    def test_bootstrap_returns_embedded_avatar(self):
+        player = Player.objects.get(name='Игрок 1')
+        user = User.objects.create_user(username='avatar-user', password='secret-pass')
+        player.user = user
+        player.avatar_data = b'avatar-binary'
+        player.avatar_content_type = 'image/png'
+        player.save()
+        self.client.login(username='avatar-user', password='secret-pass')
+
+        response = self.client.get(reverse('api_bootstrap'))
+
+        self.assertEqual(response.status_code, 200)
+        avatar_url = next(item['avatarUrl'] for item in response.json()['players'] if item['id'] == player.id)
+        self.assertTrue(avatar_url.startswith('data:image/png;base64,'))
 
 # Create your tests here.

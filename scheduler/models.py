@@ -1,3 +1,6 @@
+import base64
+import mimetypes
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -12,6 +15,13 @@ class Player(models.Model):
         'ссылка на аватар',
         blank=True,
         help_text='Для продакшена на Vercel используйте прямую ссылку на изображение.',
+    )
+    avatar_data = models.BinaryField('данные аватара', blank=True, null=True, editable=False)
+    avatar_content_type = models.CharField(
+        'mime тип аватара',
+        max_length=80,
+        blank=True,
+        editable=False,
     )
     battle_tags = models.TextField(
         'battle tags',
@@ -44,8 +54,25 @@ class Player(models.Model):
     def battle_tags_list(self):
         return [tag.strip() for tag in self.battle_tags.splitlines() if tag.strip()]
 
+    def clear_embedded_avatar(self):
+        self.avatar_data = None
+        self.avatar_content_type = ''
+
+    def set_embedded_avatar(self, uploaded_file):
+        uploaded_file.seek(0)
+        payload = uploaded_file.read()
+        self.avatar_data = payload
+        self.avatar_content_type = (
+            getattr(uploaded_file, 'content_type', '')
+            or mimetypes.guess_type(getattr(uploaded_file, 'name', ''))[0]
+            or 'image/png'
+        )
+
     @property
     def resolved_avatar_url(self):
+        if self.avatar_data and self.avatar_content_type:
+            encoded = base64.b64encode(bytes(self.avatar_data)).decode('ascii')
+            return f'data:{self.avatar_content_type};base64,{encoded}'
         if self.avatar_link:
             return self.avatar_link
         if self.avatar:
