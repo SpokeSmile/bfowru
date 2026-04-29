@@ -460,7 +460,7 @@ function EventCard({ event, onEdit }) {
   return (
     <motion.article
       whileHover={{ scale: 1.015 }}
-      className={`group relative max-w-full rounded-lg border ${style.border} ${style.bg} ${style.glow} p-2 transition`}
+      className={`group relative z-0 max-w-full rounded-lg border ${style.border} ${style.bg} ${style.glow} p-2 transition hover:z-30`}
     >
       <div className="flex min-w-0 items-center gap-2">
         <Icon className={`${style.text} shrink-0`} size={isAllDayStatus ? 16 : 17} />
