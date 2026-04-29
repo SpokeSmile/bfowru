@@ -76,9 +76,9 @@ const EVENT_STYLES = {
   tentative: {
     icon: AlertTriangle,
     border: 'border-orange-300/45',
-    bg: 'bg-orange-500/18',
+    bg: 'bg-orange-500/22',
     text: 'text-orange-200',
-    glow: 'shadow-[0_0_12px_rgba(243,112,30,0.12)]',
+    glow: 'shadow-[0_0_14px_rgba(243,112,30,0.14)]',
   },
   fallback: {
     icon: Clock3,
@@ -100,10 +100,25 @@ function formatClock(timeZone) {
   return new Intl.DateTimeFormat('ru-RU', {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
     hour12: false,
     timeZone,
   }).format(new Date());
+}
+
+function Avatar({ src, alt, fallbackLabel, className = '' }) {
+  if (src) {
+    return <img className={className} src={src} alt={alt} />;
+  }
+
+  return (
+    <div className={`grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`}>
+      <img
+        className="h-[70%] w-[70%] object-contain opacity-95"
+        src="/static/design_assets/Logo.png"
+        alt={fallbackLabel || 'Black Flock'}
+      />
+    </div>
+  );
 }
 
 function useClocks() {
@@ -248,13 +263,7 @@ function Header({ user }) {
           href="/profile/"
           aria-label="Открыть профиль"
         >
-          {user.avatarUrl ? (
-            <img className="h-7 w-7 rounded-full object-cover" src={user.avatarUrl} alt={user.username} />
-          ) : (
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-bf-steel/45 text-xs font-black">
-              {user.username.slice(0, 1).toUpperCase()}
-            </span>
-          )}
+          <Avatar src={user.avatarUrl} alt={user.username} fallbackLabel={user.username} className="h-7 w-7 object-cover" />
           <span className="max-w-28 truncate font-semibold text-bf-cream/80">{user.username}</span>
         </a>
         <button
@@ -365,12 +374,11 @@ function HeroBanner({ canAdd, onAdd }) {
 function TeamBanner() {
   return (
     <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-[22px] border-bf-orange/45 px-6 py-6 lg:px-8">
-      <div className="relative z-10 grid gap-3 lg:max-w-[460px]">
+      <div className="relative z-10 grid gap-2 lg:max-w-[520px]">
         <div className="text-sm font-black uppercase text-bf-orange">Black Flock team</div>
-        <h1 className="text-5xl font-black uppercase leading-none text-slate-100 max-md:text-4xl">
+        <h1 className="whitespace-nowrap text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl">
           Состав команды
         </h1>
-        <p className="text-sm font-medium text-bf-cream/62">Профили игроков команды Black Flock</p>
       </div>
     </section>
   );
@@ -379,13 +387,7 @@ function TeamBanner() {
 function PlayerRow({ player }) {
   return (
     <div className="flex h-full min-w-0 items-center gap-2.5 px-4 py-2">
-      {player.avatarUrl ? (
-        <img className="h-10 w-10 rounded-full border border-bf-cream/15 object-cover" src={player.avatarUrl} alt={player.name} />
-      ) : (
-        <div className="grid h-10 w-10 place-items-center rounded-full border border-bf-cream/15 bg-gradient-to-br from-bf-orange/70 to-bf-steel/70 text-base font-black text-bf-cream">
-          {player.initial}
-        </div>
-      )}
+      <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="h-10 w-10 object-cover" />
       <div className="min-w-0">
         <div className="truncate text-sm font-black text-slate-100">{player.name}</div>
         <div className="mt-1 flex flex-wrap gap-1.5">
@@ -570,7 +572,7 @@ function RosterTable({
                   <div
                     key={`${player.id}-${day.value}`}
                     className={`relative flex min-h-[60px] items-center border-b border-r border-bf-cream/10 p-1.5 last:border-r-0 ${
-                      isUnavailable ? 'bg-red-950/42' : isFullDayAvailable ? 'bg-emerald-950/30' : isTentative ? 'bg-orange-950/28' : 'bg-slate-950/36'
+                      isUnavailable ? 'bg-red-950/42' : isFullDayAvailable ? 'bg-emerald-950/30' : isTentative ? 'bg-orange-950/40' : 'bg-slate-950/36'
                     }`}
                   >
                     {cellSlots.length ? (
@@ -628,13 +630,7 @@ function StaffDirectory({ staffMembers }) {
           {staffMembers.map((staffMember) => (
             <article key={staffMember.id} className="rounded-[18px] border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
               <div className="flex items-start gap-3">
-                {staffMember.avatarUrl ? (
-                  <img className="h-12 w-12 rounded-full border border-bf-cream/15 object-cover" src={staffMember.avatarUrl} alt={staffMember.name} />
-                ) : (
-                  <div className="grid h-12 w-12 place-items-center rounded-full border border-bf-cream/15 bg-gradient-to-br from-bf-orange/70 to-bf-steel/70 text-base font-black text-bf-cream">
-                    {staffMember.initial}
-                  </div>
-                )}
+                <Avatar src={staffMember.avatarUrl} alt={staffMember.name} fallbackLabel={staffMember.name} className="h-12 w-12 object-cover" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-base font-black text-slate-100">{staffMember.name}</div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
@@ -682,17 +678,7 @@ function PlayerProfiles({ players, onEdit, showHeading = true }) {
           <article key={player.id} className="rounded-[18px] border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                {player.avatarUrl ? (
-                  <img
-                    className="h-12 w-12 rounded-full border border-bf-cream/15 object-cover"
-                    src={player.avatarUrl}
-                    alt={player.name}
-                  />
-                ) : (
-                  <div className="grid h-12 w-12 place-items-center rounded-full border border-bf-cream/15 bg-gradient-to-br from-bf-orange/70 to-bf-steel/70 text-base font-black text-bf-cream">
-                    {player.initial}
-                  </div>
-                )}
+                <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="h-12 w-12 object-cover" />
                 <div className="min-w-0">
                   <div className="truncate text-base font-black text-slate-100">{player.name}</div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
@@ -750,11 +736,12 @@ function PlayerProfiles({ players, onEdit, showHeading = true }) {
   );
 }
 
-function TeamPage({ players, onEdit }) {
+function TeamPage({ players, staffMembers, onEdit }) {
   return (
     <>
       <TeamBanner />
       <PlayerProfiles players={players} onEdit={onEdit} showHeading={false} />
+      <StaffDirectory staffMembers={staffMembers} />
     </>
   );
 }
@@ -926,13 +913,7 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
               {profile.discordConnected ? (
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    {profile.avatarUrl ? (
-                      <img className="h-12 w-12 rounded-full border border-bf-cream/15 object-cover" src={profile.avatarUrl} alt={profile.discordDisplayTag} />
-                    ) : (
-                      <div className="grid h-12 w-12 place-items-center rounded-full border border-bf-cream/15 bg-bf-steel/45 text-base font-black text-bf-cream">
-                        {profile.initial}
-                      </div>
-                    )}
+                    <Avatar src={profile.avatarUrl} alt={profile.discordDisplayTag} fallbackLabel={profile.name || profile.discordDisplayTag} className="h-12 w-12 object-cover" />
                     <div>
                       <div className="text-sm font-black text-slate-100">{profile.discordDisplayTag || '@unknown'}</div>
                       <div className="mt-1 text-xs text-bf-cream/50">
@@ -1468,7 +1449,7 @@ export default function App() {
               onSaved={handleProfileSaved}
             />
           ) : isTeamPage ? (
-            <TeamPage players={data.players} onEdit={setProfileModalPlayer} />
+            <TeamPage players={data.players} staffMembers={data.staffMembers} onEdit={setProfileModalPlayer} />
           ) : (
             <>
               <HeroBanner canAdd={canAdd} onAdd={(day) => setSlotModal({ day })} />
@@ -1481,7 +1462,6 @@ export default function App() {
                 onEdit={(event) => setSlotModal({ event })}
                 lastUpdated={data.lastUpdated}
               />
-              <StaffDirectory staffMembers={data.staffMembers} />
               <Legend eventTypes={data.eventTypes} />
             </>
           )}
