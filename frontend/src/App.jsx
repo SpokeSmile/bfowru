@@ -851,19 +851,13 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
 
   return (
     <section className="glass-panel mt-4 rounded-[20px] p-5">
-      <div className="mb-5 flex items-start justify-between gap-4 max-md:flex-col max-md:items-stretch">
+      <div className="mb-5">
         <div>
           <div className="text-sm font-black uppercase text-bf-orange">Profile</div>
           <h1 className="mt-1 text-3xl font-black uppercase text-slate-100">
             {isStaffProfile ? 'Профиль организатора' : 'Профиль игрока'}
           </h1>
         </div>
-        <a
-          className="inline-flex min-h-10 items-center justify-center rounded-xl border border-bf-cream/12 px-4 font-black text-bf-cream/72 transition hover:border-bf-orange/35 hover:text-bf-orange"
-          href="/"
-        >
-          К расписанию
-        </a>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
