@@ -399,15 +399,40 @@ class ScheduleApiTests(TestCase):
     def test_api_updates_own_profile(self):
         self.client.login(username='player1', password='secret-pass')
         response = self.patch_json('api_profile_update', {
+            'name': 'BlackFlock Main',
             'battleTagsText': 'BlackFlock#1111\nAltBird#2222',
             'discordTag': 'blackflock_main',
         })
 
         self.assertEqual(response.status_code, 200)
         self.player_one.refresh_from_db()
+        self.assertEqual(self.player_one.name, 'BlackFlock Main')
         self.assertEqual(self.player_one.battle_tags_list, ['BlackFlock#1111', 'AltBird#2222'])
         self.assertEqual(self.player_one.discord_tag, 'blackflock_main')
         self.assertEqual(response.json()['player']['discordTag'], 'blackflock_main')
+
+    def test_api_changes_password_with_old_password(self):
+        self.client.login(username='player1', password='secret-pass')
+        response = self.post_json('api_profile_password', {
+            'oldPassword': 'secret-pass',
+            'newPassword': 'new-strong-secret-123',
+            'newPasswordConfirm': 'new-strong-secret-123',
+        })
+
+        self.assertEqual(response.status_code, 200)
+        self.user_one.refresh_from_db()
+        self.assertTrue(self.user_one.check_password('new-strong-secret-123'))
+
+    def test_api_rejects_password_change_with_wrong_old_password(self):
+        self.client.login(username='player1', password='secret-pass')
+        response = self.post_json('api_profile_password', {
+            'oldPassword': 'wrong-pass',
+            'newPassword': 'new-strong-secret-123',
+            'newPasswordConfirm': 'new-strong-secret-123',
+        })
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('oldPassword', response.json()['errors'])
 
 
 class PlayerAvatarTests(TestCase):

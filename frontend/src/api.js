@@ -59,6 +59,13 @@ export function updateProfile(payload) {
   });
 }
 
+export function changePassword(payload) {
+  return request('/api/profile/password/', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function logout() {
   return request('/api/logout/', { method: 'POST' });
 }

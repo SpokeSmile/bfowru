@@ -20,6 +20,7 @@ import {
 
 import {
   bootstrap,
+  changePassword,
   createSlot,
   deleteSlot,
   logout,
@@ -179,6 +180,7 @@ function RoleBadge({ role, color, className = '' }) {
 
 function Header({ user }) {
   const clocks = useClocks();
+  const isProfilePage = window.location.pathname.startsWith('/profile');
 
   async function handleLogout() {
     const response = await logout();
@@ -206,7 +208,15 @@ function Header({ user }) {
       </div>
 
       <div className="flex items-center justify-end gap-3 max-lg:justify-between">
-        <div className="flex items-center gap-2 rounded-full border border-bf-cream/10 bg-black/30 px-3 py-2">
+        <a
+          className={`flex items-center gap-2 rounded-full border px-3 py-2 transition ${
+            isProfilePage
+              ? 'border-bf-orange/40 bg-bf-orange/10'
+              : 'border-bf-cream/10 bg-black/30 hover:border-bf-orange/35 hover:bg-bf-orange/5'
+          }`}
+          href="/profile/"
+          aria-label="Открыть профиль"
+        >
           {user.avatarUrl ? (
             <img className="h-7 w-7 rounded-full object-cover" src={user.avatarUrl} alt={user.username} />
           ) : (
@@ -215,7 +225,7 @@ function Header({ user }) {
             </span>
           )}
           <span className="max-w-28 truncate font-semibold text-bf-cream/80">{user.username}</span>
-        </div>
+        </a>
         <button
           className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-bf-orange px-4 font-black text-slate-100 transition hover:-translate-y-0.5 hover:shadow-[0_0_14px_rgba(243,112,30,0.16)]"
           type="button"
@@ -613,6 +623,207 @@ function PlayerProfiles({ players, onEdit }) {
             </div>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ProfilePage({ user, player, onSaved }) {
+  const [name, setName] = useState(player?.name || '');
+  const [battleTagsText, setBattleTagsText] = useState(player?.battleTagsText || '');
+  const [discordTag, setDiscordTag] = useState(player?.discordTag || '');
+  const [profileErrors, setProfileErrors] = useState({});
+  const [profileSuccess, setProfileSuccess] = useState('');
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+  const [passwordErrors, setPasswordErrors] = useState({});
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+
+  useEffect(() => {
+    setName(player?.name || '');
+    setBattleTagsText(player?.battleTagsText || '');
+    setDiscordTag(player?.discordTag || '');
+  }, [player]);
+
+  async function handleProfileSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSavingProfile(true);
+    setProfileErrors({});
+    setProfileSuccess('');
+    try {
+      const response = await updateProfile({ name, battleTagsText, discordTag });
+      onSaved(response.player);
+      setProfileSuccess('Профиль сохранен.')
+    } catch (saveError) {
+      setProfileErrors(saveError.payload?.errors || { __all__: [saveError.message] });
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
+
+  async function handlePasswordSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSavingPassword(true);
+    setPasswordErrors({});
+    setPasswordSuccess('');
+    try {
+      await changePassword({ oldPassword, newPassword, newPasswordConfirm });
+      setOldPassword('');
+      setNewPassword('');
+      setNewPasswordConfirm('');
+      setPasswordSuccess('Пароль обновлен.')
+    } catch (saveError) {
+      setPasswordErrors(saveError.payload?.errors || { __all__: [saveError.message] });
+    } finally {
+      setIsSavingPassword(false);
+    }
+  }
+
+  if (!player) {
+    return (
+      <section className="glass-panel mt-4 rounded-[20px] p-6">
+        <div className="text-sm font-black uppercase text-bf-orange">Profile</div>
+        <h1 className="mt-1 text-3xl font-black uppercase text-slate-100">Профиль</h1>
+        <p className="mt-4 text-bf-cream/62">Аккаунт не привязан к игроку. Обратитесь к администратору.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="glass-panel mt-4 rounded-[20px] p-5">
+      <div className="mb-5 flex items-start justify-between gap-4 max-md:flex-col max-md:items-stretch">
+        <div>
+          <div className="text-sm font-black uppercase text-bf-orange">Profile</div>
+          <h1 className="mt-1 text-3xl font-black uppercase text-slate-100">Профиль игрока</h1>
+        </div>
+        <a
+          className="inline-flex min-h-10 items-center justify-center rounded-xl border border-bf-cream/12 px-4 font-black text-bf-cream/72 transition hover:border-bf-orange/35 hover:text-bf-orange"
+          href="/"
+        >
+          К расписанию
+        </a>
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+        <form className="rounded-[18px] border border-bf-cream/10 bg-black/24 p-5" onSubmit={handleProfileSubmit}>
+          <div className="text-sm font-black uppercase text-bf-orange">Игровые данные</div>
+          {profileErrors.__all__ ? (
+            <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100">
+              {profileErrors.__all__.join(', ')}
+            </div>
+          ) : null}
+          {profileSuccess ? (
+            <div className="mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100">
+              {profileSuccess}
+            </div>
+          ) : null}
+          <div className="mt-5 grid gap-4">
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Логин
+              <input
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/20 px-4 text-bf-cream/52 outline-none"
+                value={user.username}
+                readOnly
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Имя игрока
+              <input
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45"
+                value={name}
+                onChange={(inputEvent) => setName(inputEvent.target.value)}
+              />
+              {profileErrors.name ? <span className="text-red-200">{profileErrors.name.join(', ')}</span> : null}
+            </label>
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              BattleTag&apos;и
+              <textarea
+                className="min-h-36 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 py-3 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/45"
+                value={battleTagsText}
+                onChange={(inputEvent) => setBattleTagsText(inputEvent.target.value)}
+                placeholder={'По одному на строку\nBlackFlock#21234\nBlackFlockAlt#19876'}
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Discord тег
+              <input
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45"
+                value={discordTag}
+                onChange={(inputEvent) => setDiscordTag(inputEvent.target.value)}
+              />
+            </label>
+          </div>
+          <div className="mt-5 flex justify-end">
+            <button
+              className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
+              type="submit"
+              disabled={isSavingProfile}
+            >
+              <Save size={18} />
+              Сохранить профиль
+            </button>
+          </div>
+        </form>
+
+        <form className="rounded-[18px] border border-bf-cream/10 bg-black/24 p-5" onSubmit={handlePasswordSubmit}>
+          <div className="text-sm font-black uppercase text-bf-orange">Безопасность</div>
+          {passwordErrors.__all__ ? (
+            <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100">
+              {passwordErrors.__all__.join(', ')}
+            </div>
+          ) : null}
+          {passwordSuccess ? (
+            <div className="mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100">
+              {passwordSuccess}
+            </div>
+          ) : null}
+          <div className="mt-5 grid gap-4">
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Старый пароль
+              <input
+                type="password"
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45"
+                value={oldPassword}
+                onChange={(inputEvent) => setOldPassword(inputEvent.target.value)}
+              />
+              {passwordErrors.oldPassword ? <span className="text-red-200">{passwordErrors.oldPassword.join(', ')}</span> : null}
+            </label>
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Новый пароль
+              <input
+                type="password"
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45"
+                value={newPassword}
+                onChange={(inputEvent) => setNewPassword(inputEvent.target.value)}
+              />
+              {passwordErrors.newPassword ? <span className="text-red-200">{passwordErrors.newPassword.join(', ')}</span> : null}
+            </label>
+            <label className="grid gap-2 text-sm font-black text-bf-cream/70">
+              Повторите новый пароль
+              <input
+                type="password"
+                className="h-12 rounded-2xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45"
+                value={newPasswordConfirm}
+                onChange={(inputEvent) => setNewPasswordConfirm(inputEvent.target.value)}
+              />
+              {passwordErrors.newPasswordConfirm ? <span className="text-red-200">{passwordErrors.newPasswordConfirm.join(', ')}</span> : null}
+            </label>
+          </div>
+          <div className="mt-5 flex justify-end">
+            <button
+              className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-bf-orange/45 px-5 font-black text-bf-orange transition hover:bg-bf-orange/10 disabled:cursor-not-allowed disabled:opacity-45"
+              type="submit"
+              disabled={isSavingPassword}
+            >
+              <Save size={18} />
+              Сменить пароль
+            </button>
+          </div>
+        </form>
       </div>
     </section>
   );
@@ -1019,23 +1230,31 @@ export default function App() {
   }
 
   const canAdd = Boolean(data.user.playerId);
+  const isProfilePage = window.location.pathname.startsWith('/profile');
+  const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
 
   return (
     <main className="mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 max-sm:w-[min(100%_-_20px,760px)]">
       <Header user={data.user} />
-      <HeroBanner canAdd={canAdd} onAdd={(day) => setSlotModal({ day })} />
-      <RosterTable
-        days={data.days}
-        players={data.players}
-        slots={data.slots}
-        dayEventTypes={data.dayEventTypes}
-        onAdd={(day) => setSlotModal({ day })}
-        onEdit={(event) => setSlotModal({ event })}
-        lastUpdated={data.lastUpdated}
-      />
-      <StaffDirectory staffMembers={data.staffMembers} />
-      <Legend eventTypes={data.eventTypes} />
-      <PlayerProfiles players={data.players} onEdit={setProfileModalPlayer} />
+      {isProfilePage ? (
+        <ProfilePage user={data.user} player={currentPlayer} onSaved={updatePlayerProfile} />
+      ) : (
+        <>
+          <HeroBanner canAdd={canAdd} onAdd={(day) => setSlotModal({ day })} />
+          <RosterTable
+            days={data.days}
+            players={data.players}
+            slots={data.slots}
+            dayEventTypes={data.dayEventTypes}
+            onAdd={(day) => setSlotModal({ day })}
+            onEdit={(event) => setSlotModal({ event })}
+            lastUpdated={data.lastUpdated}
+          />
+          <StaffDirectory staffMembers={data.staffMembers} />
+          <Legend eventTypes={data.eventTypes} />
+          <PlayerProfiles players={data.players} onEdit={setProfileModalPlayer} />
+        </>
+      )}
       {slotModal ? (
         <EventModal
           event={slotModal.event}
