@@ -592,7 +592,7 @@ function StaffDirectory({ staffMembers }) {
   );
 }
 
-function PlayerProfiles({ players }) {
+function PlayerProfiles({ players, onEdit }) {
   return (
     <section className="glass-panel mt-4 rounded-[20px] p-4">
       <div className="mb-4">
@@ -628,6 +628,15 @@ function PlayerProfiles({ players }) {
                   </div>
                 </div>
               </div>
+              {player.canEdit ? (
+                <button
+                  className="rounded-xl border border-bf-orange/35 px-3 py-2 text-sm font-black text-bf-orange transition hover:bg-bf-orange/10"
+                  type="button"
+                  onClick={() => onEdit(player)}
+                >
+                  Редактировать
+                </button>
+              ) : null}
             </div>
 
             <div className="mt-4 grid gap-3 text-sm">
@@ -1263,6 +1272,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [slotModal, setSlotModal] = useState(null);
+  const [profileModalPlayer, setProfileModalPlayer] = useState(null);
 
   async function loadData() {
     setIsLoading(true);
@@ -1302,12 +1312,14 @@ export default function App() {
   async function updatePlayerProfile(player, options = {}) {
     if (options.reload) {
       await loadData();
+      setProfileModalPlayer(null);
       return;
     }
     setData((current) => ({
       ...current,
       players: current.players.map((existing) => (existing.id === player.id ? player : existing)),
     }));
+    setProfileModalPlayer(null);
   }
 
   async function updateStaffProfile(staffMember, options = {}) {
@@ -1378,7 +1390,7 @@ export default function App() {
           />
           <StaffDirectory staffMembers={data.staffMembers} />
           <Legend eventTypes={data.eventTypes} />
-          <PlayerProfiles players={data.players} />
+          <PlayerProfiles players={data.players} onEdit={setProfileModalPlayer} />
         </>
       )}
       {slotModal ? (
@@ -1389,6 +1401,13 @@ export default function App() {
           onClose={() => setSlotModal(null)}
           onSaved={upsertSlot}
           onDeleted={removeSlot}
+        />
+      ) : null}
+      {profileModalPlayer ? (
+        <ProfileModal
+          player={profileModalPlayer}
+          onClose={() => setProfileModalPlayer(null)}
+          onSaved={updatePlayerProfile}
         />
       ) : null}
     </main>
