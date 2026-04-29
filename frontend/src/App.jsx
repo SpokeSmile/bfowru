@@ -62,9 +62,9 @@ const EVENT_STYLES = {
   unavailable: {
     icon: AlertTriangle,
     border: 'border-red-300/45',
-    bg: 'bg-red-500/20',
+    bg: 'bg-red-500/28',
     text: 'text-red-200',
-    glow: 'shadow-[0_0_12px_rgba(239,68,68,0.1)]',
+    glow: 'shadow-[0_0_14px_rgba(239,68,68,0.14)]',
   },
   full_day_available: {
     icon: Check,
@@ -107,7 +107,7 @@ function formatClock(timeZone) {
 
 function Avatar({ src, alt, fallbackLabel, className = '' }) {
   if (src) {
-    return <img className={className} src={src} alt={alt} />;
+    return <img className={`rounded-full border border-bf-cream/15 ${className}`} src={src} alt={alt} />;
   }
 
   return (
@@ -123,9 +123,9 @@ function Avatar({ src, alt, fallbackLabel, className = '' }) {
 
 function useClocks() {
   const [clocks, setClocks] = useState({
-    utc: '--:--:--',
-    moscow: '--:--:--',
-    cest: '--:--:--',
+    utc: '--:--',
+    moscow: '--:--',
+    cest: '--:--',
   });
 
   useEffect(() => {
@@ -221,6 +221,27 @@ function RoleBadge({ role, color, className = '' }) {
     >
       {role}
     </span>
+  );
+}
+
+function DiscordClouds({ displayTag, globalName }) {
+  if (!displayTag && !globalName) {
+    return <div className="mt-2 text-bf-cream/42">Не подключен</div>;
+  }
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-2">
+      {displayTag ? (
+        <span className="rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100">
+          {displayTag}
+        </span>
+      ) : null}
+      {globalName ? (
+        <span className="rounded-full border border-bf-cream/10 bg-black/24 px-3 py-1 text-sm font-semibold text-bf-cream/78">
+          {globalName}
+        </span>
+      ) : null}
+    </div>
   );
 }
 
@@ -427,7 +448,7 @@ function EventCard({ event, onEdit }) {
   return (
     <motion.article
       whileHover={{ scale: 1.015 }}
-      className={`group relative max-w-full overflow-hidden rounded-lg border ${style.border} ${style.bg} ${style.glow} p-2 transition`}
+      className={`group relative max-w-full rounded-lg border ${style.border} ${style.bg} ${style.glow} p-2 transition`}
     >
       <div className="flex min-w-0 items-center gap-2">
         <Icon className={`${style.text} shrink-0`} size={isAllDayStatus ? 16 : 17} />
@@ -438,14 +459,28 @@ function EventCard({ event, onEdit }) {
                 {isFullDayAvailable ? 'Свободен весь день' : isTentative ? 'Не уверен' : 'Не могу в этот день'}
               </div>
               {event.note ? (
-                <p className="mt-1 line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">{event.note}</p>
+                <div className="relative mt-1">
+                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
+                    {event.note}
+                  </p>
+                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[220px] rounded-xl border border-bf-cream/12 bg-[#0d1420] px-3 py-2 text-[11px] font-medium leading-relaxed text-bf-cream shadow-[0_14px_30px_rgba(0,0,0,0.34)] group-hover:block">
+                    {event.note}
+                  </div>
+                </div>
               ) : null}
             </>
           ) : (
             <>
               <div className={`text-[11px] font-black leading-tight ${style.text}`}>{event.timeRange}</div>
               {event.note ? (
-                <p className="mt-1 line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">{event.note}</p>
+                <div className="relative mt-1">
+                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
+                    {event.note}
+                  </p>
+                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[220px] rounded-xl border border-bf-cream/12 bg-[#0d1420] px-3 py-2 text-[11px] font-medium leading-relaxed text-bf-cream shadow-[0_14px_30px_rgba(0,0,0,0.34)] group-hover:block">
+                    {event.note}
+                  </div>
+                </div>
               ) : null}
             </>
           )}
@@ -572,7 +607,7 @@ function RosterTable({
                   <div
                     key={`${player.id}-${day.value}`}
                     className={`relative flex min-h-[60px] items-center border-b border-r border-bf-cream/10 p-1.5 last:border-r-0 ${
-                      isUnavailable ? 'bg-red-950/42' : isFullDayAvailable ? 'bg-emerald-950/30' : isTentative ? 'bg-orange-950/40' : 'bg-slate-950/36'
+                      isUnavailable ? 'bg-red-900/50' : isFullDayAvailable ? 'bg-emerald-950/30' : isTentative ? 'bg-orange-950/40' : 'bg-slate-950/36'
                     }`}
                   >
                     {cellSlots.length ? (
@@ -646,10 +681,7 @@ function StaffDirectory({ staffMembers }) {
 
               <div className="mt-4 rounded-2xl border border-bf-cream/10 bg-black/28 px-4 py-3">
                 <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/44">Discord</div>
-                <div className="mt-2 text-sm font-semibold text-slate-100">{staffMember.discordDisplayTag || 'Не подключен'}</div>
-                {staffMember.discordGlobalName ? (
-                  <div className="mt-1 text-xs text-bf-cream/48">{staffMember.discordGlobalName}</div>
-                ) : null}
+                <DiscordClouds displayTag={staffMember.discordDisplayTag} globalName={staffMember.discordGlobalName} />
               </div>
             </article>
           ))}
@@ -723,10 +755,7 @@ function PlayerProfiles({ players, onEdit, showHeading = true }) {
 
               <div className="rounded-2xl border border-bf-cream/10 bg-black/28 px-4 py-3">
                 <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/44">Discord</div>
-                <div className="mt-2 text-sm font-semibold text-slate-100">{player.discordDisplayTag || 'Не подключен'}</div>
-                {player.discordGlobalName ? (
-                  <div className="mt-1 text-xs text-bf-cream/48">{player.discordGlobalName}</div>
-                ) : null}
+                <DiscordClouds displayTag={player.discordDisplayTag} globalName={player.discordGlobalName} />
               </div>
             </div>
           </article>
