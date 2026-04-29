@@ -224,23 +224,16 @@ function RoleBadge({ role, color, className = '' }) {
   );
 }
 
-function DiscordClouds({ displayTag, globalName }) {
-  if (!displayTag && !globalName) {
+function DiscordClouds({ displayTag }) {
+  if (!displayTag) {
     return <div className="mt-2 text-bf-cream/42">Не подключен</div>;
   }
 
   return (
     <div className="mt-2 flex flex-wrap gap-2">
-      {displayTag ? (
-        <span className="rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100">
-          {displayTag}
-        </span>
-      ) : null}
-      {globalName ? (
-        <span className="rounded-full border border-bf-cream/10 bg-black/24 px-3 py-1 text-sm font-semibold text-bf-cream/78">
-          {globalName}
-        </span>
-      ) : null}
+      <span className="rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100">
+        {displayTag}
+      </span>
     </div>
   );
 }
@@ -463,7 +456,7 @@ function EventCard({ event, onEdit }) {
                   <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
                     {event.note}
                   </p>
-                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[220px] rounded-xl border border-bf-cream/12 bg-[#0d1420] px-3 py-2 text-[11px] font-medium leading-relaxed text-bf-cream shadow-[0_14px_30px_rgba(0,0,0,0.34)] group-hover:block">
+                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[240px] rounded-xl border border-bf-orange/28 bg-[#121a28] px-3 py-2 text-[11px] font-medium leading-relaxed text-slate-100 shadow-[0_18px_40px_rgba(0,0,0,0.48)] ring-1 ring-black/30 group-hover:block">
                     {event.note}
                   </div>
                 </div>
@@ -477,7 +470,7 @@ function EventCard({ event, onEdit }) {
                   <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
                     {event.note}
                   </p>
-                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[220px] rounded-xl border border-bf-cream/12 bg-[#0d1420] px-3 py-2 text-[11px] font-medium leading-relaxed text-bf-cream shadow-[0_14px_30px_rgba(0,0,0,0.34)] group-hover:block">
+                  <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden max-w-[240px] rounded-xl border border-bf-orange/28 bg-[#121a28] px-3 py-2 text-[11px] font-medium leading-relaxed text-slate-100 shadow-[0_18px_40px_rgba(0,0,0,0.48)] ring-1 ring-black/30 group-hover:block">
                     {event.note}
                   </div>
                 </div>
@@ -681,7 +674,7 @@ function StaffDirectory({ staffMembers }) {
 
               <div className="mt-4 rounded-2xl border border-bf-cream/10 bg-black/28 px-4 py-3">
                 <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/44">Discord</div>
-                <DiscordClouds displayTag={staffMember.discordDisplayTag} globalName={staffMember.discordGlobalName} />
+                <DiscordClouds displayTag={staffMember.discordDisplayTag} />
               </div>
             </article>
           ))}
@@ -755,7 +748,7 @@ function PlayerProfiles({ players, onEdit, showHeading = true }) {
 
               <div className="rounded-2xl border border-bf-cream/10 bg-black/28 px-4 py-3">
                 <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/44">Discord</div>
-                <DiscordClouds displayTag={player.discordDisplayTag} globalName={player.discordGlobalName} />
+                <DiscordClouds displayTag={player.discordDisplayTag} />
               </div>
             </div>
           </article>
