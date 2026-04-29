@@ -73,6 +73,8 @@ textarea {
 }
 
 .app-sidebar {
+  position: relative;
+  z-index: 40;
   display: flex;
   min-height: calc(100vh - 32px);
   flex-direction: column;
@@ -227,17 +229,29 @@ textarea {
 
   .app-sidebar.app-sidebar-collapsed .sidebar-head {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 
   .app-sidebar.app-sidebar-collapsed .sidebar-brand {
+    width: 100%;
     justify-content: center;
+    gap: 0;
     padding-inline: 10px;
+  }
+
+  .app-sidebar.app-sidebar-collapsed .sidebar-brand-meta,
+  .app-sidebar.app-sidebar-collapsed .sidebar-link-label {
+    pointer-events: none;
   }
 
   .app-sidebar.app-sidebar-collapsed .sidebar-nav-link {
     justify-content: center;
+    gap: 0;
     padding-inline: 0;
+  }
+
+  .app-sidebar.app-sidebar-collapsed .sidebar-toggle {
+    align-self: center;
   }
 
   .app-sidebar.app-sidebar-collapsed .sidebar-footer-mark {
@@ -252,6 +266,7 @@ textarea {
 
   .app-sidebar.app-sidebar-collapsed .sidebar-link-tooltip {
     position: absolute;
+    z-index: 120;
     left: calc(100% + 12px);
     top: 50%;
     display: block;

@@ -349,7 +349,6 @@ function Sidebar({ pathname, collapsed, onToggle }) {
               className={`sidebar-nav-link ${item.isActive ? 'sidebar-nav-link-active' : ''}`}
               href={item.href}
               aria-current={item.isActive ? 'page' : undefined}
-              title={collapsed ? item.label : undefined}
             >
               <Icon size={18} />
               <span className={`sidebar-link-label ${collapsed ? 'xl:w-0 xl:opacity-0' : 'xl:w-auto xl:opacity-100'}`}>
