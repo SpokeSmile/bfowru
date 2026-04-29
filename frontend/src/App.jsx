@@ -472,7 +472,7 @@ function EventCard({ event, onEdit }) {
               </div>
               {event.note ? (
                 <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
+                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
                     {event.note}
                   </p>
                   <div
@@ -489,7 +489,7 @@ function EventCard({ event, onEdit }) {
               <div className={`text-[11px] font-black leading-tight ${style.text}`}>{event.timeRange}</div>
               {event.note ? (
                 <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60" title={event.note}>
+                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
                     {event.note}
                   </p>
                   <div
