@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
@@ -238,6 +239,74 @@ function DiscordClouds({ displayTag }) {
   );
 }
 
+function CommentTooltip({ tooltip }) {
+  const needsEmergencyWrap = /\S{30,}/.test(tooltip.text || '');
+  const [position, setPosition] = useState({
+    left: 0,
+    top: 0,
+    placement: tooltip.placement || 'bottom',
+  });
+  const [maxWidth, setMaxWidth] = useState(Math.min(320, window.innerWidth - 32));
+  const [isReady, setIsReady] = useState(false);
+  const tooltipRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const tooltipNode = tooltipRef.current;
+    if (!tooltipNode) return;
+
+    const viewportPadding = 16;
+    const offset = 8;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const desiredMaxWidth = Math.min(320, viewportWidth - viewportPadding * 2);
+    setMaxWidth(desiredMaxWidth);
+
+    const tooltipWidth = tooltipNode.offsetWidth;
+    const tooltipHeight = tooltipNode.offsetHeight;
+
+    let left = tooltip.anchorRect.left;
+    if (left + tooltipWidth > viewportWidth - viewportPadding) {
+      left = viewportWidth - viewportPadding - tooltipWidth;
+    }
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    }
+
+    let placement = 'bottom';
+    let top = tooltip.anchorRect.bottom + offset;
+
+    if (top + tooltipHeight > viewportHeight - viewportPadding) {
+      placement = 'top';
+      top = tooltip.anchorRect.top - tooltipHeight - offset;
+    }
+
+    if (top < viewportPadding) {
+      top = Math.max(viewportPadding, viewportHeight - tooltipHeight - viewportPadding);
+    }
+
+    setPosition({ left, top, placement });
+    setIsReady(true);
+  }, [tooltip]);
+
+  return createPortal(
+    <div
+      ref={(node) => {
+        tooltipRef.current = node;
+      }}
+      className={`comment-tooltip${needsEmergencyWrap ? ' comment-tooltip--force-break' : ''}`}
+      style={{
+        left: `${position.left}px`,
+        top: `${position.top}px`,
+        maxWidth: `${maxWidth}px`,
+        opacity: isReady ? 1 : 0,
+      }}
+    >
+      {tooltip.text}
+    </div>,
+    document.body,
+  );
+}
+
 function Header({ user }) {
   const clocks = useClocks();
   const isProfilePage = window.location.pathname.startsWith('/profile');
@@ -417,7 +486,7 @@ function PlayerRow({ player }) {
   );
 }
 
-function EventCard({ event, onEdit }) {
+function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
   const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
   const isUnavailable = event.slotType === 'unavailable';
   const isFullDayAvailable = event.slotType === 'full_day_available';
@@ -453,15 +522,13 @@ function EventCard({ event, onEdit }) {
               </div>
               {event.note ? (
                 <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
-                    {event.note}
-                  </p>
-                  <div
-                    className="pointer-events-none absolute left-0 top-full z-[90] mt-2 hidden min-w-[180px] max-w-[260px] whitespace-normal break-all rounded-xl border border-white/10 px-3 py-2 text-[12px] font-medium leading-relaxed text-white shadow-[0_18px_40px_rgba(0,0,0,0.72)] group-hover:block"
-                    style={{ backgroundColor: '#000000', opacity: 1 }}
+                  <p
+                    className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60"
+                    onMouseEnter={(mouseEvent) => onNoteHoverStart(event.note, mouseEvent.currentTarget.getBoundingClientRect())}
+                    onMouseLeave={onNoteHoverEnd}
                   >
                     {event.note}
-                  </div>
+                  </p>
                 </div>
               ) : null}
             </>
@@ -470,15 +537,13 @@ function EventCard({ event, onEdit }) {
               <div className={`text-[11px] font-black leading-tight ${style.text}`}>{event.timeRange}</div>
               {event.note ? (
                 <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
-                    {event.note}
-                  </p>
-                  <div
-                    className="pointer-events-none absolute left-0 top-full z-[90] mt-2 hidden min-w-[180px] max-w-[260px] whitespace-normal break-all rounded-xl border border-white/10 px-3 py-2 text-[12px] font-medium leading-relaxed text-white shadow-[0_18px_40px_rgba(0,0,0,0.72)] group-hover:block"
-                    style={{ backgroundColor: '#000000', opacity: 1 }}
+                  <p
+                    className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60"
+                    onMouseEnter={(mouseEvent) => onNoteHoverStart(event.note, mouseEvent.currentTarget.getBoundingClientRect())}
+                    onMouseLeave={onNoteHoverEnd}
                   >
                     {event.note}
-                  </div>
+                  </p>
                 </div>
               ) : null}
             </>
@@ -531,6 +596,8 @@ function RosterTable({
   dayEventTypes,
   onAdd,
   onEdit,
+  onNoteHoverStart,
+  onNoteHoverEnd,
   lastUpdated,
 }) {
   const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
@@ -612,7 +679,13 @@ function RosterTable({
                     {cellSlots.length ? (
                       <div className="grid w-full gap-1.5">
                         {cellSlots.map((slot) => (
-                          <EventCard key={slot.id} event={slot} onEdit={onEdit} />
+                          <EventCard
+                            key={slot.id}
+                            event={slot}
+                            onEdit={onEdit}
+                            onNoteHoverStart={onNoteHoverStart}
+                            onNoteHoverEnd={onNoteHoverEnd}
+                          />
                         ))}
                         {player.canEdit ? (
                           <button
@@ -1353,6 +1426,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [slotModal, setSlotModal] = useState(null);
   const [profileModalPlayer, setProfileModalPlayer] = useState(null);
+  const [commentTooltip, setCommentTooltip] = useState(null);
 
   async function loadData() {
     setIsLoading(true);
@@ -1370,6 +1444,32 @@ export default function App() {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (!commentTooltip) return;
+
+    const handleViewportChange = () => setCommentTooltip(null);
+    window.addEventListener('scroll', handleViewportChange, true);
+    window.addEventListener('resize', handleViewportChange);
+
+    return () => {
+      window.removeEventListener('scroll', handleViewportChange, true);
+      window.removeEventListener('resize', handleViewportChange);
+    };
+  }, [commentTooltip]);
+
+  function handleNoteHoverStart(text, anchorRect) {
+    setCommentTooltip({
+      text,
+      anchorRect,
+      placement: 'bottom',
+      visible: true,
+    });
+  }
+
+  function handleNoteHoverEnd() {
+    setCommentTooltip(null);
+  }
 
   function upsertSlot(slot) {
     setData((current) => ({
@@ -1473,6 +1573,8 @@ export default function App() {
                 dayEventTypes={data.dayEventTypes}
                 onAdd={(day) => setSlotModal({ day })}
                 onEdit={(event) => setSlotModal({ event })}
+                onNoteHoverStart={handleNoteHoverStart}
+                onNoteHoverEnd={handleNoteHoverEnd}
                 lastUpdated={data.lastUpdated}
               />
               <Legend eventTypes={data.eventTypes} />
@@ -1495,6 +1597,12 @@ export default function App() {
           player={profileModalPlayer}
           onClose={() => setProfileModalPlayer(null)}
           onSaved={updatePlayerProfile}
+        />
+      ) : null}
+      {commentTooltip?.visible ? (
+        <CommentTooltip
+          key={`${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`}
+          tooltip={commentTooltip}
         />
       ) : null}
     </main>
