@@ -32,6 +32,14 @@ export function bootstrap() {
   return request('/api/bootstrap/', { method: 'GET' });
 }
 
+export function fetchGameUpdates() {
+  return request('/api/game-updates/', { method: 'GET' });
+}
+
+export function fetchGameUpdateDetail(slug) {
+  return request(`/api/game-updates/${slug}/`, { method: 'GET' });
+}
+
 export function createSlot(payload) {
   return request('/api/slots/', {
     method: 'POST',

@@ -9,8 +9,59 @@ from django.urls import reverse
 
 from .admin import PlayerAdmin, PlayerInline, StaffMemberAdmin
 from .forms import ScheduleSlotForm
-from .models import DayEventType, DiscordConnection, Player, RosterState, ScheduleSlot, StaffMember
+from .game_updates import parse_game_updates_html, sync_game_updates
+from .models import DayEventType, DiscordConnection, GameUpdate, Player, RosterState, ScheduleSlot, StaffMember
 from .roster import ensure_current_roster_week
+
+PATCH_NOTES_SAMPLE_HTML = """
+<div class="PatchNotes-patch PatchNotes-live">
+  <div class="anchor" id="patch-2026-04-23"></div>
+  <div class="PatchNotes-labels"><div class="PatchNotes-date">April 23, 2026</div></div>
+  <h3 class="PatchNotes-patchTitle">Overwatch Retail Patch Notes – April 23, 2026</h3>
+  <div class="PatchNotes-section PatchNotes-section-generic_update">
+    <h4 class="PatchNotes-sectionTitle">Balance Hotfix Update</h4>
+    <div class="PatchNotes-sectionDescription"><p>This is a balance hotfix update.</p></div>
+  </div>
+  <div class="PatchNotesHeroUpdate">
+    <div class="PatchNotesHeroUpdate-header">
+      <img class="PatchNotesHeroUpdate-icon" src="https://example.com/roadhog.png" alt="Roadhog">
+      <h5 class="PatchNotesHeroUpdate-name">Roadhog</h5>
+    </div>
+    <div class="PatchNotesHeroUpdate-body">
+      <div class="PatchNotesHeroUpdate-abilitiesList">
+        <div class="PatchNotesAbilityUpdate">
+          <div class="PatchNotesAbilityUpdate-text">
+            <div class="PatchNotesAbilityUpdate-name">Chain Hook</div>
+            <div class="PatchNotesAbilityUpdate-detailList">
+              <ul>
+                <li>Cooldown reduced from 8 to 7 seconds.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="PatchNotesTop">Top of post</div>
+</div>
+<div class="PatchNotes-patch PatchNotes-live">
+  <div class="anchor" id="patch-2026-04-18"></div>
+  <div class="PatchNotes-labels"><div class="PatchNotes-date">April 18, 2026</div></div>
+  <h3 class="PatchNotes-patchTitle">Overwatch Retail Patch Notes – April 18, 2026</h3>
+  <div class="PatchNotes-section PatchNotes-section-generic_update">
+    <h4 class="PatchNotes-sectionTitle">Bug Fix Update</h4>
+    <div class="PatchNotes-sectionDescription"><p>This is a bug fix update.</p></div>
+  </div>
+  <div class="PatchNotesGeneralUpdate">
+    <div class="PatchNotesGeneralUpdate-title">General</div>
+    <div class="PatchNotesGeneralUpdate-description">
+      <ul>
+        <li>Fixed a bug in matchmaking.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+"""
 
 
 class ScheduleFormTests(TestCase):
@@ -810,4 +861,98 @@ class AdminConfigurationTests(TestCase):
         self.assertNotIn('discord_tag', PlayerInline.fields)
         self.assertIn('discord_status', PlayerInline.fields)
 
-# Create your tests here.
+
+class GameUpdateParserTests(TestCase):
+    def test_parse_game_updates_html_extracts_patch_entries(self):
+        parsed = parse_game_updates_html(PATCH_NOTES_SAMPLE_HTML)
+
+        self.assertEqual(len(parsed), 2)
+        self.assertEqual(parsed[0]['type_label'], 'Hotfix')
+        self.assertEqual(parsed[0]['hero_image_url'], 'https://example.com/roadhog.png')
+        self.assertEqual(parsed[0]['summary'], 'This is a balance hotfix update.')
+        self.assertTrue(any(block['type'] == 'heading' and block['text'] == 'Roadhog' for block in parsed[0]['content_json']))
+        self.assertTrue(any(block['type'] == 'bullet_list' for block in parsed[0]['content_json']))
+        self.assertTrue(parsed[0]['source_url'].endswith('#patch-2026-04-23'))
+        self.assertEqual(parsed[1]['type_label'], 'Bug Fix')
+
+    @patch('scheduler.game_updates.requests.get')
+    def test_sync_game_updates_upserts_records(self, mocked_get):
+        mocked_get.return_value = Mock(status_code=200)
+        mocked_get.return_value.raise_for_status = Mock()
+        mocked_get.return_value.text = PATCH_NOTES_SAMPLE_HTML
+
+        first_result = sync_game_updates()
+
+        self.assertEqual(first_result['created'], 2)
+        self.assertEqual(first_result['updated'], 0)
+        self.assertEqual(GameUpdate.objects.count(), 2)
+
+        mocked_get.return_value.text = PATCH_NOTES_SAMPLE_HTML.replace(
+            'This is a balance hotfix update.',
+            'This is an updated balance hotfix summary.',
+        )
+
+        second_result = sync_game_updates()
+
+        self.assertEqual(second_result['created'], 0)
+        self.assertEqual(second_result['updated'], 2)
+        self.assertEqual(GameUpdate.objects.count(), 2)
+        self.assertEqual(
+            GameUpdate.objects.get(slug='2026-04-23-overwatch-retail-patch-notes-april-23-2026').summary,
+            'This is an updated balance hotfix summary.',
+        )
+
+
+class GameUpdateApiTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='updates-user', password='secret-pass')
+        self.client.login(username='updates-user', password='secret-pass')
+        self.update = GameUpdate.objects.create(
+            slug='2026-04-23-overwatch-retail-patch-notes-april-23-2026',
+            title='Overwatch Retail Patch Notes – April 23, 2026',
+            published_at=date(2026, 4, 23),
+            type_label='Hotfix',
+            source_url='https://overwatch.blizzard.com/en-us/news/patch-notes/#patch-2026-04-23',
+            summary='This is a balance hotfix update.',
+            hero_image_url='https://example.com/roadhog.png',
+            content_json=[{'type': 'paragraph', 'text': 'This is a balance hotfix update.'}],
+        )
+
+    def test_list_endpoint_returns_updates(self):
+        response = self.client.get(reverse('api_game_updates_list'))
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()['updates'][0]
+        self.assertEqual(payload['slug'], self.update.slug)
+        self.assertEqual(payload['typeLabel'], 'Hotfix')
+
+    def test_detail_endpoint_returns_content_json(self):
+        response = self.client.get(reverse('api_game_update_detail', args=[self.update.slug]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['update']['contentJson'][0]['text'], 'This is a balance hotfix update.')
+
+    def test_detail_endpoint_returns_404_for_missing_slug(self):
+        response = self.client.get(reverse('api_game_update_detail', args=['missing-slug']))
+
+        self.assertEqual(response.status_code, 404)
+
+
+@override_settings(CRON_SECRET='sync-secret')
+class GameUpdateSyncEndpointTests(TestCase):
+    def test_sync_endpoint_rejects_missing_secret(self):
+        response = self.client.get(reverse('api_game_updates_sync'))
+
+        self.assertEqual(response.status_code, 401)
+
+    @patch('scheduler.api.sync_game_updates')
+    def test_sync_endpoint_accepts_bearer_secret(self, mocked_sync):
+        mocked_sync.return_value = {'fetched': 4, 'created': 2, 'updated': 2, 'total': 4}
+
+        response = self.client.get(
+            reverse('api_game_updates_sync'),
+            HTTP_AUTHORIZATION='Bearer sync-secret',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['created'], 2)

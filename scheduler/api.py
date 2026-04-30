@@ -18,8 +18,9 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from .game_updates import GameUpdateSyncError, sync_game_updates
 from .forms import ScheduleSlotForm
-from .models import DayEventType, DiscordConnection, Player, ScheduleSlot, StaffMember
+from .models import DayEventType, DiscordConnection, GameUpdate, Player, ScheduleSlot, StaffMember
 from .roster import ensure_current_roster_week
 from .views import get_current_player, get_current_staff_member
 
@@ -181,6 +182,24 @@ def serialize_day_event(day_event):
     }
 
 
+def serialize_game_update_summary(game_update):
+    return {
+        'slug': game_update.slug,
+        'title': game_update.title,
+        'publishedAt': game_update.published_at.isoformat(),
+        'typeLabel': game_update.type_label,
+        'summary': game_update.summary,
+        'heroImageUrl': game_update.hero_image_url,
+        'sourceUrl': game_update.source_url,
+    }
+
+
+def serialize_game_update_detail(game_update):
+    payload = serialize_game_update_summary(game_update)
+    payload['contentJson'] = game_update.content_json
+    return payload
+
+
 def event_meta_for_day(day_of_week, day_event_map):
     day_event = day_event_map.get(day_of_week)
     if not day_event or not day_event.event_type:
@@ -301,6 +320,44 @@ def bootstrap(request):
 
 def build_timestamp_label():
     return timezone.localtime(BUILD_TIMESTAMP).strftime('%d.%m.%Y %H:%M')
+
+
+def expected_sync_secrets():
+    return [value for value in [settings.CRON_SECRET, settings.GAME_UPDATES_SYNC_TOKEN] if value]
+
+
+def request_has_sync_secret(request):
+    authorization = request.headers.get('Authorization', '').strip()
+    return any(authorization == f'Bearer {secret}' for secret in expected_sync_secrets())
+
+
+@require_GET
+@login_required
+def game_updates_list(request):
+    updates = GameUpdate.objects.all()
+    return JsonResponse({'updates': [serialize_game_update_summary(item) for item in updates]})
+
+
+@require_GET
+@login_required
+def game_update_detail(request, slug):
+    game_update = get_object_or_404(GameUpdate, slug=slug)
+    return JsonResponse({'update': serialize_game_update_detail(game_update)})
+
+
+@require_GET
+def game_updates_sync(request):
+    if not expected_sync_secrets():
+        return JsonResponse({'error': 'Sync secret is not configured.'}, status=503)
+    if not request_has_sync_secret(request):
+        return JsonResponse({'error': 'Unauthorized.'}, status=401)
+
+    try:
+        result = sync_game_updates()
+    except GameUpdateSyncError as exc:
+        return JsonResponse({'error': str(exc)}, status=502)
+
+    return JsonResponse({'ok': True, **result})
 
 
 @require_POST

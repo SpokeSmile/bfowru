@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .models import DayEventType, DiscordConnection, Player, RosterState, ScheduleSlot, StaffMember
+from .game_updates import GameUpdateSyncError, sync_game_updates
+from .models import DayEventType, DiscordConnection, GameUpdate, Player, RosterState, ScheduleSlot, StaffMember
 from .roster import ensure_current_roster_week
 
 
@@ -186,3 +187,74 @@ class ScheduleSlotAdmin(admin.ModelAdmin):
 class DayEventTypeAdmin(admin.ModelAdmin):
     list_display = ('day_of_week', 'event_type', 'event_label')
     list_filter = ('event_type',)
+
+
+@admin.register(GameUpdate)
+class GameUpdateAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/scheduler/gameupdate/change_list.html'
+    list_display = ('title', 'published_at', 'type_label', 'synced_at')
+    search_fields = ('title', 'summary', 'type_label', 'source_url')
+    ordering = ('-published_at', '-id')
+    readonly_fields = (
+        'slug',
+        'title',
+        'published_at',
+        'type_label',
+        'source_link',
+        'hero_image_preview',
+        'summary',
+        'content_preview',
+        'synced_at',
+    )
+    fields = readonly_fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                'sync-updates/',
+                self.admin_site.admin_view(self.sync_updates_view),
+                name='scheduler_gameupdate_sync_updates',
+            ),
+        ]
+        return custom_urls + urls
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['sync_updates_url'] = reverse('admin:scheduler_gameupdate_sync_updates')
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def sync_updates_view(self, request):
+        if request.method != 'POST':
+            return HttpResponseRedirect(reverse('admin:scheduler_gameupdate_changelist'))
+
+        try:
+            result = sync_game_updates()
+        except GameUpdateSyncError as exc:
+            messages.error(request, str(exc))
+        else:
+            messages.success(
+                request,
+                f"Синхронизация завершена. Найдено: {result['fetched']}. Создано: {result['created']}. Обновлено: {result['updated']}.",
+            )
+        return HttpResponseRedirect(reverse('admin:scheduler_gameupdate_changelist'))
+
+    @admin.display(description='источник')
+    def source_link(self, obj):
+        return format_html('<a href="{}" target="_blank" rel="noopener noreferrer">Открыть Blizzard</a>', obj.source_url)
+
+    @admin.display(description='hero image')
+    def hero_image_preview(self, obj):
+        if not obj.hero_image_url:
+            return '—'
+        return format_html(
+            '<img src="{}" alt="" style="width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid rgba(0,0,0,.08);" />',
+            obj.hero_image_url,
+        )
+
+    @admin.display(description='контент')
+    def content_preview(self, obj):
+        return format_html('<pre style="white-space:pre-wrap;max-width:900px;">{}</pre>', obj.content_json)

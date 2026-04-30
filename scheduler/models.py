@@ -442,3 +442,23 @@ class DayEventType(models.Model):
     @property
     def event_tone(self):
         return ScheduleSlot.EVENT_TYPE_META.get(self.event_type, {}).get('tone', 'orange')
+
+
+class GameUpdate(models.Model):
+    slug = models.SlugField('slug', max_length=180, unique=True)
+    title = models.CharField('заголовок', max_length=255)
+    published_at = models.DateField('дата публикации')
+    type_label = models.CharField('тип обновления', max_length=80)
+    source_url = models.URLField('источник', max_length=500)
+    summary = models.TextField('краткое описание', blank=True)
+    hero_image_url = models.URLField('изображение героя', max_length=500, blank=True)
+    content_json = models.JSONField('контент патча', default=list, blank=True)
+    synced_at = models.DateTimeField('синхронизировано', auto_now=True)
+
+    class Meta:
+        ordering = ['-published_at', '-id']
+        verbose_name = 'обновление игры'
+        verbose_name_plural = 'обновления игры'
+
+    def __str__(self):
+        return self.title

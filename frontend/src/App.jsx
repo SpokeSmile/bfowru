@@ -3,10 +3,12 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
+  BookText,
   CalendarPlus,
   Check,
   Clock3,
   Crosshair,
+  ExternalLink,
   LogOut,
   MonitorPlay,
   Pencil,
@@ -26,6 +28,8 @@ import {
   createSlot,
   deleteSlot,
   disconnectDiscord,
+  fetchGameUpdateDetail,
+  fetchGameUpdates,
   logout,
   updateProfile,
   updateSlot,
@@ -211,6 +215,23 @@ function hexToRgba(hexColor, alpha) {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
+function formatPublishedDate(value) {
+  if (!value) return '';
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(value));
+}
+
+const UPDATE_TYPE_STYLES = {
+  Hotfix: 'border-amber-300/30 bg-amber-500/10 text-amber-100',
+  'Bug Fix': 'border-rose-300/30 bg-rose-500/10 text-rose-100',
+  'Season / Event': 'border-purple-300/30 bg-purple-500/10 text-purple-100',
+  'Patch Notes': 'border-sky-300/30 bg-sky-500/10 text-sky-100',
+  Update: 'border-bf-cream/10 bg-black/20 text-bf-cream/72',
+};
+
 function roleBadgeStyle(color) {
   return {
     borderColor: hexToRgba(color, 0.35),
@@ -371,13 +392,19 @@ function Sidebar({ pathname }) {
       href: '/',
       label: 'Расписание',
       icon: Clock3,
-      isActive: !pathname.startsWith('/team') && !pathname.startsWith('/profile'),
+      isActive: !pathname.startsWith('/team') && !pathname.startsWith('/profile') && !pathname.startsWith('/updates'),
     },
     {
       href: '/team/',
       label: 'Состав',
       icon: Users,
       isActive: pathname.startsWith('/team'),
+    },
+    {
+      href: '/updates/',
+      label: 'Обновления',
+      icon: BookText,
+      isActive: pathname.startsWith('/updates'),
     },
     {
       href: '/profile/',
@@ -831,6 +858,201 @@ function TeamPage({ players, staffMembers }) {
       <TeamBanner />
       <PlayerProfiles players={players} showHeading={false} />
       <StaffDirectory staffMembers={staffMembers} />
+    </>
+  );
+}
+
+function UpdateTypeBadge({ typeLabel, className = '' }) {
+  const style = UPDATE_TYPE_STYLES[typeLabel] || UPDATE_TYPE_STYLES.Update;
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-black uppercase tracking-wide ${style} ${className}`}>
+      {typeLabel}
+    </span>
+  );
+}
+
+function UpdatesBanner() {
+  return (
+    <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/25 px-6 py-6 lg:px-8">
+      <div className="relative z-10 grid gap-3 lg:max-w-[520px]">
+        <div className="text-sm font-black uppercase text-bf-orange">Blizzard</div>
+        <h1 className="text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl">
+          Обновления Overwatch 2
+        </h1>
+        <p className="max-w-[520px] text-sm text-bf-cream/66">
+          Официальные patch notes Blizzard, синхронизированные в приложение.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function UpdateContentBlock({ block }) {
+  if (block.type === 'heading') {
+    if (block.level <= 4) {
+      return <h3 className="mt-5 text-lg font-black uppercase text-slate-100 first:mt-0">{block.text}</h3>;
+    }
+    return <h4 className="mt-4 text-sm font-black uppercase text-bf-orange">{block.text}</h4>;
+  }
+
+  if (block.type === 'paragraph') {
+    return <p className="text-sm leading-6 text-bf-cream/74">{block.text}</p>;
+  }
+
+  if (block.type === 'bullet_list') {
+    return (
+      <ul className="grid gap-2 pl-5 text-sm leading-6 text-bf-cream/78">
+        {block.items.map((item) => (
+          <li key={item} className="list-disc">
+            {item}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (block.type === 'image') {
+    return (
+      <div className="mt-3 flex items-center gap-3 rounded-xl border border-bf-cream/10 bg-black/18 p-3">
+        <img
+          className="h-14 w-14 rounded-xl border border-bf-cream/10 object-cover"
+          src={block.src}
+          alt={block.alt || ''}
+        />
+        <div className="text-sm font-bold text-bf-cream/72">{block.alt || 'Hero update'}</div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+function UpdatesPage({
+  updates,
+  selectedSlug,
+  selectedUpdate,
+  onSelect,
+  isLoadingList,
+  isLoadingDetail,
+  error,
+}) {
+  const hasUpdates = updates.length > 0;
+
+  return (
+    <>
+      <UpdatesBanner />
+      <section className="mt-4 grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
+        <div className="glass-panel rounded-xl p-4">
+          <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase text-slate-100">
+            <BookText size={18} className="text-bf-orange" />
+            Последние обновления
+          </div>
+
+          {isLoadingList ? (
+            <div className="rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62">
+              Загружаю список обновлений...
+            </div>
+          ) : error ? (
+            <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm text-red-100">
+              {error}
+            </div>
+          ) : hasUpdates ? (
+            <div className="grid gap-3">
+              {updates.map((update) => {
+                const isActive = update.slug === selectedSlug;
+                return (
+                  <button
+                    key={update.slug}
+                    type="button"
+                    onClick={() => onSelect(update.slug)}
+                    className={`grid gap-3 rounded-xl border p-4 text-left transition ${
+                      isActive
+                        ? 'border-bf-orange/45 bg-bf-orange/10 shadow-[0_0_18px_rgba(216,109,56,0.10)]'
+                        : 'border-bf-cream/10 bg-black/18 hover:border-bf-orange/25 hover:bg-bf-steel/10'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="truncate text-base font-black uppercase text-slate-100">{update.title}</div>
+                        <div className="mt-1 text-xs font-semibold text-bf-cream/48">{formatPublishedDate(update.publishedAt)}</div>
+                      </div>
+                      <UpdateTypeBadge typeLabel={update.typeLabel} className="shrink-0" />
+                    </div>
+                    <p className="line-clamp-3 text-sm leading-5 text-bf-cream/64">{update.summary || 'Без краткого описания.'}</p>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62">
+              Обновления еще не синхронизированы.
+            </div>
+          )}
+        </div>
+
+        <div className="glass-panel rounded-xl p-4">
+          {isLoadingDetail ? (
+            <div className="rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62">
+              Загружаю детали патча...
+            </div>
+          ) : selectedUpdate ? (
+            <div className="grid gap-5">
+              <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <UpdateTypeBadge typeLabel={selectedUpdate.typeLabel} />
+                    <span className="text-xs font-semibold uppercase tracking-wide text-bf-cream/44">
+                      {formatPublishedDate(selectedUpdate.publishedAt)}
+                    </span>
+                  </div>
+                  <h2 className="mt-3 text-3xl font-black uppercase leading-tight text-slate-100">
+                    {selectedUpdate.title}
+                  </h2>
+                  <p className="mt-3 max-w-[780px] text-sm leading-6 text-bf-cream/70">
+                    {selectedUpdate.summary || 'Без краткого описания.'}
+                  </p>
+                </div>
+
+                {selectedUpdate.heroImageUrl ? (
+                  <img
+                    className="h-48 w-full rounded-xl border border-bf-cream/10 object-cover"
+                    src={selectedUpdate.heroImageUrl}
+                    alt={selectedUpdate.title}
+                  />
+                ) : null}
+              </div>
+
+              <div className="rounded-xl border border-bf-cream/10 bg-black/18 p-4">
+                <div className="grid gap-4">
+                  {selectedUpdate.contentJson.length ? (
+                    selectedUpdate.contentJson.map((block, index) => (
+                      <UpdateContentBlock key={`${block.type}-${index}-${block.text || block.src || 'block'}`} block={block} />
+                    ))
+                  ) : (
+                    <div className="text-sm text-bf-cream/60">Контент патча не найден.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <a
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-bf-cream/10 bg-black/18 px-4 font-black text-slate-100 transition hover:border-bf-orange/35 hover:text-bf-orange"
+                  href={selectedUpdate.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink size={17} />
+                  Открыть на Blizzard
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62">
+              Выберите обновление из списка.
+            </div>
+          )}
+        </div>
+      </section>
     </>
   );
 }
@@ -1424,6 +1646,12 @@ export default function App() {
   const [slotModal, setSlotModal] = useState(null);
   const [profileModalPlayer, setProfileModalPlayer] = useState(null);
   const [commentTooltip, setCommentTooltip] = useState(null);
+  const [updatesList, setUpdatesList] = useState([]);
+  const [updatesBySlug, setUpdatesBySlug] = useState({});
+  const [isLoadingUpdatesList, setIsLoadingUpdatesList] = useState(false);
+  const [isLoadingUpdateDetail, setIsLoadingUpdateDetail] = useState(false);
+  const [updatesError, setUpdatesError] = useState('');
+  const [selectedUpdateSlug, setSelectedUpdateSlug] = useState(() => new URLSearchParams(window.location.search).get('patch') || '');
 
   async function loadData() {
     setIsLoading(true);
@@ -1442,6 +1670,55 @@ export default function App() {
     loadData();
   }, []);
 
+  async function loadUpdatesList() {
+    setIsLoadingUpdatesList(true);
+    setUpdatesError('');
+    try {
+      const response = await fetchGameUpdates();
+      setUpdatesList(response.updates || []);
+      return response.updates || [];
+    } catch (loadError) {
+      setUpdatesError(loadError.message);
+      return [];
+    } finally {
+      setIsLoadingUpdatesList(false);
+    }
+  }
+
+  async function loadUpdateDetail(slug) {
+    if (!slug || updatesBySlug[slug]) {
+      return updatesBySlug[slug] || null;
+    }
+
+    setIsLoadingUpdateDetail(true);
+    setUpdatesError('');
+    try {
+      const response = await fetchGameUpdateDetail(slug);
+      setUpdatesBySlug((current) => ({
+        ...current,
+        [slug]: response.update,
+      }));
+      return response.update;
+    } catch (loadError) {
+      setUpdatesError(loadError.message);
+      return null;
+    } finally {
+      setIsLoadingUpdateDetail(false);
+    }
+  }
+
+  function selectUpdate(slug) {
+    setSelectedUpdateSlug(slug);
+    const params = new URLSearchParams(window.location.search);
+    if (slug) {
+      params.set('patch', slug);
+    } else {
+      params.delete('patch');
+    }
+    const query = params.toString();
+    window.history.replaceState({}, document.title, `${window.location.pathname}${query ? `?${query}` : ''}`);
+  }
+
   useEffect(() => {
     if (!commentTooltip) return;
 
@@ -1454,6 +1731,43 @@ export default function App() {
       window.removeEventListener('resize', handleViewportChange);
     };
   }, [commentTooltip]);
+
+  const pathname = window.location.pathname;
+  const isUpdatesPage = pathname.startsWith('/updates');
+
+  useEffect(() => {
+    if (!isUpdatesPage) return;
+
+    let isMounted = true;
+
+    loadUpdatesList().then((updates) => {
+      if (!isMounted) return;
+      const requestedSlug = new URLSearchParams(window.location.search).get('patch') || '';
+      const initialSlug = updates.some((item) => item.slug === requestedSlug)
+        ? requestedSlug
+        : updates[0]?.slug || '';
+
+      if (initialSlug) {
+        setSelectedUpdateSlug(initialSlug);
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('patch') !== initialSlug) {
+          params.set('patch', initialSlug);
+          window.history.replaceState({}, document.title, `${window.location.pathname}?${params.toString()}`);
+        }
+      } else {
+        setSelectedUpdateSlug('');
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isUpdatesPage]);
+
+  useEffect(() => {
+    if (!isUpdatesPage || !selectedUpdateSlug) return;
+    loadUpdateDetail(selectedUpdateSlug);
+  }, [isUpdatesPage, selectedUpdateSlug]);
 
   function handleNoteHoverStart(text, anchorRect) {
     setCommentTooltip({
@@ -1515,7 +1829,7 @@ export default function App() {
       <main className="grid min-h-screen place-items-center px-6">
         <div className="glass-panel rounded-xl px-8 py-6 text-center">
           <RefreshCw className="mx-auto animate-spin text-bf-orange" />
-          <div className="mt-3 font-black uppercase">Загрузка расписания</div>
+          <div className="mt-3 font-black uppercase">Загрузка данных</div>
         </div>
       </main>
     );
@@ -1526,7 +1840,7 @@ export default function App() {
       <main className="grid min-h-screen place-items-center px-6">
         <div className="glass-panel max-w-md rounded-xl px-8 py-6 text-center">
           <AlertTriangle className="mx-auto text-red-300" />
-          <div className="mt-3 font-black uppercase">Не удалось загрузить расписание</div>
+          <div className="mt-3 font-black uppercase">Не удалось загрузить данные</div>
           <p className="mt-2 text-bf-cream/60">{error}</p>
           <button className="mt-5 rounded-xl bg-bf-orange px-5 py-3 font-black text-black" type="button" onClick={loadData}>
             Повторить
@@ -1537,13 +1851,13 @@ export default function App() {
   }
 
   const canAdd = Boolean(data.user.playerId);
-  const pathname = window.location.pathname;
   const isProfilePage = pathname.startsWith('/profile');
   const isTeamPage = pathname.startsWith('/team');
   const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
   const currentStaffMember = data.staffMembers.find((staffMember) => staffMember.id === data.user.staffMemberId) || null;
   const currentProfile = data.user.profileType === 'staff' ? currentStaffMember : currentPlayer;
   const handleProfileSaved = data.user.profileType === 'staff' ? updateStaffProfile : updatePlayerProfile;
+  const selectedUpdate = selectedUpdateSlug ? updatesBySlug[selectedUpdateSlug] || null : null;
 
   return (
     <main className="mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]">
@@ -1560,6 +1874,16 @@ export default function App() {
             />
           ) : isTeamPage ? (
             <TeamPage players={data.players} staffMembers={data.staffMembers} />
+          ) : isUpdatesPage ? (
+            <UpdatesPage
+              updates={updatesList}
+              selectedSlug={selectedUpdateSlug}
+              selectedUpdate={selectedUpdate}
+              onSelect={selectUpdate}
+              isLoadingList={isLoadingUpdatesList}
+              isLoadingDetail={isLoadingUpdateDetail}
+              error={updatesError}
+            />
           ) : (
             <>
               <HeroBanner canAdd={canAdd} onAdd={(day) => setSlotModal({ day })} />

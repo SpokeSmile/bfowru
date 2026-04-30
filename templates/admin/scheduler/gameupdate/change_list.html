@@ -1,0 +1,13 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+    <li>
+        <form action="{{ sync_updates_url }}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="button" style="padding:8px 14px;border-radius:12px;border:1px solid #f3701e;background:#f3701e;color:#160b05;font-weight:700;cursor:pointer;">
+                Синхронизировать Blizzard
+            </button>
+        </form>
+    </li>
+    {{ block.super }}
+{% endblock %}

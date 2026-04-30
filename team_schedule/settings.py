@@ -171,6 +171,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DISCORD_CLIENT_ID = os.environ.get('DISCORD_CLIENT_ID', '').strip()
 DISCORD_CLIENT_SECRET = os.environ.get('DISCORD_CLIENT_SECRET', '').strip()
 DISCORD_REDIRECT_URI = os.environ.get('DISCORD_REDIRECT_URI', '').strip()
+CRON_SECRET = os.environ.get('CRON_SECRET', '').strip()
+GAME_UPDATES_SYNC_TOKEN = os.environ.get('GAME_UPDATES_SYNC_TOKEN', '').strip()
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'schedule'
