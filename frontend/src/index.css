@@ -78,8 +78,13 @@ textarea {
   display: flex;
   justify-content: center;
   min-height: calc(100vh - 32px);
-  border-radius: 34px;
-  padding: 12px 10px;
+  border: 1px solid rgba(232, 216, 201, 0.08);
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(14, 21, 36, 0.96), rgba(6, 10, 18, 0.98)),
+    #070b14;
+  padding: 10px 8px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
   overflow: visible;
 }
 
@@ -89,16 +94,8 @@ textarea {
   width: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  border: 1px solid rgba(232, 216, 201, 0.06);
-  border-radius: 26px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.014), transparent 28%),
-    rgba(5, 10, 18, 0.34);
-  padding: 14px 10px 20px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 12px 28px rgba(0, 0, 0, 0.2);
+  gap: 16px;
+  padding: 10px 0 18px;
 }
 
 .sidebar-head {
@@ -109,15 +106,12 @@ textarea {
 
 .sidebar-brand {
   display: grid;
-  height: 86px;
-  width: 86px;
+  height: 72px;
+  width: 72px;
   place-items: center;
-  border-radius: 26px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0)),
-    rgba(6, 11, 20, 0.5);
+  border-radius: 999px;
+  background: transparent;
   text-decoration: none;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
 }
 
 .sidebar-brand .brand-logo {
@@ -129,24 +123,24 @@ textarea {
 .sidebar-nav {
   display: grid;
   width: 100%;
-  gap: 12px;
+  gap: 14px;
   justify-items: center;
 }
 
 .sidebar-nav-link {
   position: relative;
   display: grid;
-  width: 86px;
-  min-height: 86px;
+  width: 76px;
+  min-height: 74px;
   justify-items: center;
   align-content: center;
-  gap: 8px;
-  border-radius: 22px;
+  gap: 7px;
+  border-radius: 20px;
   background: transparent;
-  color: rgba(232, 216, 201, 0.72);
-  padding: 12px 8px;
-  font-size: 12px;
-  font-weight: 800;
+  color: rgba(232, 216, 201, 0.58);
+  padding: 10px 7px;
+  font-size: 11px;
+  font-weight: 750;
   letter-spacing: 0;
   text-transform: none;
   text-align: center;
@@ -167,18 +161,18 @@ textarea {
 
 .sidebar-nav-link:hover {
   transform: translateY(-1px);
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.018);
+  color: rgba(248, 250, 252, 0.9);
+  background: rgba(255, 255, 255, 0.016);
 }
 
 .sidebar-nav-link-active {
   background:
-    radial-gradient(circle at 50% 0%, rgba(243, 112, 30, 0.2), transparent 72%),
-    linear-gradient(180deg, rgba(243, 112, 30, 0.2), rgba(243, 112, 30, 0.08));
+    radial-gradient(circle at 50% 25%, rgba(243, 112, 30, 0.32), transparent 72%),
+    linear-gradient(180deg, rgba(243, 112, 30, 0.28), rgba(243, 112, 30, 0.12));
   color: #f8fafc;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 10px 24px rgba(243, 112, 30, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 14px 28px rgba(243, 112, 30, 0.18);
 }
 
 .comment-tooltip {
@@ -205,11 +199,11 @@ textarea {
 
 @media (min-width: 1280px) {
   .app-shell {
-    grid-template-columns: 118px minmax(0, 1fr);
+    grid-template-columns: 98px minmax(0, 1fr);
   }
 
   .app-sidebar {
-    width: 118px;
+    width: 98px;
   }
 }
 
@@ -268,12 +262,12 @@ textarea {
 
 @media (max-width: 640px) {
   .sidebar-shell {
-    padding-inline: 8px;
+    padding-inline: 0;
   }
 
   .sidebar-brand {
-    height: 74px;
-    width: 74px;
+    height: 66px;
+    width: 66px;
   }
 
   .sidebar-brand .brand-logo {

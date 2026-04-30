@@ -185,7 +185,7 @@ function discordFeedbackFromUrl(search) {
   return null;
 }
 
-function previewNote(text, maxChars = 25) {
+function previewNote(text, maxChars = 15) {
   if (!text) return '';
   const chars = Array.from(text);
   if (chars.length <= maxChars) return text;
