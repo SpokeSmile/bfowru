@@ -188,6 +188,11 @@ class ScheduleAccessTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse('login'), response.url)
 
+    def test_login_page_renders_for_anonymous_user(self):
+        response = self.client.get(reverse('login'))
+
+        self.assertEqual(response.status_code, 200)
+
     def test_schedule_shows_player_role(self):
         self.player_one.role = 'Leader'
         self.player_one.save()
