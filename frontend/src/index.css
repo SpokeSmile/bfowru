@@ -270,7 +270,7 @@ textarea {
 .sidebar-nav-link {
   position: relative;
   display: grid;
-  width: 76px;
+  width: 82px;
   min-height: 74px;
   justify-items: center;
   align-content: center;
@@ -295,8 +295,10 @@ textarea {
 
 .sidebar-link-label {
   display: block;
-  max-width: 100%;
+  width: 100%;
   line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .sidebar-nav-link:hover {

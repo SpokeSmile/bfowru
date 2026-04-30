@@ -877,11 +877,8 @@ function UpdatesBanner() {
       <div className="relative z-10 grid gap-3 lg:max-w-[520px]">
         <div className="text-sm font-black uppercase text-bf-orange">Blizzard</div>
         <h1 className="text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl">
-          Обновления Overwatch 2
+          Обновления Overwatch
         </h1>
-        <p className="max-w-[520px] text-sm text-bf-cream/66">
-          Официальные patch notes Blizzard, синхронизированные в приложение.
-        </p>
       </div>
     </section>
   );
@@ -965,18 +962,20 @@ function UpdatesPage({
                     key={update.slug}
                     type="button"
                     onClick={() => onSelect(update.slug)}
-                    className={`grid gap-3 rounded-xl border p-4 text-left transition ${
+                    className={`grid gap-3 overflow-hidden rounded-xl border p-4 text-left transition ${
                       isActive
                         ? 'border-bf-orange/45 bg-bf-orange/10 shadow-[0_0_18px_rgba(216,109,56,0.10)]'
                         : 'border-bf-cream/10 bg-black/18 hover:border-bf-orange/25 hover:bg-bf-steel/10'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="grid items-start gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
                       <div className="min-w-0">
-                        <div className="truncate text-base font-black uppercase text-slate-100">{update.title}</div>
+                        <div className="line-clamp-2 break-words text-base font-black uppercase leading-tight text-slate-100">
+                          {update.title}
+                        </div>
                         <div className="mt-1 text-xs font-semibold text-bf-cream/48">{formatPublishedDate(update.publishedAt)}</div>
                       </div>
-                      <UpdateTypeBadge typeLabel={update.typeLabel} className="shrink-0" />
+                      <UpdateTypeBadge typeLabel={update.typeLabel} className="justify-self-start sm:justify-self-end" />
                     </div>
                     <p className="line-clamp-3 text-sm leading-5 text-bf-cream/64">{update.summary || 'Без краткого описания.'}</p>
                   </button>
@@ -1005,7 +1004,7 @@ function UpdatesPage({
                       {formatPublishedDate(selectedUpdate.publishedAt)}
                     </span>
                   </div>
-                  <h2 className="mt-3 text-3xl font-black uppercase leading-tight text-slate-100">
+                  <h2 className="mt-3 break-words text-3xl font-black uppercase leading-tight text-slate-100">
                     {selectedUpdate.title}
                   </h2>
                   <p className="mt-3 max-w-[780px] text-sm leading-6 text-bf-cream/70">
