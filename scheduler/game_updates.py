@@ -1,3 +1,4 @@
+import json
 import re
 from datetime import datetime
 from urllib.parse import urljoin
@@ -11,6 +12,7 @@ from .models import GameUpdate
 
 PATCH_NOTES_URL = 'https://overwatch.blizzard.com/en-us/news/patch-notes/'
 SUMMARY_MAX_LENGTH = 320
+ARCHIVE_MONTHS_TO_REFRESH = 2
 
 
 class GameUpdateSyncError(Exception):
@@ -24,6 +26,32 @@ def normalize_text(value):
 def build_update_slug(published_at, title):
     base = slugify(title)[:150] or 'patch-notes'
     return f'{published_at:%Y-%m-%d}-{base}'
+
+
+def extract_patch_notes_date_map(html):
+    match = re.search(r'patchNotesDates\s*=\s*(\{.*?\});', html, flags=re.S)
+    if not match:
+        return {}
+
+    try:
+        parsed = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return {}
+
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def extract_archive_months(html, channel='live'):
+    date_map = extract_patch_notes_date_map(html)
+    months = date_map.get(channel, [])
+    if not isinstance(months, list):
+        return []
+    return [value for value in months if re.fullmatch(r'\d{4}-\d{2}', str(value or ''))]
+
+
+def build_archive_url(month_key, channel='live'):
+    year, month = month_key.split('-')
+    return f'https://overwatch.blizzard.com/en-us/news/patch-notes/{channel}/{year}/{month}'
 
 
 def classify_update_type(title, blocks):
@@ -205,18 +233,44 @@ def fetch_patch_notes_html(url=PATCH_NOTES_URL):
     return response.text
 
 
+def collect_patch_payloads(root_html, full_archive=False):
+    payloads_by_slug = {}
+    visited_urls = {PATCH_NOTES_URL}
+
+    for payload in parse_game_updates_html(root_html):
+        payloads_by_slug[payload['slug']] = payload
+
+    archive_months = extract_archive_months(root_html, channel='live')
+    months_to_fetch = archive_months if full_archive else archive_months[:ARCHIVE_MONTHS_TO_REFRESH]
+
+    for month_key in months_to_fetch:
+        archive_url = build_archive_url(month_key, channel='live')
+        if archive_url in visited_urls:
+            continue
+        visited_urls.add(archive_url)
+        archive_html = fetch_patch_notes_html(archive_url)
+        for payload in parse_game_updates_html(archive_html, base_url=archive_url):
+            payloads_by_slug[payload['slug']] = payload
+
+    return payloads_by_slug
+
+
 @transaction.atomic
-def sync_game_updates():
+def sync_game_updates(full_archive=False):
     try:
         html = fetch_patch_notes_html()
     except requests.RequestException as exc:
         raise GameUpdateSyncError('Не удалось загрузить patch notes Blizzard.') from exc
 
-    parsed_updates = parse_game_updates_html(html)
+    try:
+        payloads_by_slug = collect_patch_payloads(html, full_archive=full_archive)
+    except requests.RequestException as exc:
+        raise GameUpdateSyncError('Не удалось загрузить архив patch notes Blizzard.') from exc
+
     created = 0
     updated = 0
 
-    for payload in parsed_updates:
+    for payload in payloads_by_slug.values():
         _obj, was_created = GameUpdate.objects.update_or_create(
             slug=payload['slug'],
             defaults=payload,
@@ -227,7 +281,7 @@ def sync_game_updates():
             updated += 1
 
     return {
-        'fetched': len(parsed_updates),
+        'fetched': len(payloads_by_slug),
         'created': created,
         'updated': updated,
         'total': GameUpdate.objects.count(),

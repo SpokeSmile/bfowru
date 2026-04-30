@@ -933,7 +933,8 @@ function UpdatesPage({
   isLoadingDetail,
   error,
 }) {
-  const hasUpdates = updates.length > 0;
+  const visibleUpdates = updates.slice(0, 10);
+  const hasUpdates = visibleUpdates.length > 0;
 
   return (
     <>
@@ -955,7 +956,7 @@ function UpdatesPage({
             </div>
           ) : hasUpdates ? (
             <div className="grid gap-3">
-              {updates.map((update) => {
+              {visibleUpdates.map((update) => {
                 const isActive = update.slug === selectedSlug;
                 return (
                   <button
