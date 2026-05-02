@@ -45772,6 +45772,252 @@ function OverwatchStatsPage({
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-3 text-sm text-bf-cream/42", children: stats?.unavailableMessage || "SR, история последних матчей и серии не доступны в OverFast API." })
   ] });
 }
+function ProfilePage({ user, profile, profileType, onSaved }) {
+  const isPlayerProfile = profileType === "player";
+  const isStaffProfile = profileType === "staff";
+  const [name, setName] = reactExports.useState(profile?.name || "");
+  const [battleTagsText, setBattleTagsText] = reactExports.useState(profile?.battleTagsText || "");
+  const [profileErrors, setProfileErrors] = reactExports.useState({});
+  const [profileSuccess, setProfileSuccess] = reactExports.useState("");
+  const [isSavingProfile, setIsSavingProfile] = reactExports.useState(false);
+  const [discordFeedback, setDiscordFeedback] = reactExports.useState(() => discordFeedbackFromUrl(window.location.search));
+  const [isDisconnectingDiscord, setIsDisconnectingDiscord] = reactExports.useState(false);
+  const [oldPassword, setOldPassword] = reactExports.useState("");
+  const [newPassword, setNewPassword] = reactExports.useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = reactExports.useState("");
+  const [passwordErrors, setPasswordErrors] = reactExports.useState({});
+  const [passwordSuccess, setPasswordSuccess] = reactExports.useState("");
+  const [isSavingPassword, setIsSavingPassword] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    setName(profile?.name || "");
+    setBattleTagsText(profile?.battleTagsText || "");
+  }, [profile]);
+  reactExports.useEffect(() => {
+    if (!discordFeedbackFromUrl(window.location.search)) return;
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }, []);
+  async function handleProfileSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSavingProfile(true);
+    setProfileErrors({});
+    setProfileSuccess("");
+    try {
+      const payload = { name };
+      if (isPlayerProfile) {
+        payload.battleTagsText = battleTagsText;
+      }
+      const response = await updateProfile(payload);
+      await onSaved(response.profile || response.player);
+      setProfileSuccess("Профиль сохранен.");
+    } catch (saveError) {
+      setProfileErrors(saveError.payload?.errors || { __all__: [saveError.message] });
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
+  async function handleDiscordDisconnect() {
+    setIsDisconnectingDiscord(true);
+    setDiscordFeedback(null);
+    try {
+      await disconnectDiscord();
+      await onSaved(null, { reload: true });
+      setDiscordFeedback({ tone: "success", text: "Discord отвязан." });
+    } catch (disconnectError) {
+      setDiscordFeedback({ tone: "error", text: disconnectError.message });
+    } finally {
+      setIsDisconnectingDiscord(false);
+    }
+  }
+  async function handlePasswordSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSavingPassword(true);
+    setPasswordErrors({});
+    setPasswordSuccess("");
+    try {
+      await changePassword({ oldPassword, newPassword, newPasswordConfirm });
+      setOldPassword("");
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setPasswordSuccess("Пароль обновлен.");
+    } catch (saveError) {
+      setPasswordErrors(saveError.payload?.errors || { __all__: [saveError.message] });
+    } finally {
+      setIsSavingPassword(false);
+    }
+  }
+  if (!profile) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-1 text-3xl font-black uppercase text-slate-100", children: "Профиль" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-bf-cream/62", children: "Аккаунт не привязан ни к игроку, ни к организаторскому составу. Обратитесь к администратору." })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-5", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-1 text-3xl font-black uppercase text-slate-100", children: isStaffProfile ? "Профиль организатора" : "Профиль игрока" })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handleProfileSubmit, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: isStaffProfile ? "Контактные данные" : "Игровые данные" }),
+        profileErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: profileErrors.__all__.join(", ") }) : null,
+        profileSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: profileSuccess }) : null,
+        discordFeedback ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: `mt-4 rounded-xl p-3 text-sm ${discordFeedback.tone === "success" ? "border border-emerald-400/25 bg-emerald-500/10 text-emerald-100" : "border border-red-400/30 bg-red-500/10 text-red-100"}`,
+            children: discordFeedback.text
+          }
+        ) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 grid gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "Логин",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/20 px-4 text-bf-cream/52 outline-none",
+                value: user.username,
+                readOnly: true
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            isStaffProfile ? "Имя" : "Имя игрока",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
+                value: name,
+                onChange: (inputEvent) => setName(inputEvent.target.value)
+              }
+            ),
+            profileErrors.name ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: profileErrors.name.join(", ") }) : null
+          ] }),
+          isPlayerProfile ? /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "BattleTag'и",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "textarea",
+              {
+                className: "min-h-36 rounded-xl border border-bf-cream/10 bg-black/30 px-4 py-3 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/45",
+                value: battleTagsText,
+                onChange: (inputEvent) => setBattleTagsText(inputEvent.target.value),
+                placeholder: "По одному на строку\nBlackFlock#21234\nBlackFlockAlt#19876"
+              }
+            )
+          ] }) : null,
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/28 px-4 py-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Discord" }),
+            profile.discordConnected ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: profile.avatarUrl, alt: profile.discordDisplayTag, fallbackLabel: profile.name || profile.discordDisplayTag, className: "h-12 w-12 object-cover" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: profile.discordDisplayTag || "@unknown" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: profile.discordGlobalName || "Подключенный аккаунт Discord" })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  className: "inline-flex min-h-10 items-center rounded-xl border border-red-300/30 px-4 font-black text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-45",
+                  type: "button",
+                  onClick: handleDiscordDisconnect,
+                  disabled: isDisconnectingDiscord,
+                  children: "Отвязать Discord"
+                }
+              )
+            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-semibold text-slate-100", children: "Не подключен" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: "Аватар и Discord handle подтянутся автоматически после подключения." })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  className: "inline-flex min-h-10 items-center rounded-xl bg-bf-orange px-4 font-black text-black transition hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(216,109,56,0.18)]",
+                  type: "button",
+                  onClick: () => {
+                    window.location.href = "/api/discord/connect/";
+                  },
+                  children: "Подключить Discord"
+                }
+              )
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
+            type: "submit",
+            disabled: isSavingProfile,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
+              "Сохранить профиль"
+            ]
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handlePasswordSubmit, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Безопасность" }),
+        passwordErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: passwordErrors.__all__.join(", ") }) : null,
+        passwordSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: passwordSuccess }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 grid gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "Старый пароль",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "password",
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
+                value: oldPassword,
+                onChange: (inputEvent) => setOldPassword(inputEvent.target.value)
+              }
+            ),
+            passwordErrors.oldPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.oldPassword.join(", ") }) : null
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "Новый пароль",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "password",
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
+                value: newPassword,
+                onChange: (inputEvent) => setNewPassword(inputEvent.target.value)
+              }
+            ),
+            passwordErrors.newPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.newPassword.join(", ") }) : null
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "Повторите новый пароль",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "password",
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
+                value: newPasswordConfirm,
+                onChange: (inputEvent) => setNewPasswordConfirm(inputEvent.target.value)
+              }
+            ),
+            passwordErrors.newPasswordConfirm ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.newPasswordConfirm.join(", ") }) : null
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: "inline-flex min-h-11 items-center gap-2 rounded-xl border border-bf-orange/45 px-5 font-black text-bf-orange transition hover:bg-bf-orange/10 disabled:cursor-not-allowed disabled:opacity-45",
+            type: "submit",
+            disabled: isSavingPassword,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
+              "Сменить пароль"
+            ]
+          }
+        ) })
+      ] })
+    ] })
+  ] });
+}
 function CommentTooltip({ tooltip }) {
   const needsEmergencyWrap = /\S{30,}/.test(tooltip.text || "");
   const [position, setPosition] = reactExports.useState({
@@ -46279,252 +46525,6 @@ function UpdatesPage({
           }
         ) })
       ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62", children: "Выберите обновление из списка." }) })
-    ] })
-  ] });
-}
-function ProfilePage({ user, profile, profileType, onSaved }) {
-  const isPlayerProfile = profileType === "player";
-  const isStaffProfile = profileType === "staff";
-  const [name, setName] = reactExports.useState(profile?.name || "");
-  const [battleTagsText, setBattleTagsText] = reactExports.useState(profile?.battleTagsText || "");
-  const [profileErrors, setProfileErrors] = reactExports.useState({});
-  const [profileSuccess, setProfileSuccess] = reactExports.useState("");
-  const [isSavingProfile, setIsSavingProfile] = reactExports.useState(false);
-  const [discordFeedback, setDiscordFeedback] = reactExports.useState(() => discordFeedbackFromUrl(window.location.search));
-  const [isDisconnectingDiscord, setIsDisconnectingDiscord] = reactExports.useState(false);
-  const [oldPassword, setOldPassword] = reactExports.useState("");
-  const [newPassword, setNewPassword] = reactExports.useState("");
-  const [newPasswordConfirm, setNewPasswordConfirm] = reactExports.useState("");
-  const [passwordErrors, setPasswordErrors] = reactExports.useState({});
-  const [passwordSuccess, setPasswordSuccess] = reactExports.useState("");
-  const [isSavingPassword, setIsSavingPassword] = reactExports.useState(false);
-  reactExports.useEffect(() => {
-    setName(profile?.name || "");
-    setBattleTagsText(profile?.battleTagsText || "");
-  }, [profile]);
-  reactExports.useEffect(() => {
-    if (!discordFeedbackFromUrl(window.location.search)) return;
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }, []);
-  async function handleProfileSubmit(submitEvent) {
-    submitEvent.preventDefault();
-    setIsSavingProfile(true);
-    setProfileErrors({});
-    setProfileSuccess("");
-    try {
-      const payload = { name };
-      if (isPlayerProfile) {
-        payload.battleTagsText = battleTagsText;
-      }
-      const response = await updateProfile(payload);
-      await onSaved(response.profile || response.player);
-      setProfileSuccess("Профиль сохранен.");
-    } catch (saveError) {
-      setProfileErrors(saveError.payload?.errors || { __all__: [saveError.message] });
-    } finally {
-      setIsSavingProfile(false);
-    }
-  }
-  async function handleDiscordDisconnect() {
-    setIsDisconnectingDiscord(true);
-    setDiscordFeedback(null);
-    try {
-      await disconnectDiscord();
-      await onSaved(null, { reload: true });
-      setDiscordFeedback({ tone: "success", text: "Discord отвязан." });
-    } catch (disconnectError) {
-      setDiscordFeedback({ tone: "error", text: disconnectError.message });
-    } finally {
-      setIsDisconnectingDiscord(false);
-    }
-  }
-  async function handlePasswordSubmit(submitEvent) {
-    submitEvent.preventDefault();
-    setIsSavingPassword(true);
-    setPasswordErrors({});
-    setPasswordSuccess("");
-    try {
-      await changePassword({ oldPassword, newPassword, newPasswordConfirm });
-      setOldPassword("");
-      setNewPassword("");
-      setNewPasswordConfirm("");
-      setPasswordSuccess("Пароль обновлен.");
-    } catch (saveError) {
-      setPasswordErrors(saveError.payload?.errors || { __all__: [saveError.message] });
-    } finally {
-      setIsSavingPassword(false);
-    }
-  }
-  if (!profile) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-1 text-3xl font-black uppercase text-slate-100", children: "Профиль" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-bf-cream/62", children: "Аккаунт не привязан ни к игроку, ни к организаторскому составу. Обратитесь к администратору." })
-    ] });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-5", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-1 text-3xl font-black uppercase text-slate-100", children: isStaffProfile ? "Профиль организатора" : "Профиль игрока" })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handleProfileSubmit, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: isStaffProfile ? "Контактные данные" : "Игровые данные" }),
-        profileErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: profileErrors.__all__.join(", ") }) : null,
-        profileSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: profileSuccess }) : null,
-        discordFeedback ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: `mt-4 rounded-xl p-3 text-sm ${discordFeedback.tone === "success" ? "border border-emerald-400/25 bg-emerald-500/10 text-emerald-100" : "border border-red-400/30 bg-red-500/10 text-red-100"}`,
-            children: discordFeedback.text
-          }
-        ) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 grid gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Логин",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/20 px-4 text-bf-cream/52 outline-none",
-                value: user.username,
-                readOnly: true
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            isStaffProfile ? "Имя" : "Имя игрока",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
-                value: name,
-                onChange: (inputEvent) => setName(inputEvent.target.value)
-              }
-            ),
-            profileErrors.name ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: profileErrors.name.join(", ") }) : null
-          ] }),
-          isPlayerProfile ? /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "BattleTag'и",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "textarea",
-              {
-                className: "min-h-36 rounded-xl border border-bf-cream/10 bg-black/30 px-4 py-3 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/45",
-                value: battleTagsText,
-                onChange: (inputEvent) => setBattleTagsText(inputEvent.target.value),
-                placeholder: "По одному на строку\nBlackFlock#21234\nBlackFlockAlt#19876"
-              }
-            )
-          ] }) : null,
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/28 px-4 py-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Discord" }),
-            profile.discordConnected ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: profile.avatarUrl, alt: profile.discordDisplayTag, fallbackLabel: profile.name || profile.discordDisplayTag, className: "h-12 w-12 object-cover" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: profile.discordDisplayTag || "@unknown" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: profile.discordGlobalName || "Подключенный аккаунт Discord" })
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "inline-flex min-h-10 items-center rounded-xl border border-red-300/30 px-4 font-black text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-45",
-                  type: "button",
-                  onClick: handleDiscordDisconnect,
-                  disabled: isDisconnectingDiscord,
-                  children: "Отвязать Discord"
-                }
-              )
-            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-semibold text-slate-100", children: "Не подключен" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: "Аватар и Discord handle подтянутся автоматически после подключения." })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "inline-flex min-h-10 items-center rounded-xl bg-bf-orange px-4 font-black text-black transition hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(216,109,56,0.18)]",
-                  type: "button",
-                  onClick: () => {
-                    window.location.href = "/api/discord/connect/";
-                  },
-                  children: "Подключить Discord"
-                }
-              )
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-            type: "submit",
-            disabled: isSavingProfile,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
-              "Сохранить профиль"
-            ]
-          }
-        ) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handlePasswordSubmit, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Безопасность" }),
-        passwordErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: passwordErrors.__all__.join(", ") }) : null,
-        passwordSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: passwordSuccess }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 grid gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Старый пароль",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "password",
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
-                value: oldPassword,
-                onChange: (inputEvent) => setOldPassword(inputEvent.target.value)
-              }
-            ),
-            passwordErrors.oldPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.oldPassword.join(", ") }) : null
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Новый пароль",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "password",
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
-                value: newPassword,
-                onChange: (inputEvent) => setNewPassword(inputEvent.target.value)
-              }
-            ),
-            passwordErrors.newPassword ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.newPassword.join(", ") }) : null
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Повторите новый пароль",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                type: "password",
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/45",
-                value: newPasswordConfirm,
-                onChange: (inputEvent) => setNewPasswordConfirm(inputEvent.target.value)
-              }
-            ),
-            passwordErrors.newPasswordConfirm ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: passwordErrors.newPasswordConfirm.join(", ") }) : null
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-5 flex justify-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            className: "inline-flex min-h-11 items-center gap-2 rounded-xl border border-bf-orange/45 px-5 font-black text-bf-orange transition hover:bg-bf-orange/10 disabled:cursor-not-allowed disabled:opacity-45",
-            type: "submit",
-            disabled: isSavingPassword,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
-              "Сменить пароль"
-            ]
-          }
-        ) })
-      ] })
     ] })
   ] });
 }
