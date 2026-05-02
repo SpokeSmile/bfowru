@@ -20641,6 +20641,135 @@ function DiscordClouds({ displayTag }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
 }
+function formatClock(timeZone) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone
+  }).format(/* @__PURE__ */ new Date());
+}
+function useClocks() {
+  const [clocks, setClocks] = reactExports.useState({
+    utc: "--:--",
+    moscow: "--:--",
+    cest: "--:--"
+  });
+  reactExports.useEffect(() => {
+    const update = () => {
+      setClocks({
+        utc: formatClock("UTC"),
+        moscow: formatClock("Europe/Moscow"),
+        cest: formatClock("Etc/GMT-2")
+      });
+    };
+    update();
+    const timer = window.setInterval(update, 1e3);
+    return () => window.clearInterval(timer);
+  }, []);
+  return clocks;
+}
+function Header({ user }) {
+  const clocks = useClocks();
+  const isProfilePage = window.location.pathname.startsWith("/profile");
+  async function handleLogout() {
+    const response = await logout();
+    window.location.href = response.redirectUrl || "/login/";
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "top-header", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "top-header-brand", href: "/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/design_assets/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Black Flock" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
+      ["UTC", clocks.utc],
+      ["Moscow", clocks.moscow],
+      ["CEST", clocks.cest]
+    ].map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-clock", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-label", children: label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-value", children: value })
+    ] }, label)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "a",
+        {
+          className: `top-header-user ${isProfilePage ? "top-header-user-active" : ""}`,
+          href: "/profile/",
+          "aria-label": "Открыть профиль",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "h-7 w-7 object-cover" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "top-header-logout",
+          type: "button",
+          onClick: handleLogout,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 18 }),
+            "Выйти"
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+function Sidebar({ pathname }) {
+  const items = [
+    {
+      href: "/",
+      label: "Расписание",
+      icon: Clock3,
+      isActive: !pathname.startsWith("/team") && !pathname.startsWith("/profile") && !pathname.startsWith("/updates") && !pathname.startsWith("/stats")
+    },
+    {
+      href: "/team/",
+      label: "Состав",
+      icon: Users,
+      isActive: pathname.startsWith("/team")
+    },
+    {
+      href: "/updates/",
+      label: "Обновления",
+      icon: BookText,
+      isActive: pathname.startsWith("/updates")
+    },
+    {
+      href: "/stats/",
+      label: "Статистика",
+      icon: ChartColumn,
+      isActive: pathname.startsWith("/stats")
+    },
+    {
+      href: "/profile/",
+      label: "Настройки",
+      icon: Settings,
+      isActive: pathname.startsWith("/profile")
+    }
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/design_assets/Logo.png", alt: "" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
+      const Icon2 = item.icon;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "a",
+        {
+          className: `sidebar-nav-link ${item.isActive ? "sidebar-nav-link-active" : ""}`,
+          href: item.href,
+          "aria-current": item.isActive ? "page" : void 0,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
+          ]
+        },
+        item.href
+      );
+    }) })
+  ] }) });
+}
 function r(e) {
   var t, f, n = "";
   if ("string" == typeof e || "number" == typeof e) n += e;
@@ -45516,34 +45645,6 @@ const AVAILABLE_CARD_STYLE = {
   text: "text-[#e3e9f3]",
   glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
 };
-function formatClock(timeZone) {
-  return new Intl.DateTimeFormat("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone
-  }).format(/* @__PURE__ */ new Date());
-}
-function useClocks() {
-  const [clocks, setClocks] = reactExports.useState({
-    utc: "--:--",
-    moscow: "--:--",
-    cest: "--:--"
-  });
-  reactExports.useEffect(() => {
-    const update = () => {
-      setClocks({
-        utc: formatClock("UTC"),
-        moscow: formatClock("Europe/Moscow"),
-        cest: formatClock("Etc/GMT-2")
-      });
-    };
-    update();
-    const timer = window.setInterval(update, 1e3);
-    return () => window.clearInterval(timer);
-  }, []);
-  return clocks;
-}
 function timeChoices(startHour, endHour) {
   return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
     const hour = startHour + index;
@@ -45649,107 +45750,6 @@ function CommentTooltip({ tooltip }) {
     ),
     document.body
   );
-}
-function Header({ user }) {
-  const clocks = useClocks();
-  const isProfilePage = window.location.pathname.startsWith("/profile");
-  async function handleLogout() {
-    const response = await logout();
-    window.location.href = response.redirectUrl || "/login/";
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "top-header", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "top-header-brand", href: "/", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/design_assets/Logo.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Black Flock" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
-      ["UTC", clocks.utc],
-      ["Moscow", clocks.moscow],
-      ["CEST", clocks.cest]
-    ].map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-clock", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-label", children: label }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-value", children: value })
-    ] }, label)) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-actions", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "a",
-        {
-          className: `top-header-user ${isProfilePage ? "top-header-user-active" : ""}`,
-          href: "/profile/",
-          "aria-label": "Открыть профиль",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "h-7 w-7 object-cover" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: "top-header-logout",
-          type: "button",
-          onClick: handleLogout,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 18 }),
-            "Выйти"
-          ]
-        }
-      )
-    ] })
-  ] });
-}
-function Sidebar({ pathname }) {
-  const items = [
-    {
-      href: "/",
-      label: "Расписание",
-      icon: Clock3,
-      isActive: !pathname.startsWith("/team") && !pathname.startsWith("/profile") && !pathname.startsWith("/updates") && !pathname.startsWith("/stats")
-    },
-    {
-      href: "/team/",
-      label: "Состав",
-      icon: Users,
-      isActive: pathname.startsWith("/team")
-    },
-    {
-      href: "/updates/",
-      label: "Обновления",
-      icon: BookText,
-      isActive: pathname.startsWith("/updates")
-    },
-    {
-      href: "/stats/",
-      label: "Статистика",
-      icon: ChartColumn,
-      isActive: pathname.startsWith("/stats")
-    },
-    {
-      href: "/profile/",
-      label: "Настройки",
-      icon: Settings,
-      isActive: pathname.startsWith("/profile")
-    }
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/design_assets/Logo.png", alt: "" }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
-      const Icon2 = item.icon;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "a",
-        {
-          className: `sidebar-nav-link ${item.isActive ? "sidebar-nav-link-active" : ""}`,
-          href: item.href,
-          "aria-current": item.isActive ? "page" : void 0,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
-          ]
-        },
-        item.href
-      );
-    }) })
-  ] }) });
 }
 function HeroBanner({ canAdd, onAdd }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]", children: [

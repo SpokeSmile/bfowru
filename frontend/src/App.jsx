@@ -3,21 +3,12 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import {
   AlertTriangle,
-  BarChart3,
-  BookText,
   CalendarPlus,
-  Check,
   Clock3,
-  Crosshair,
-  LogOut,
-  MonitorPlay,
   Pencil,
   RefreshCw,
   Save,
-  Settings,
-  Swords,
   Trash2,
-  Trophy,
   Users,
   X,
 } from 'lucide-react';
@@ -31,168 +22,23 @@ import {
   fetchGameUpdateDetail,
   fetchGameUpdates,
   fetchOverwatchStats,
-  logout,
   refreshOverwatchStats,
   updateProfile,
   updateSlot,
 } from './api.js';
+import { Header, Sidebar } from './components/AppChrome.jsx';
 import { Avatar, DiscordClouds, RoleBadge } from './components/common.jsx';
 import OverwatchStatsPage from './components/OverwatchStatsPage.jsx';
 import TeamPage from './components/TeamPage.jsx';
 import UpdatesPage from './components/UpdatesPage.jsx';
-
-const EVENT_STYLES = {
-  scrim: {
-    icon: Swords,
-    border: 'border-[#56688f]/55',
-    bg: 'bg-[#22314d]/80',
-    text: 'text-[#b8c7ec]',
-    glow: 'shadow-[0_0_12px_rgba(72,88,126,0.14)]',
-  },
-  competitive: {
-    icon: Crosshair,
-    border: 'border-[#8a6b4d]/50',
-    bg: 'bg-[#3a3028]/80',
-    text: 'text-[#e2c19d]',
-    glow: 'shadow-[0_0_12px_rgba(138,107,77,0.12)]',
-  },
-  review: {
-    icon: MonitorPlay,
-    border: 'border-[#6b5a91]/50',
-    bg: 'bg-[#342b4c]/80',
-    text: 'text-[#c8b6f2]',
-    glow: 'shadow-[0_0_12px_rgba(107,90,145,0.12)]',
-  },
-  tournament: {
-    icon: Trophy,
-    border: 'border-[#8d4c45]/50',
-    bg: 'bg-[#492a2c]/80',
-    text: 'text-[#f0b3a8]',
-    glow: 'shadow-[0_0_12px_rgba(141,76,69,0.12)]',
-  },
-  unavailable: {
-    icon: AlertTriangle,
-    border: 'border-[#9a4651]/55',
-    bg: 'bg-[#612633]/80',
-    text: 'text-[#ffc7ce]',
-    glow: 'shadow-[0_0_14px_rgba(154,70,81,0.16)]',
-  },
-  full_day_available: {
-    icon: Check,
-    border: 'border-[#3f8067]/55',
-    bg: 'bg-[#1f513f]/80',
-    text: 'text-[#bdebd5]',
-    glow: 'shadow-[0_0_12px_rgba(63,128,103,0.14)]',
-  },
-  tentative: {
-    icon: AlertTriangle,
-    border: 'border-[#9a6a39]/55',
-    bg: 'bg-[#4c3425]/80',
-    text: 'text-[#f5c993]',
-    glow: 'shadow-[0_0_14px_rgba(154,106,57,0.16)]',
-  },
-  fallback: {
-    icon: Clock3,
-    border: 'border-[#556076]/35',
-    bg: 'bg-[#202b40]/80',
-    text: 'text-[#d7deea]',
-    glow: 'shadow-[0_0_10px_rgba(62,73,98,0.12)]',
-  },
-};
-
-const AVAILABLE_CARD_STYLE = {
-  border: 'border-[#556076]/35',
-  bg: 'bg-[#202b40]/80',
-  text: 'text-[#e3e9f3]',
-  glow: 'shadow-[0_0_10px_rgba(62,73,98,0.12)]',
-};
-
-function formatClock(timeZone) {
-  return new Intl.DateTimeFormat('ru-RU', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone,
-  }).format(new Date());
-}
-
-function useClocks() {
-  const [clocks, setClocks] = useState({
-    utc: '--:--',
-    moscow: '--:--',
-    cest: '--:--',
-  });
-
-  useEffect(() => {
-    const update = () => {
-      setClocks({
-        utc: formatClock('UTC'),
-        moscow: formatClock('Europe/Moscow'),
-        cest: formatClock('Etc/GMT-2'),
-      });
-    };
-
-    update();
-    const timer = window.setInterval(update, 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return clocks;
-}
-
-function timeChoices(startHour, endHour) {
-  return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
-    const hour = startHour + index;
-    return {
-      value: hour * 60,
-      label: `${String(hour).padStart(2, '0')}:00`,
-    };
-  });
-}
-
-function discordFeedbackFromUrl(search) {
-  const params = new URLSearchParams(search);
-  const status = params.get('discord');
-  const reason = params.get('reason');
-  if (!status) return null;
-
-  if (status === 'connected') {
-    return { tone: 'success', text: 'Discord успешно подключен.' };
-  }
-
-  if (status === 'disconnected') {
-    return { tone: 'success', text: 'Discord отвязан.' };
-  }
-
-  if (status === 'error') {
-    const messages = {
-      'already-linked': 'Этот Discord-аккаунт уже привязан к другому пользователю.',
-      'invalid-state': 'Не удалось подтвердить запрос подключения Discord.',
-      'missing-code': 'Discord не вернул код подключения.',
-      'oauth-failed': 'Не удалось получить данные Discord. Повторите попытку.',
-      'not-configured': 'Discord временно недоступен. Обратитесь к администратору.',
-      'access_denied': 'Подключение Discord было отменено.',
-    };
-    return { tone: 'error', text: messages[reason] || 'Не удалось подключить Discord.' };
-  }
-
-  return null;
-}
-
-function previewNote(text, maxChars = 15) {
-  if (!text) return '';
-  const chars = Array.from(text);
-  if (chars.length <= maxChars) return text;
-  return `${chars.slice(0, maxChars).join('')}...`;
-}
-
-function buildDayEventMap(dayEventTypes = []) {
-  const map = new Map();
-  dayEventTypes.forEach((dayEvent) => {
-    map.set(Number(dayEvent.dayOfWeek), dayEvent);
-  });
-  return map;
-}
+import {
+  AVAILABLE_CARD_STYLE,
+  EVENT_STYLES,
+  buildDayEventMap,
+  discordFeedbackFromUrl,
+  previewNote,
+  timeChoices,
+} from './scheduleConfig.js';
 
 function CommentTooltip({ tooltip }) {
   const needsEmergencyWrap = /\S{30,}/.test(tooltip.text || '');
@@ -259,121 +105,6 @@ function CommentTooltip({ tooltip }) {
       {tooltip.text}
     </div>,
     document.body,
-  );
-}
-
-function Header({ user }) {
-  const clocks = useClocks();
-  const isProfilePage = window.location.pathname.startsWith('/profile');
-
-  async function handleLogout() {
-    const response = await logout();
-    window.location.href = response.redirectUrl || '/login/';
-  }
-
-  return (
-    <header className="top-header">
-      <a className="top-header-brand" href="/">
-        <img className="top-header-logo" src="/static/design_assets/Logo.png" alt="" />
-        <span>Black Flock</span>
-      </a>
-
-      <div className="top-header-clocks">
-        {[
-          ['UTC', clocks.utc],
-          ['Moscow', clocks.moscow],
-          ['CEST', clocks.cest],
-        ].map(([label, value]) => (
-          <div key={label} className="top-header-clock">
-            <div className="top-header-clock-label">{label}</div>
-            <div className="top-header-clock-value">{value}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="top-header-actions">
-        <a
-          className={`top-header-user ${isProfilePage ? 'top-header-user-active' : ''}`}
-          href="/profile/"
-          aria-label="Открыть профиль"
-        >
-          <Avatar src={user.avatarUrl} alt={user.username} fallbackLabel={user.username} className="h-7 w-7 object-cover" />
-          <span>{user.username}</span>
-        </a>
-        <button
-          className="top-header-logout"
-          type="button"
-          onClick={handleLogout}
-        >
-          <LogOut size={18} />
-          Выйти
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function Sidebar({ pathname }) {
-  const items = [
-    {
-      href: '/',
-      label: 'Расписание',
-      icon: Clock3,
-      isActive: !pathname.startsWith('/team') && !pathname.startsWith('/profile') && !pathname.startsWith('/updates') && !pathname.startsWith('/stats'),
-    },
-    {
-      href: '/team/',
-      label: 'Состав',
-      icon: Users,
-      isActive: pathname.startsWith('/team'),
-    },
-    {
-      href: '/updates/',
-      label: 'Обновления',
-      icon: BookText,
-      isActive: pathname.startsWith('/updates'),
-    },
-    {
-      href: '/stats/',
-      label: 'Статистика',
-      icon: BarChart3,
-      isActive: pathname.startsWith('/stats'),
-    },
-    {
-      href: '/profile/',
-      label: 'Настройки',
-      icon: Settings,
-      isActive: pathname.startsWith('/profile'),
-    },
-  ];
-
-  return (
-    <aside className="app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start">
-      <div className="sidebar-shell">
-        <div className="sidebar-head">
-          <a className="sidebar-brand" href="/" aria-label="Black Flock">
-            <img className="brand-logo" src="/static/design_assets/Logo.png" alt="" />
-          </a>
-        </div>
-
-        <nav className="sidebar-nav" aria-label="Основная навигация">
-          {items.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.href}
-                className={`sidebar-nav-link ${item.isActive ? 'sidebar-nav-link-active' : ''}`}
-                href={item.href}
-                aria-current={item.isActive ? 'page' : undefined}
-              >
-                <Icon size={20} />
-                <span className="sidebar-link-label">{item.label}</span>
-              </a>
-            );
-          })}
-        </nav>
-      </div>
-    </aside>
   );
 }
 
