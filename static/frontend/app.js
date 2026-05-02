@@ -12506,6 +12506,83 @@ function requireClient() {
   return client.exports;
 }
 var clientExports = requireClient();
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(";").shift();
+  }
+  return "";
+}
+async function request(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),
+      ...options.headers || {}
+    },
+    ...options
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    const error = new Error(data.error || "Request failed");
+    error.payload = data;
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+function bootstrap() {
+  return request("/api/bootstrap/", { method: "GET" });
+}
+function fetchGameUpdates() {
+  return request("/api/game-updates/", { method: "GET" });
+}
+function fetchGameUpdateDetail(slug) {
+  return request(`/api/game-updates/${slug}/`, { method: "GET" });
+}
+function fetchOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
+}
+function refreshOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
+}
+function createSlot(payload) {
+  return request("/api/slots/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function updateSlot(id2, payload) {
+  return request(`/api/slots/${id2}/`, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function deleteSlot(id2) {
+  return request(`/api/slots/${id2}/delete/`, {
+    method: "DELETE"
+  });
+}
+function updateProfile(payload) {
+  return request("/api/profile/", {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function changePassword(payload) {
+  return request("/api/profile/password/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function disconnectDiscord() {
+  return request("/api/discord/disconnect/", { method: "POST" });
+}
+function logout() {
+  return request("/api/logout/", { method: "POST" });
+}
 const toKebabCase = (string2) => string2.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 const toCamelCase = (string2) => string2.replace(
   /^([A-Z])|[\s-_]+(\w)/g,
@@ -12742,83 +12819,6 @@ const __iconNode = [
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
 const X = createLucideIcon("x", __iconNode);
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop().split(";").shift();
-  }
-  return "";
-}
-async function request(path, options = {}) {
-  const response = await fetch(path, {
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken"),
-      ...options.headers || {}
-    },
-    ...options
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    const error = new Error(data.error || "Request failed");
-    error.payload = data;
-    error.status = response.status;
-    throw error;
-  }
-  return data;
-}
-function bootstrap() {
-  return request("/api/bootstrap/", { method: "GET" });
-}
-function fetchGameUpdates() {
-  return request("/api/game-updates/", { method: "GET" });
-}
-function fetchGameUpdateDetail(slug) {
-  return request(`/api/game-updates/${slug}/`, { method: "GET" });
-}
-function fetchOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
-}
-function refreshOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
-}
-function createSlot(payload) {
-  return request("/api/slots/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function updateSlot(id2, payload) {
-  return request(`/api/slots/${id2}/`, {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function deleteSlot(id2) {
-  return request(`/api/slots/${id2}/delete/`, {
-    method: "DELETE"
-  });
-}
-function updateProfile(payload) {
-  return request("/api/profile/", {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function changePassword(payload) {
-  return request("/api/profile/password/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function disconnectDiscord() {
-  return request("/api/discord/disconnect/", { method: "POST" });
-}
-function logout() {
-  return request("/api/logout/", { method: "POST" });
-}
 function Avatar({ src, alt, fallbackLabel, className = "" }) {
   if (src) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `rounded-full border border-bf-cream/15 ${className}`, src, alt });
@@ -12992,6 +12992,20 @@ function Sidebar({ pathname }) {
         item.href
       );
     }) })
+  ] }) });
+}
+function LoadingView() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl px-8 py-6 text-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "mx-auto animate-spin text-bf-orange" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 font-black uppercase", children: "Загрузка данных" })
+  ] }) });
+}
+function ErrorView({ error, onRetry }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel max-w-md rounded-xl px-8 py-6 text-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { className: "mx-auto text-red-300" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 font-black uppercase", children: "Не удалось загрузить данные" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-bf-cream/60", children: error }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "mt-5 rounded-xl bg-bf-orange px-5 py-3 font-black text-black", type: "button", onClick: onRetry, children: "Повторить" })
   ] }) });
 }
 const LayoutGroupContext = reactExports.createContext({});
@@ -46729,18 +46743,10 @@ function App() {
     }));
   }
   if (isLoading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl px-8 py-6 text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "mx-auto animate-spin text-bf-orange" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 font-black uppercase", children: "Загрузка данных" })
-    ] }) });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingView, {});
   }
   if (error) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel max-w-md rounded-xl px-8 py-6 text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(TriangleAlert, { className: "mx-auto text-red-300" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 font-black uppercase", children: "Не удалось загрузить данные" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-bf-cream/60", children: error }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "mt-5 rounded-xl bg-bf-orange px-5 py-3 font-black text-black", type: "button", onClick: loadData, children: "Повторить" })
-    ] }) });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorView, { error, onRetry: loadData });
   }
   const canAdd = Boolean(data.user.playerId);
   const isProfilePage = pathname.startsWith("/profile");
