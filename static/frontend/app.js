@@ -12506,6 +12506,494 @@ function requireClient() {
   return client.exports;
 }
 var clientExports = requireClient();
+const toKebabCase = (string2) => string2.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string2) => string2.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string2) => {
+  const camelCase = toCamelCase(string2);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+const mergeClasses = (...classes) => classes.filter((className, index, array2) => {
+  return Boolean(className) && className.trim() !== "" && array2.indexOf(className) === index;
+}).join(" ").trim();
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+};
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+const Icon = reactExports.forwardRef(
+  ({
+    color: color2 = "currentColor",
+    size = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => reactExports.createElement(
+    "svg",
+    {
+      ref,
+      ...defaultAttributes,
+      width: size,
+      height: size,
+      stroke: color2,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
+      className: mergeClasses("lucide", className),
+      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = reactExports.forwardRef(
+    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component.displayName = toPascalCase(iconName);
+  return Component;
+};
+const __iconNode$i = [
+  [
+    "path",
+    {
+      d: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20",
+      key: "k3hazp"
+    }
+  ],
+  ["path", { d: "M8 11h8", key: "vwpz6n" }],
+  ["path", { d: "M8 7h6", key: "1f0q6e" }]
+];
+const BookText = createLucideIcon("book-text", __iconNode$i);
+const __iconNode$h = [
+  ["path", { d: "M16 19h6", key: "xwg31i" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["path", { d: "M19 16v6", key: "tddt3s" }],
+  ["path", { d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5", key: "1glfrc" }],
+  ["path", { d: "M3 10h18", key: "8toen8" }],
+  ["path", { d: "M8 2v4", key: "1cmpym" }]
+];
+const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$h);
+const __iconNode$g = [
+  ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
+  ["path", { d: "M18 17V9", key: "2bz60n" }],
+  ["path", { d: "M13 17V5", key: "1frdt8" }],
+  ["path", { d: "M8 17v-3", key: "17ska0" }]
+];
+const ChartColumn = createLucideIcon("chart-column", __iconNode$g);
+const __iconNode$f = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$f);
+const __iconNode$e = [
+  ["path", { d: "M12 6v6h4", key: "135r8i" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const Clock3 = createLucideIcon("clock-3", __iconNode$e);
+const __iconNode$d = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
+  ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
+  ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
+  ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
+];
+const Crosshair = createLucideIcon("crosshair", __iconNode$d);
+const __iconNode$c = [
+  ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+  ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+  ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
+];
+const ExternalLink = createLucideIcon("external-link", __iconNode$c);
+const __iconNode$b = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$b);
+const __iconNode$a = [
+  [
+    "path",
+    {
+      d: "M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z",
+      key: "vbtd3f"
+    }
+  ],
+  ["path", { d: "M12 17v4", key: "1riwvh" }],
+  ["path", { d: "M8 21h8", key: "1ev6f3" }],
+  ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2", key: "x3v2xh" }]
+];
+const MonitorPlay = createLucideIcon("monitor-play", __iconNode$a);
+const __iconNode$9 = [
+  [
+    "path",
+    {
+      d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
+      key: "1a8usu"
+    }
+  ],
+  ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
+];
+const Pencil = createLucideIcon("pencil", __iconNode$9);
+const __iconNode$8 = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
+const __iconNode$7 = [
+  [
+    "path",
+    {
+      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+      key: "1c8476"
+    }
+  ],
+  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
+];
+const Save = createLucideIcon("save", __iconNode$7);
+const __iconNode$6 = [
+  [
+    "path",
+    {
+      d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+      key: "1i5ecw"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$6);
+const __iconNode$5 = [
+  ["polyline", { points: "14.5 17.5 3 6 3 3 6 3 17.5 14.5", key: "1hfsw2" }],
+  ["line", { x1: "13", x2: "19", y1: "19", y2: "13", key: "1vrmhu" }],
+  ["line", { x1: "16", x2: "20", y1: "16", y2: "20", key: "1bron3" }],
+  ["line", { x1: "19", x2: "21", y1: "21", y2: "19", key: "13pww6" }],
+  ["polyline", { points: "14.5 6.5 18 3 21 3 21 6 17.5 9.5", key: "hbey2j" }],
+  ["line", { x1: "5", x2: "9", y1: "14", y2: "18", key: "1hf58s" }],
+  ["line", { x1: "7", x2: "4", y1: "17", y2: "20", key: "pidxm4" }],
+  ["line", { x1: "3", x2: "5", y1: "19", y2: "21", key: "1pehsh" }]
+];
+const Swords = createLucideIcon("swords", __iconNode$5);
+const __iconNode$4 = [
+  ["path", { d: "M10 11v6", key: "nco0om" }],
+  ["path", { d: "M14 11v6", key: "outv1u" }],
+  ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$4);
+const __iconNode$3 = [
+  [
+    "path",
+    {
+      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+      key: "wmoenq"
+    }
+  ],
+  ["path", { d: "M12 9v4", key: "juzpu7" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$3);
+const __iconNode$2 = [
+  ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
+  ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
+  ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
+  ["path", { d: "M4 22h16", key: "57wxv0" }],
+  ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
+  ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
+];
+const Trophy = createLucideIcon("trophy", __iconNode$2);
+const __iconNode$1 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const Users = createLucideIcon("users", __iconNode$1);
+const __iconNode = [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+];
+const X = createLucideIcon("x", __iconNode);
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(";").shift();
+  }
+  return "";
+}
+async function request(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),
+      ...options.headers || {}
+    },
+    ...options
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    const error = new Error(data.error || "Request failed");
+    error.payload = data;
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+function bootstrap() {
+  return request("/api/bootstrap/", { method: "GET" });
+}
+function fetchGameUpdates() {
+  return request("/api/game-updates/", { method: "GET" });
+}
+function fetchGameUpdateDetail(slug) {
+  return request(`/api/game-updates/${slug}/`, { method: "GET" });
+}
+function fetchOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
+}
+function refreshOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
+}
+function createSlot(payload) {
+  return request("/api/slots/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function updateSlot(id2, payload) {
+  return request(`/api/slots/${id2}/`, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function deleteSlot(id2) {
+  return request(`/api/slots/${id2}/delete/`, {
+    method: "DELETE"
+  });
+}
+function updateProfile(payload) {
+  return request("/api/profile/", {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function changePassword(payload) {
+  return request("/api/profile/password/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function disconnectDiscord() {
+  return request("/api/discord/disconnect/", { method: "POST" });
+}
+function logout() {
+  return request("/api/logout/", { method: "POST" });
+}
+function Avatar({ src, alt, fallbackLabel, className = "" }) {
+  if (src) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `rounded-full border border-bf-cream/15 ${className}`, src, alt });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "img",
+    {
+      className: "h-[70%] w-[70%] object-contain opacity-95",
+      src: "/static/design_assets/Logo.png",
+      alt: fallbackLabel || "Black Flock"
+    }
+  ) });
+}
+function hexToRgba(hexColor, alpha2) {
+  if (!hexColor || !/^#[0-9A-Fa-f]{6}$/.test(hexColor)) {
+    return `rgba(232, 237, 245, ${alpha2})`;
+  }
+  const red = Number.parseInt(hexColor.slice(1, 3), 16);
+  const green = Number.parseInt(hexColor.slice(3, 5), 16);
+  const blue = Number.parseInt(hexColor.slice(5, 7), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha2})`;
+}
+function roleBadgeStyle(color2) {
+  return {
+    borderColor: hexToRgba(color2, 0.35),
+    backgroundColor: hexToRgba(color2, 0.12),
+    color: color2
+  };
+}
+function RoleBadge({ role, color: color2, className = "" }) {
+  if (!role) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "span",
+    {
+      className: `rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
+      style: roleBadgeStyle(color2),
+      children: role
+    }
+  );
+}
+function DiscordClouds({ displayTag }) {
+  if (!displayTag) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-bf-cream/42", children: "Не подключен" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
+}
+function formatClock(timeZone) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone
+  }).format(/* @__PURE__ */ new Date());
+}
+function useClocks() {
+  const [clocks, setClocks] = reactExports.useState({
+    utc: "--:--",
+    moscow: "--:--",
+    cest: "--:--"
+  });
+  reactExports.useEffect(() => {
+    const update = () => {
+      setClocks({
+        utc: formatClock("UTC"),
+        moscow: formatClock("Europe/Moscow"),
+        cest: formatClock("Etc/GMT-2")
+      });
+    };
+    update();
+    const timer = window.setInterval(update, 1e3);
+    return () => window.clearInterval(timer);
+  }, []);
+  return clocks;
+}
+function Header({ user }) {
+  const clocks = useClocks();
+  const isProfilePage = window.location.pathname.startsWith("/profile");
+  async function handleLogout() {
+    const response = await logout();
+    window.location.href = response.redirectUrl || "/login/";
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "top-header", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "top-header-brand", href: "/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/design_assets/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Black Flock" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
+      ["UTC", clocks.utc],
+      ["Moscow", clocks.moscow],
+      ["CEST", clocks.cest]
+    ].map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-clock", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-label", children: label }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-value", children: value })
+    ] }, label)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "a",
+        {
+          className: `top-header-user ${isProfilePage ? "top-header-user-active" : ""}`,
+          href: "/profile/",
+          "aria-label": "Открыть профиль",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "h-7 w-7 object-cover" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "top-header-logout",
+          type: "button",
+          onClick: handleLogout,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 18 }),
+            "Выйти"
+          ]
+        }
+      )
+    ] })
+  ] });
+}
+function Sidebar({ pathname }) {
+  const items = [
+    {
+      href: "/",
+      label: "Расписание",
+      icon: Clock3,
+      isActive: !pathname.startsWith("/team") && !pathname.startsWith("/profile") && !pathname.startsWith("/updates") && !pathname.startsWith("/stats")
+    },
+    {
+      href: "/team/",
+      label: "Состав",
+      icon: Users,
+      isActive: pathname.startsWith("/team")
+    },
+    {
+      href: "/updates/",
+      label: "Обновления",
+      icon: BookText,
+      isActive: pathname.startsWith("/updates")
+    },
+    {
+      href: "/stats/",
+      label: "Статистика",
+      icon: ChartColumn,
+      isActive: pathname.startsWith("/stats")
+    },
+    {
+      href: "/profile/",
+      label: "Настройки",
+      icon: Settings,
+      isActive: pathname.startsWith("/profile")
+    }
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/design_assets/Logo.png", alt: "" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
+      const Icon2 = item.icon;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "a",
+        {
+          className: `sidebar-nav-link ${item.isActive ? "sidebar-nav-link-active" : ""}`,
+          href: item.href,
+          "aria-current": item.isActive ? "page" : void 0,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
+          ]
+        },
+        item.href
+      );
+    }) })
+  ] }) });
+}
 const LayoutGroupContext = reactExports.createContext({});
 function useConstant(init) {
   const ref = reactExports.useRef(null);
@@ -20281,493 +20769,408 @@ const featureBundle = {
   ...layout
 };
 const motion = /* @__PURE__ */ createMotionProxy(featureBundle, createDomVisualElement);
-const toKebabCase = (string2) => string2.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const toCamelCase = (string2) => string2.replace(
-  /^([A-Z])|[\s-_]+(\w)/g,
-  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
-);
-const toPascalCase = (string2) => {
-  const camelCase = toCamelCase(string2);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
-};
-const mergeClasses = (...classes) => classes.filter((className, index, array2) => {
-  return Boolean(className) && className.trim() !== "" && array2.indexOf(className) === index;
-}).join(" ").trim();
-const hasA11yProp = (props) => {
-  for (const prop in props) {
-    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
-      return true;
-    }
+const EVENT_STYLES = {
+  scrim: {
+    icon: Swords,
+    border: "border-[#56688f]/55",
+    bg: "bg-[#22314d]/80",
+    text: "text-[#b8c7ec]",
+    glow: "shadow-[0_0_12px_rgba(72,88,126,0.14)]"
+  },
+  competitive: {
+    icon: Crosshair,
+    border: "border-[#8a6b4d]/50",
+    bg: "bg-[#3a3028]/80",
+    text: "text-[#e2c19d]",
+    glow: "shadow-[0_0_12px_rgba(138,107,77,0.12)]"
+  },
+  review: {
+    icon: MonitorPlay,
+    border: "border-[#6b5a91]/50",
+    bg: "bg-[#342b4c]/80",
+    text: "text-[#c8b6f2]",
+    glow: "shadow-[0_0_12px_rgba(107,90,145,0.12)]"
+  },
+  tournament: {
+    icon: Trophy,
+    border: "border-[#8d4c45]/50",
+    bg: "bg-[#492a2c]/80",
+    text: "text-[#f0b3a8]",
+    glow: "shadow-[0_0_12px_rgba(141,76,69,0.12)]"
+  },
+  unavailable: {
+    icon: TriangleAlert,
+    border: "border-[#9a4651]/55",
+    bg: "bg-[#612633]/80",
+    text: "text-[#ffc7ce]",
+    glow: "shadow-[0_0_14px_rgba(154,70,81,0.16)]"
+  },
+  full_day_available: {
+    icon: Check,
+    border: "border-[#3f8067]/55",
+    bg: "bg-[#1f513f]/80",
+    text: "text-[#bdebd5]",
+    glow: "shadow-[0_0_12px_rgba(63,128,103,0.14)]"
+  },
+  tentative: {
+    icon: TriangleAlert,
+    border: "border-[#9a6a39]/55",
+    bg: "bg-[#4c3425]/80",
+    text: "text-[#f5c993]",
+    glow: "shadow-[0_0_14px_rgba(154,106,57,0.16)]"
+  },
+  fallback: {
+    icon: Clock3,
+    border: "border-[#556076]/35",
+    bg: "bg-[#202b40]/80",
+    text: "text-[#d7deea]",
+    glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
   }
 };
-var defaultAttributes = {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: 24,
-  height: 24,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
+const AVAILABLE_CARD_STYLE = {
+  border: "border-[#556076]/35",
+  bg: "bg-[#202b40]/80",
+  text: "text-[#e3e9f3]",
+  glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
 };
-const Icon = reactExports.forwardRef(
-  ({
-    color: color2 = "currentColor",
-    size = 24,
-    strokeWidth = 2,
-    absoluteStrokeWidth,
-    className = "",
-    children,
-    iconNode,
-    ...rest
-  }, ref) => reactExports.createElement(
-    "svg",
-    {
-      ref,
-      ...defaultAttributes,
-      width: size,
-      height: size,
-      stroke: color2,
-      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
-      className: mergeClasses("lucide", className),
-      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
-      ...rest
-    },
-    [
-      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
-      ...Array.isArray(children) ? children : [children]
-    ]
-  )
-);
-const createLucideIcon = (iconName, iconNode) => {
-  const Component = reactExports.forwardRef(
-    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
-      ref,
-      iconNode,
-      className: mergeClasses(
-        `lucide-${toKebabCase(toPascalCase(iconName))}`,
-        `lucide-${iconName}`,
-        className
-      ),
-      ...props
-    })
-  );
-  Component.displayName = toPascalCase(iconName);
-  return Component;
-};
-const __iconNode$i = [
-  [
-    "path",
-    {
-      d: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20",
-      key: "k3hazp"
-    }
-  ],
-  ["path", { d: "M8 11h8", key: "vwpz6n" }],
-  ["path", { d: "M8 7h6", key: "1f0q6e" }]
-];
-const BookText = createLucideIcon("book-text", __iconNode$i);
-const __iconNode$h = [
-  ["path", { d: "M16 19h6", key: "xwg31i" }],
-  ["path", { d: "M16 2v4", key: "4m81vk" }],
-  ["path", { d: "M19 16v6", key: "tddt3s" }],
-  ["path", { d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5", key: "1glfrc" }],
-  ["path", { d: "M3 10h18", key: "8toen8" }],
-  ["path", { d: "M8 2v4", key: "1cmpym" }]
-];
-const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$h);
-const __iconNode$g = [
-  ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
-  ["path", { d: "M18 17V9", key: "2bz60n" }],
-  ["path", { d: "M13 17V5", key: "1frdt8" }],
-  ["path", { d: "M8 17v-3", key: "17ska0" }]
-];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$g);
-const __iconNode$f = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$f);
-const __iconNode$e = [
-  ["path", { d: "M12 6v6h4", key: "135r8i" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Clock3 = createLucideIcon("clock-3", __iconNode$e);
-const __iconNode$d = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
-  ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
-  ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
-  ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
-];
-const Crosshair = createLucideIcon("crosshair", __iconNode$d);
-const __iconNode$c = [
-  ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-  ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-  ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-];
-const ExternalLink = createLucideIcon("external-link", __iconNode$c);
-const __iconNode$b = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-];
-const LogOut = createLucideIcon("log-out", __iconNode$b);
-const __iconNode$a = [
-  [
-    "path",
-    {
-      d: "M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z",
-      key: "vbtd3f"
-    }
-  ],
-  ["path", { d: "M12 17v4", key: "1riwvh" }],
-  ["path", { d: "M8 21h8", key: "1ev6f3" }],
-  ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2", key: "x3v2xh" }]
-];
-const MonitorPlay = createLucideIcon("monitor-play", __iconNode$a);
-const __iconNode$9 = [
-  [
-    "path",
-    {
-      d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
-      key: "1a8usu"
-    }
-  ],
-  ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
-];
-const Pencil = createLucideIcon("pencil", __iconNode$9);
-const __iconNode$8 = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
-const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
-      key: "1c8476"
-    }
-  ],
-  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
-  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
-];
-const Save = createLucideIcon("save", __iconNode$7);
-const __iconNode$6 = [
-  [
-    "path",
-    {
-      d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
-      key: "1i5ecw"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
-];
-const Settings = createLucideIcon("settings", __iconNode$6);
-const __iconNode$5 = [
-  ["polyline", { points: "14.5 17.5 3 6 3 3 6 3 17.5 14.5", key: "1hfsw2" }],
-  ["line", { x1: "13", x2: "19", y1: "19", y2: "13", key: "1vrmhu" }],
-  ["line", { x1: "16", x2: "20", y1: "16", y2: "20", key: "1bron3" }],
-  ["line", { x1: "19", x2: "21", y1: "21", y2: "19", key: "13pww6" }],
-  ["polyline", { points: "14.5 6.5 18 3 21 3 21 6 17.5 9.5", key: "hbey2j" }],
-  ["line", { x1: "5", x2: "9", y1: "14", y2: "18", key: "1hf58s" }],
-  ["line", { x1: "7", x2: "4", y1: "17", y2: "20", key: "pidxm4" }],
-  ["line", { x1: "3", x2: "5", y1: "19", y2: "21", key: "1pehsh" }]
-];
-const Swords = createLucideIcon("swords", __iconNode$5);
-const __iconNode$4 = [
-  ["path", { d: "M10 11v6", key: "nco0om" }],
-  ["path", { d: "M14 11v6", key: "outv1u" }],
-  ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$4);
-const __iconNode$3 = [
-  [
-    "path",
-    {
-      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-      key: "wmoenq"
-    }
-  ],
-  ["path", { d: "M12 9v4", key: "juzpu7" }],
-  ["path", { d: "M12 17h.01", key: "p32p05" }]
-];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$3);
-const __iconNode$2 = [
-  ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
-  ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
-  ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
-  ["path", { d: "M4 22h16", key: "57wxv0" }],
-  ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
-  ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
-];
-const Trophy = createLucideIcon("trophy", __iconNode$2);
-const __iconNode$1 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const Users = createLucideIcon("users", __iconNode$1);
-const __iconNode = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
-];
-const X = createLucideIcon("x", __iconNode);
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop().split(";").shift();
+function timeChoices(startHour, endHour) {
+  return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
+    const hour = startHour + index;
+    return {
+      value: hour * 60,
+      label: `${String(hour).padStart(2, "0")}:00`
+    };
+  });
+}
+function discordFeedbackFromUrl(search) {
+  const params = new URLSearchParams(search);
+  const status = params.get("discord");
+  const reason = params.get("reason");
+  if (!status) return null;
+  if (status === "connected") {
+    return { tone: "success", text: "Discord успешно подключен." };
   }
-  return "";
-}
-async function request(path, options = {}) {
-  const response = await fetch(path, {
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken"),
-      ...options.headers || {}
-    },
-    ...options
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    const error = new Error(data.error || "Request failed");
-    error.payload = data;
-    error.status = response.status;
-    throw error;
+  if (status === "disconnected") {
+    return { tone: "success", text: "Discord отвязан." };
   }
-  return data;
-}
-function bootstrap() {
-  return request("/api/bootstrap/", { method: "GET" });
-}
-function fetchGameUpdates() {
-  return request("/api/game-updates/", { method: "GET" });
-}
-function fetchGameUpdateDetail(slug) {
-  return request(`/api/game-updates/${slug}/`, { method: "GET" });
-}
-function fetchOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
-}
-function refreshOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
-}
-function createSlot(payload) {
-  return request("/api/slots/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function updateSlot(id2, payload) {
-  return request(`/api/slots/${id2}/`, {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function deleteSlot(id2) {
-  return request(`/api/slots/${id2}/delete/`, {
-    method: "DELETE"
-  });
-}
-function updateProfile(payload) {
-  return request("/api/profile/", {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function changePassword(payload) {
-  return request("/api/profile/password/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function disconnectDiscord() {
-  return request("/api/discord/disconnect/", { method: "POST" });
-}
-function logout() {
-  return request("/api/logout/", { method: "POST" });
-}
-function Avatar({ src, alt, fallbackLabel, className = "" }) {
-  if (src) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `rounded-full border border-bf-cream/15 ${className}`, src, alt });
+  if (status === "error") {
+    const messages = {
+      "already-linked": "Этот Discord-аккаунт уже привязан к другому пользователю.",
+      "invalid-state": "Не удалось подтвердить запрос подключения Discord.",
+      "missing-code": "Discord не вернул код подключения.",
+      "oauth-failed": "Не удалось получить данные Discord. Повторите попытку.",
+      "not-configured": "Discord временно недоступен. Обратитесь к администратору.",
+      "access_denied": "Подключение Discord было отменено."
+    };
+    return { tone: "error", text: messages[reason] || "Не удалось подключить Discord." };
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "img",
+  return null;
+}
+function previewNote(text, maxChars = 15) {
+  if (!text) return "";
+  const chars = Array.from(text);
+  if (chars.length <= maxChars) return text;
+  return `${chars.slice(0, maxChars).join("")}...`;
+}
+function buildDayEventMap(dayEventTypes = []) {
+  const map2 = /* @__PURE__ */ new Map();
+  dayEventTypes.forEach((dayEvent) => {
+    map2.set(Number(dayEvent.dayOfWeek), dayEvent);
+  });
+  return map2;
+}
+function EventModal({ event, day, days, onClose, onSaved, onDeleted }) {
+  const isEditing = Boolean(event);
+  const [slotType, setSlotType] = reactExports.useState(event?.slotType || "available");
+  const [dayOfWeek, setDayOfWeek] = reactExports.useState(event?.dayOfWeek ?? day ?? days[0]?.value ?? 0);
+  const [startTimeMinutes, setStartTimeMinutes] = reactExports.useState(event?.startTimeMinutes ?? 1140);
+  const [endTimeMinutes, setEndTimeMinutes] = reactExports.useState(event?.endTimeMinutes ?? 1260);
+  const [note, setNote] = reactExports.useState(event?.note || "");
+  const [errors, setErrors] = reactExports.useState({});
+  const [isSaving, setIsSaving] = reactExports.useState(false);
+  async function handleSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSaving(true);
+    setErrors({});
+    const payload = {
+      slotType,
+      dayOfWeek,
+      startTimeMinutes,
+      endTimeMinutes,
+      note
+    };
+    if (slotType === "unavailable" || slotType === "full_day_available" || slotType === "tentative") {
+      payload.startTimeMinutes = null;
+      payload.endTimeMinutes = null;
+    }
+    try {
+      const response = isEditing ? await updateSlot(event.id, payload) : await createSlot(payload);
+      onSaved(response.slot);
+    } catch (saveError) {
+      setErrors(saveError.payload?.errors || { __all__: [saveError.message] });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+  async function handleDelete() {
+    if (!isEditing) return;
+    setIsSaving(true);
+    try {
+      await deleteSlot(event.id);
+      onDeleted(event.id);
+    } catch (deleteError) {
+      setErrors(deleteError.payload?.errors || { __all__: [deleteError.message] });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+  const startChoices = timeChoices(0, 23);
+  const endChoices = timeChoices(1, 24);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    motion.form,
     {
-      className: "h-[70%] w-[70%] object-contain opacity-95",
-      src: "/static/design_assets/Logo.png",
-      alt: fallbackLabel || "Black Flock"
+      initial: { opacity: 0, y: 24, scale: 0.98 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      className: "w-full max-w-2xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
+      onSubmit: handleSubmit,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Availability editor" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-2xl font-black uppercase text-slate-100", children: isEditing ? "Редактировать время" : "Добавить время" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "rounded-xl border border-bf-cream/10 p-2 text-bf-cream/60 transition hover:border-bf-orange/40 hover:text-bf-orange",
+              type: "button",
+              onClick: onClose,
+              "aria-label": "Закрыть",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+            }
+          )
+        ] }),
+        errors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: errors.__all__.join(", ") }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 grid gap-5", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-md:grid-cols-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "available" ? "border-bf-orange bg-bf-orange/15 text-bf-orange" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
+                type: "button",
+                onClick: () => setSlotType("available"),
+                children: "Диапазон времени"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "full_day_available" ? "border-emerald-300/50 bg-emerald-500/15 text-emerald-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
+                type: "button",
+                onClick: () => setSlotType("full_day_available"),
+                children: "Свободен весь день"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "tentative" ? "border-orange-300/50 bg-orange-500/15 text-orange-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
+                type: "button",
+                onClick: () => setSlotType("tentative"),
+                children: "Не уверен"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "unavailable" ? "border-red-300/50 bg-red-500/15 text-red-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
+                type: "button",
+                onClick: () => setSlotType("unavailable"),
+                children: "Не могу в этот день"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "День",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "select",
+              {
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
+                value: dayOfWeek,
+                onChange: (inputEvent) => setDayOfWeek(Number(inputEvent.target.value)),
+                children: days.map((dayOption) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: dayOption.value, children: [
+                  dayOption.label,
+                  " - ",
+                  dayOption.date
+                ] }, dayOption.value))
+              }
+            ),
+            errors.day_of_week ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.day_of_week.join(", ") }) : null
+          ] }),
+          slotType === "available" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4 max-sm:grid-cols-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+              "С",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "select",
+                {
+                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
+                  value: startTimeMinutes,
+                  onChange: (inputEvent) => setStartTimeMinutes(Number(inputEvent.target.value)),
+                  children: startChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
+                }
+              ),
+              errors.start_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.start_time_minutes.join(", ") }) : null
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+              "До",
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "select",
+                {
+                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
+                  value: endTimeMinutes,
+                  onChange: (inputEvent) => setEndTimeMinutes(Number(inputEvent.target.value)),
+                  children: endChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
+                }
+              ),
+              errors.end_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.end_time_minutes.join(", ") }) : null
+            ] })
+          ] }) : null,
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+            "Комментарий",
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/50",
+                value: note,
+                onChange: (inputEvent) => setNote(inputEvent.target.value),
+                placeholder: "Дополнительная информация"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex flex-wrap justify-between gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: isEditing ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              className: "inline-flex min-h-11 items-center gap-2 rounded-xl border border-red-300/30 px-4 font-black text-red-100 transition hover:bg-red-500/10",
+              type: "button",
+              disabled: isSaving,
+              onClick: handleDelete,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 18 }),
+                "Удалить"
+              ]
+            }
+          ) : null }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                className: "min-h-11 rounded-xl border border-bf-cream/10 px-4 font-black text-bf-cream/70 transition hover:border-bf-orange/40",
+                type: "button",
+                onClick: onClose,
+                children: "Отмена"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "button",
+              {
+                className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
+                type: "submit",
+                disabled: isSaving,
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
+                  "Сохранить"
+                ]
+              }
+            )
+          ] })
+        ] })
+      ]
     }
   ) });
 }
-function hexToRgba(hexColor, alpha2) {
-  if (!hexColor || !/^#[0-9A-Fa-f]{6}$/.test(hexColor)) {
-    return `rgba(232, 237, 245, ${alpha2})`;
-  }
-  const red = Number.parseInt(hexColor.slice(1, 3), 16);
-  const green = Number.parseInt(hexColor.slice(3, 5), 16);
-  const blue = Number.parseInt(hexColor.slice(5, 7), 16);
-  return `rgba(${red}, ${green}, ${blue}, ${alpha2})`;
-}
-function roleBadgeStyle(color2) {
-  return {
-    borderColor: hexToRgba(color2, 0.35),
-    backgroundColor: hexToRgba(color2, 0.12),
-    color: color2
-  };
-}
-function RoleBadge({ role, color: color2, className = "" }) {
-  if (!role) return null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "span",
-    {
-      className: `rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
-      style: roleBadgeStyle(color2),
-      children: role
+function ProfileModal({ player, onClose, onSaved }) {
+  const [battleTagsText, setBattleTagsText] = reactExports.useState(player.battleTagsText || "");
+  const [error, setError] = reactExports.useState("");
+  const [isSaving, setIsSaving] = reactExports.useState(false);
+  async function handleSubmit(submitEvent) {
+    submitEvent.preventDefault();
+    setIsSaving(true);
+    setError("");
+    try {
+      const response = await updateProfile({ battleTagsText });
+      await onSaved(response.profile || response.player);
+    } catch (saveError) {
+      setError(saveError.payload?.error || saveError.message);
+    } finally {
+      setIsSaving(false);
     }
-  );
-}
-function DiscordClouds({ displayTag }) {
-  if (!displayTag) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-bf-cream/42", children: "Не подключен" });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
-}
-function formatClock(timeZone) {
-  return new Intl.DateTimeFormat("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone
-  }).format(/* @__PURE__ */ new Date());
-}
-function useClocks() {
-  const [clocks, setClocks] = reactExports.useState({
-    utc: "--:--",
-    moscow: "--:--",
-    cest: "--:--"
-  });
-  reactExports.useEffect(() => {
-    const update = () => {
-      setClocks({
-        utc: formatClock("UTC"),
-        moscow: formatClock("Europe/Moscow"),
-        cest: formatClock("Etc/GMT-2")
-      });
-    };
-    update();
-    const timer = window.setInterval(update, 1e3);
-    return () => window.clearInterval(timer);
-  }, []);
-  return clocks;
-}
-function Header({ user }) {
-  const clocks = useClocks();
-  const isProfilePage = window.location.pathname.startsWith("/profile");
-  async function handleLogout() {
-    const response = await logout();
-    window.location.href = response.redirectUrl || "/login/";
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "top-header", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "top-header-brand", href: "/", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/design_assets/Logo.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Black Flock" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
-      ["UTC", clocks.utc],
-      ["Moscow", clocks.moscow],
-      ["CEST", clocks.cest]
-    ].map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-clock", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-label", children: label }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-value", children: value })
-    ] }, label)) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "top-header-actions", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "a",
-        {
-          className: `top-header-user ${isProfilePage ? "top-header-user-active" : ""}`,
-          href: "/profile/",
-          "aria-label": "Открыть профиль",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "h-7 w-7 object-cover" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: "top-header-logout",
-          type: "button",
-          onClick: handleLogout,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 18 }),
-            "Выйти"
-          ]
-        }
-      )
-    ] })
-  ] });
-}
-function Sidebar({ pathname }) {
-  const items = [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    motion.form,
     {
-      href: "/",
-      label: "Расписание",
-      icon: Clock3,
-      isActive: !pathname.startsWith("/team") && !pathname.startsWith("/profile") && !pathname.startsWith("/updates") && !pathname.startsWith("/stats")
-    },
-    {
-      href: "/team/",
-      label: "Состав",
-      icon: Users,
-      isActive: pathname.startsWith("/team")
-    },
-    {
-      href: "/updates/",
-      label: "Обновления",
-      icon: BookText,
-      isActive: pathname.startsWith("/updates")
-    },
-    {
-      href: "/stats/",
-      label: "Статистика",
-      icon: ChartColumn,
-      isActive: pathname.startsWith("/stats")
-    },
-    {
-      href: "/profile/",
-      label: "Настройки",
-      icon: Settings,
-      isActive: pathname.startsWith("/profile")
+      initial: { opacity: 0, y: 24, scale: 0.98 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      className: "w-full max-w-xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
+      onSubmit: handleSubmit,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile editor" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-2xl font-black uppercase text-slate-100", children: "Игровые профили" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "rounded-xl border border-bf-cream/10 p-2 text-bf-cream/60 transition hover:border-bf-orange/40 hover:text-bf-orange",
+              type: "button",
+              onClick: onClose,
+              "aria-label": "Закрыть",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+            }
+          )
+        ] }),
+        error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: error }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 grid gap-5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
+          "BattleTag'и",
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "textarea",
+            {
+              className: "min-h-32 rounded-xl border border-bf-cream/10 bg-black/30 px-4 py-3 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/50",
+              value: battleTagsText,
+              onChange: (inputEvent) => setBattleTagsText(inputEvent.target.value),
+              placeholder: "По одному на строку\nBlackFlock#21234\nBlackFlockAlt#19876"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium text-bf-cream/45", children: "Если аккаунтов несколько, указывай каждый BattleTag с новой строки." })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex justify-end gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: "min-h-11 rounded-xl border border-bf-cream/10 px-4 font-black text-bf-cream/70 transition hover:border-bf-orange/40",
+              type: "button",
+              onClick: onClose,
+              children: "Отмена"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
+              type: "submit",
+              disabled: isSaving,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
+                "Сохранить"
+              ]
+            }
+          )
+        ] })
+      ]
     }
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/design_assets/Logo.png", alt: "" }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
-      const Icon2 = item.icon;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "a",
-        {
-          className: `sidebar-nav-link ${item.isActive ? "sidebar-nav-link-active" : ""}`,
-          href: item.href,
-          "aria-current": item.isActive ? "page" : void 0,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
-          ]
-        },
-        item.href
-      );
-    }) })
-  ] }) });
+  ) });
 }
 function r(e) {
   var t, f, n = "";
@@ -45429,116 +45832,6 @@ function CommentTooltip({ tooltip }) {
     document.body
   );
 }
-const EVENT_STYLES = {
-  scrim: {
-    icon: Swords,
-    border: "border-[#56688f]/55",
-    bg: "bg-[#22314d]/80",
-    text: "text-[#b8c7ec]",
-    glow: "shadow-[0_0_12px_rgba(72,88,126,0.14)]"
-  },
-  competitive: {
-    icon: Crosshair,
-    border: "border-[#8a6b4d]/50",
-    bg: "bg-[#3a3028]/80",
-    text: "text-[#e2c19d]",
-    glow: "shadow-[0_0_12px_rgba(138,107,77,0.12)]"
-  },
-  review: {
-    icon: MonitorPlay,
-    border: "border-[#6b5a91]/50",
-    bg: "bg-[#342b4c]/80",
-    text: "text-[#c8b6f2]",
-    glow: "shadow-[0_0_12px_rgba(107,90,145,0.12)]"
-  },
-  tournament: {
-    icon: Trophy,
-    border: "border-[#8d4c45]/50",
-    bg: "bg-[#492a2c]/80",
-    text: "text-[#f0b3a8]",
-    glow: "shadow-[0_0_12px_rgba(141,76,69,0.12)]"
-  },
-  unavailable: {
-    icon: TriangleAlert,
-    border: "border-[#9a4651]/55",
-    bg: "bg-[#612633]/80",
-    text: "text-[#ffc7ce]",
-    glow: "shadow-[0_0_14px_rgba(154,70,81,0.16)]"
-  },
-  full_day_available: {
-    icon: Check,
-    border: "border-[#3f8067]/55",
-    bg: "bg-[#1f513f]/80",
-    text: "text-[#bdebd5]",
-    glow: "shadow-[0_0_12px_rgba(63,128,103,0.14)]"
-  },
-  tentative: {
-    icon: TriangleAlert,
-    border: "border-[#9a6a39]/55",
-    bg: "bg-[#4c3425]/80",
-    text: "text-[#f5c993]",
-    glow: "shadow-[0_0_14px_rgba(154,106,57,0.16)]"
-  },
-  fallback: {
-    icon: Clock3,
-    border: "border-[#556076]/35",
-    bg: "bg-[#202b40]/80",
-    text: "text-[#d7deea]",
-    glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
-  }
-};
-const AVAILABLE_CARD_STYLE = {
-  border: "border-[#556076]/35",
-  bg: "bg-[#202b40]/80",
-  text: "text-[#e3e9f3]",
-  glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
-};
-function timeChoices(startHour, endHour) {
-  return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
-    const hour = startHour + index;
-    return {
-      value: hour * 60,
-      label: `${String(hour).padStart(2, "0")}:00`
-    };
-  });
-}
-function discordFeedbackFromUrl(search) {
-  const params = new URLSearchParams(search);
-  const status = params.get("discord");
-  const reason = params.get("reason");
-  if (!status) return null;
-  if (status === "connected") {
-    return { tone: "success", text: "Discord успешно подключен." };
-  }
-  if (status === "disconnected") {
-    return { tone: "success", text: "Discord отвязан." };
-  }
-  if (status === "error") {
-    const messages = {
-      "already-linked": "Этот Discord-аккаунт уже привязан к другому пользователю.",
-      "invalid-state": "Не удалось подтвердить запрос подключения Discord.",
-      "missing-code": "Discord не вернул код подключения.",
-      "oauth-failed": "Не удалось получить данные Discord. Повторите попытку.",
-      "not-configured": "Discord временно недоступен. Обратитесь к администратору.",
-      "access_denied": "Подключение Discord было отменено."
-    };
-    return { tone: "error", text: messages[reason] || "Не удалось подключить Discord." };
-  }
-  return null;
-}
-function previewNote(text, maxChars = 15) {
-  if (!text) return "";
-  const chars = Array.from(text);
-  if (chars.length <= maxChars) return text;
-  return `${chars.slice(0, maxChars).join("")}...`;
-}
-function buildDayEventMap(dayEventTypes = []) {
-  const map2 = /* @__PURE__ */ new Map();
-  dayEventTypes.forEach((dayEvent) => {
-    map2.set(Number(dayEvent.dayOfWeek), dayEvent);
-  });
-  return map2;
-}
 function HeroBanner({ canAdd, onAdd }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[440px]", children: [
@@ -46234,299 +46527,6 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
       ] })
     ] })
   ] });
-}
-function EventModal({ event, day, days, onClose, onSaved, onDeleted }) {
-  const isEditing = Boolean(event);
-  const [slotType, setSlotType] = reactExports.useState(event?.slotType || "available");
-  const [dayOfWeek, setDayOfWeek] = reactExports.useState(event?.dayOfWeek ?? day ?? days[0]?.value ?? 0);
-  const [startTimeMinutes, setStartTimeMinutes] = reactExports.useState(event?.startTimeMinutes ?? 1140);
-  const [endTimeMinutes, setEndTimeMinutes] = reactExports.useState(event?.endTimeMinutes ?? 1260);
-  const [note, setNote] = reactExports.useState(event?.note || "");
-  const [errors, setErrors] = reactExports.useState({});
-  const [isSaving, setIsSaving] = reactExports.useState(false);
-  async function handleSubmit(submitEvent) {
-    submitEvent.preventDefault();
-    setIsSaving(true);
-    setErrors({});
-    const payload = {
-      slotType,
-      dayOfWeek,
-      startTimeMinutes,
-      endTimeMinutes,
-      note
-    };
-    if (slotType === "unavailable" || slotType === "full_day_available" || slotType === "tentative") {
-      payload.startTimeMinutes = null;
-      payload.endTimeMinutes = null;
-    }
-    try {
-      const response = isEditing ? await updateSlot(event.id, payload) : await createSlot(payload);
-      onSaved(response.slot);
-    } catch (saveError) {
-      setErrors(saveError.payload?.errors || { __all__: [saveError.message] });
-    } finally {
-      setIsSaving(false);
-    }
-  }
-  async function handleDelete() {
-    if (!isEditing) return;
-    setIsSaving(true);
-    try {
-      await deleteSlot(event.id);
-      onDeleted(event.id);
-    } catch (deleteError) {
-      setErrors(deleteError.payload?.errors || { __all__: [deleteError.message] });
-    } finally {
-      setIsSaving(false);
-    }
-  }
-  const startChoices = timeChoices(0, 23);
-  const endChoices = timeChoices(1, 24);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    motion.form,
-    {
-      initial: { opacity: 0, y: 24, scale: 0.98 },
-      animate: { opacity: 1, y: 0, scale: 1 },
-      className: "w-full max-w-2xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
-      onSubmit: handleSubmit,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Availability editor" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-2xl font-black uppercase text-slate-100", children: isEditing ? "Редактировать время" : "Добавить время" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "rounded-xl border border-bf-cream/10 p-2 text-bf-cream/60 transition hover:border-bf-orange/40 hover:text-bf-orange",
-              type: "button",
-              onClick: onClose,
-              "aria-label": "Закрыть",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
-            }
-          )
-        ] }),
-        errors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: errors.__all__.join(", ") }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 grid gap-5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-md:grid-cols-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "available" ? "border-bf-orange bg-bf-orange/15 text-bf-orange" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("available"),
-                children: "Диапазон времени"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "full_day_available" ? "border-emerald-300/50 bg-emerald-500/15 text-emerald-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("full_day_available"),
-                children: "Свободен весь день"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "tentative" ? "border-orange-300/50 bg-orange-500/15 text-orange-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("tentative"),
-                children: "Не уверен"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "unavailable" ? "border-red-300/50 bg-red-500/15 text-red-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("unavailable"),
-                children: "Не могу в этот день"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "День",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "select",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                value: dayOfWeek,
-                onChange: (inputEvent) => setDayOfWeek(Number(inputEvent.target.value)),
-                children: days.map((dayOption) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: dayOption.value, children: [
-                  dayOption.label,
-                  " - ",
-                  dayOption.date
-                ] }, dayOption.value))
-              }
-            ),
-            errors.day_of_week ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.day_of_week.join(", ") }) : null
-          ] }),
-          slotType === "available" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4 max-sm:grid-cols-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-              "С",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                  value: startTimeMinutes,
-                  onChange: (inputEvent) => setStartTimeMinutes(Number(inputEvent.target.value)),
-                  children: startChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
-                }
-              ),
-              errors.start_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.start_time_minutes.join(", ") }) : null
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-              "До",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                  value: endTimeMinutes,
-                  onChange: (inputEvent) => setEndTimeMinutes(Number(inputEvent.target.value)),
-                  children: endChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
-                }
-              ),
-              errors.end_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.end_time_minutes.join(", ") }) : null
-            ] })
-          ] }) : null,
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Комментарий",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/50",
-                value: note,
-                onChange: (inputEvent) => setNote(inputEvent.target.value),
-                placeholder: "Дополнительная информация"
-              }
-            )
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex flex-wrap justify-between gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: isEditing ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              className: "inline-flex min-h-11 items-center gap-2 rounded-xl border border-red-300/30 px-4 font-black text-red-100 transition hover:bg-red-500/10",
-              type: "button",
-              disabled: isSaving,
-              onClick: handleDelete,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 18 }),
-                "Удалить"
-              ]
-            }
-          ) : null }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: "min-h-11 rounded-xl border border-bf-cream/10 px-4 font-black text-bf-cream/70 transition hover:border-bf-orange/40",
-                type: "button",
-                onClick: onClose,
-                children: "Отмена"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-                type: "submit",
-                disabled: isSaving,
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
-                  "Сохранить"
-                ]
-              }
-            )
-          ] })
-        ] })
-      ]
-    }
-  ) });
-}
-function ProfileModal({ player, onClose, onSaved }) {
-  const [battleTagsText, setBattleTagsText] = reactExports.useState(player.battleTagsText || "");
-  const [error, setError] = reactExports.useState("");
-  const [isSaving, setIsSaving] = reactExports.useState(false);
-  async function handleSubmit(submitEvent) {
-    submitEvent.preventDefault();
-    setIsSaving(true);
-    setError("");
-    try {
-      const response = await updateProfile({ battleTagsText });
-      await onSaved(response.profile || response.player);
-    } catch (saveError) {
-      setError(saveError.payload?.error || saveError.message);
-    } finally {
-      setIsSaving(false);
-    }
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    motion.form,
-    {
-      initial: { opacity: 0, y: 24, scale: 0.98 },
-      animate: { opacity: 1, y: 0, scale: 1 },
-      className: "w-full max-w-xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
-      onSubmit: handleSubmit,
-      children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Profile editor" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-2xl font-black uppercase text-slate-100", children: "Игровые профили" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "rounded-xl border border-bf-cream/10 p-2 text-bf-cream/60 transition hover:border-bf-orange/40 hover:text-bf-orange",
-              type: "button",
-              onClick: onClose,
-              "aria-label": "Закрыть",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
-            }
-          )
-        ] }),
-        error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: error }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 grid gap-5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-          "BattleTag'и",
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "textarea",
-            {
-              className: "min-h-32 rounded-xl border border-bf-cream/10 bg-black/30 px-4 py-3 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/50",
-              value: battleTagsText,
-              onChange: (inputEvent) => setBattleTagsText(inputEvent.target.value),
-              placeholder: "По одному на строку\nBlackFlock#21234\nBlackFlockAlt#19876"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-medium text-bf-cream/45", children: "Если аккаунтов несколько, указывай каждый BattleTag с новой строки." })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex justify-end gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              className: "min-h-11 rounded-xl border border-bf-cream/10 px-4 font-black text-bf-cream/70 transition hover:border-bf-orange/40",
-              type: "button",
-              onClick: onClose,
-              children: "Отмена"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "button",
-            {
-              className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-              type: "submit",
-              disabled: isSaving,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
-                "Сохранить"
-              ]
-            }
-          )
-        ] })
-      ]
-    }
-  ) });
 }
 function App() {
   const [data, setData] = reactExports.useState(null);
