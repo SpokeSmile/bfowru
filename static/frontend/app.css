@@ -2005,11 +2005,6 @@ textarea {
   color: rgb(216 109 56 / var(--tw-text-opacity, 1));
 }
 
-.hover\:text-slate-100:hover {
-  --tw-text-opacity: 1;
-  color: rgb(241 245 249 / var(--tw-text-opacity, 1));
-}
-
 .hover\:shadow-\[0_10px_22px_rgba\(0\2c 0\2c 0\2c 0\.18\)\]:hover {
   --tw-shadow: 0 10px 22px rgba(0,0,0,0.18);
   --tw-shadow-colored: 0 10px 22px var(--tw-shadow-color);

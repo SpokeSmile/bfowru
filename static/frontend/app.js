@@ -20282,6 +20282,359 @@ const featureBundle = {
   ...layout
 };
 const motion = /* @__PURE__ */ createMotionProxy(featureBundle, createDomVisualElement);
+const toKebabCase = (string2) => string2.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string2) => string2.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string2) => {
+  const camelCase = toCamelCase(string2);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+const mergeClasses = (...classes) => classes.filter((className, index, array2) => {
+  return Boolean(className) && className.trim() !== "" && array2.indexOf(className) === index;
+}).join(" ").trim();
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+};
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+const Icon = reactExports.forwardRef(
+  ({
+    color: color2 = "currentColor",
+    size = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => reactExports.createElement(
+    "svg",
+    {
+      ref,
+      ...defaultAttributes,
+      width: size,
+      height: size,
+      stroke: color2,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
+      className: mergeClasses("lucide", className),
+      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = reactExports.forwardRef(
+    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component.displayName = toPascalCase(iconName);
+  return Component;
+};
+const __iconNode$i = [
+  [
+    "path",
+    {
+      d: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20",
+      key: "k3hazp"
+    }
+  ],
+  ["path", { d: "M8 11h8", key: "vwpz6n" }],
+  ["path", { d: "M8 7h6", key: "1f0q6e" }]
+];
+const BookText = createLucideIcon("book-text", __iconNode$i);
+const __iconNode$h = [
+  ["path", { d: "M16 19h6", key: "xwg31i" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["path", { d: "M19 16v6", key: "tddt3s" }],
+  ["path", { d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5", key: "1glfrc" }],
+  ["path", { d: "M3 10h18", key: "8toen8" }],
+  ["path", { d: "M8 2v4", key: "1cmpym" }]
+];
+const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$h);
+const __iconNode$g = [
+  ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
+  ["path", { d: "M18 17V9", key: "2bz60n" }],
+  ["path", { d: "M13 17V5", key: "1frdt8" }],
+  ["path", { d: "M8 17v-3", key: "17ska0" }]
+];
+const ChartColumn = createLucideIcon("chart-column", __iconNode$g);
+const __iconNode$f = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$f);
+const __iconNode$e = [
+  ["path", { d: "M12 6v6h4", key: "135r8i" }],
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
+];
+const Clock3 = createLucideIcon("clock-3", __iconNode$e);
+const __iconNode$d = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
+  ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
+  ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
+  ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
+];
+const Crosshair = createLucideIcon("crosshair", __iconNode$d);
+const __iconNode$c = [
+  ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+  ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+  ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
+];
+const ExternalLink = createLucideIcon("external-link", __iconNode$c);
+const __iconNode$b = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$b);
+const __iconNode$a = [
+  [
+    "path",
+    {
+      d: "M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z",
+      key: "vbtd3f"
+    }
+  ],
+  ["path", { d: "M12 17v4", key: "1riwvh" }],
+  ["path", { d: "M8 21h8", key: "1ev6f3" }],
+  ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2", key: "x3v2xh" }]
+];
+const MonitorPlay = createLucideIcon("monitor-play", __iconNode$a);
+const __iconNode$9 = [
+  [
+    "path",
+    {
+      d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
+      key: "1a8usu"
+    }
+  ],
+  ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
+];
+const Pencil = createLucideIcon("pencil", __iconNode$9);
+const __iconNode$8 = [
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
+];
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
+const __iconNode$7 = [
+  [
+    "path",
+    {
+      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+      key: "1c8476"
+    }
+  ],
+  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
+];
+const Save = createLucideIcon("save", __iconNode$7);
+const __iconNode$6 = [
+  [
+    "path",
+    {
+      d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+      key: "1i5ecw"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Settings = createLucideIcon("settings", __iconNode$6);
+const __iconNode$5 = [
+  ["polyline", { points: "14.5 17.5 3 6 3 3 6 3 17.5 14.5", key: "1hfsw2" }],
+  ["line", { x1: "13", x2: "19", y1: "19", y2: "13", key: "1vrmhu" }],
+  ["line", { x1: "16", x2: "20", y1: "16", y2: "20", key: "1bron3" }],
+  ["line", { x1: "19", x2: "21", y1: "21", y2: "19", key: "13pww6" }],
+  ["polyline", { points: "14.5 6.5 18 3 21 3 21 6 17.5 9.5", key: "hbey2j" }],
+  ["line", { x1: "5", x2: "9", y1: "14", y2: "18", key: "1hf58s" }],
+  ["line", { x1: "7", x2: "4", y1: "17", y2: "20", key: "pidxm4" }],
+  ["line", { x1: "3", x2: "5", y1: "19", y2: "21", key: "1pehsh" }]
+];
+const Swords = createLucideIcon("swords", __iconNode$5);
+const __iconNode$4 = [
+  ["path", { d: "M10 11v6", key: "nco0om" }],
+  ["path", { d: "M14 11v6", key: "outv1u" }],
+  ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
+];
+const Trash2 = createLucideIcon("trash-2", __iconNode$4);
+const __iconNode$3 = [
+  [
+    "path",
+    {
+      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+      key: "wmoenq"
+    }
+  ],
+  ["path", { d: "M12 9v4", key: "juzpu7" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$3);
+const __iconNode$2 = [
+  ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
+  ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
+  ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
+  ["path", { d: "M4 22h16", key: "57wxv0" }],
+  ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
+  ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
+];
+const Trophy = createLucideIcon("trophy", __iconNode$2);
+const __iconNode$1 = [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+];
+const Users = createLucideIcon("users", __iconNode$1);
+const __iconNode = [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+];
+const X = createLucideIcon("x", __iconNode);
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(";").shift();
+  }
+  return "";
+}
+async function request(path, options = {}) {
+  const response = await fetch(path, {
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),
+      ...options.headers || {}
+    },
+    ...options
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    const error = new Error(data.error || "Request failed");
+    error.payload = data;
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+function bootstrap() {
+  return request("/api/bootstrap/", { method: "GET" });
+}
+function fetchGameUpdates() {
+  return request("/api/game-updates/", { method: "GET" });
+}
+function fetchGameUpdateDetail(slug) {
+  return request(`/api/game-updates/${slug}/`, { method: "GET" });
+}
+function fetchOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
+}
+function refreshOverwatchStats(mode = "competitive") {
+  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
+}
+function createSlot(payload) {
+  return request("/api/slots/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function updateSlot(id2, payload) {
+  return request(`/api/slots/${id2}/`, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function deleteSlot(id2) {
+  return request(`/api/slots/${id2}/delete/`, {
+    method: "DELETE"
+  });
+}
+function updateProfile(payload) {
+  return request("/api/profile/", {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}
+function changePassword(payload) {
+  return request("/api/profile/password/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+function disconnectDiscord() {
+  return request("/api/discord/disconnect/", { method: "POST" });
+}
+function logout() {
+  return request("/api/logout/", { method: "POST" });
+}
+function Avatar({ src, alt, fallbackLabel, className = "" }) {
+  if (src) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `rounded-full border border-bf-cream/15 ${className}`, src, alt });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "img",
+    {
+      className: "h-[70%] w-[70%] object-contain opacity-95",
+      src: "/static/design_assets/Logo.png",
+      alt: fallbackLabel || "Black Flock"
+    }
+  ) });
+}
+function hexToRgba(hexColor, alpha2) {
+  if (!hexColor || !/^#[0-9A-Fa-f]{6}$/.test(hexColor)) {
+    return `rgba(232, 237, 245, ${alpha2})`;
+  }
+  const red = Number.parseInt(hexColor.slice(1, 3), 16);
+  const green = Number.parseInt(hexColor.slice(3, 5), 16);
+  const blue = Number.parseInt(hexColor.slice(5, 7), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha2})`;
+}
+function roleBadgeStyle(color2) {
+  return {
+    borderColor: hexToRgba(color2, 0.35),
+    backgroundColor: hexToRgba(color2, 0.12),
+    color: color2
+  };
+}
+function RoleBadge({ role, color: color2, className = "" }) {
+  if (!role) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "span",
+    {
+      className: `rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
+      style: roleBadgeStyle(color2),
+      children: role
+    }
+  );
+}
 function r(e) {
   var t, f, n = "";
   if ("string" == typeof e || "number" == typeof e) n += e;
@@ -44632,318 +44985,254 @@ var BarChart = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     ref
   });
 });
-const toKebabCase = (string2) => string2.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const toCamelCase = (string2) => string2.replace(
-  /^([A-Z])|[\s-_]+(\w)/g,
-  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
-);
-const toPascalCase = (string2) => {
-  const camelCase = toCamelCase(string2);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+function formatShortDateTime(value) {
+  if (!value) return "—";
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date(value));
+}
+function formatInteger(value) {
+  return new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 0
+  }).format(Number.isFinite(value) ? value : 0);
+}
+function formatDecimal(value, digits = 1) {
+  if (!Number.isFinite(value)) return "—";
+  return new Intl.NumberFormat("ru-RU", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits
+  }).format(value);
+}
+function formatPercent(value) {
+  if (!Number.isFinite(value)) return "—";
+  return `${formatDecimal(value, 1)}%`;
+}
+function formatHours(seconds) {
+  const hours = Math.round((Number(seconds) || 0) / 3600);
+  return `${formatInteger(hours)} ч.`;
+}
+const OVERWATCH_STATS_MODES = [
+  { value: "overview", label: "Общая статистика" },
+  { value: "competitive", label: "Competitive" }
+];
+const RANK_CHART_COLORS = {
+  Champion: "#f6d266",
+  Grandmaster: "#e6c462",
+  Master: "#b58df4",
+  Diamond: "#7fc7ff",
+  Platinum: "#67dcc8",
+  Gold: "#f2bf61",
+  Silver: "#c9d2dc",
+  Bronze: "#b4764f"
 };
-const mergeClasses = (...classes) => classes.filter((className, index, array2) => {
-  return Boolean(className) && className.trim() !== "" && array2.indexOf(className) === index;
-}).join(" ").trim();
-const hasA11yProp = (props) => {
-  for (const prop in props) {
-    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
-      return true;
-    }
-  }
-};
-var defaultAttributes = {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: 24,
-  height: 24,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
-};
-const Icon = reactExports.forwardRef(
-  ({
-    color: color2 = "currentColor",
-    size = 24,
-    strokeWidth = 2,
-    absoluteStrokeWidth,
-    className = "",
-    children,
-    iconNode,
-    ...rest
-  }, ref) => reactExports.createElement(
-    "svg",
-    {
-      ref,
-      ...defaultAttributes,
-      width: size,
-      height: size,
-      stroke: color2,
-      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
-      className: mergeClasses("lucide", className),
-      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
-      ...rest
-    },
-    [
-      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
-      ...Array.isArray(children) ? children : [children]
-    ]
-  )
-);
-const createLucideIcon = (iconName, iconNode) => {
-  const Component = reactExports.forwardRef(
-    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
-      ref,
-      iconNode,
-      className: mergeClasses(
-        `lucide-${toKebabCase(toPascalCase(iconName))}`,
-        `lucide-${iconName}`,
-        className
-      ),
-      ...props
-    })
-  );
-  Component.displayName = toPascalCase(iconName);
-  return Component;
-};
-const __iconNode$i = [
-  [
-    "path",
-    {
-      d: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20",
-      key: "k3hazp"
-    }
-  ],
-  ["path", { d: "M8 11h8", key: "vwpz6n" }],
-  ["path", { d: "M8 7h6", key: "1f0q6e" }]
-];
-const BookText = createLucideIcon("book-text", __iconNode$i);
-const __iconNode$h = [
-  ["path", { d: "M16 19h6", key: "xwg31i" }],
-  ["path", { d: "M16 2v4", key: "4m81vk" }],
-  ["path", { d: "M19 16v6", key: "tddt3s" }],
-  ["path", { d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5", key: "1glfrc" }],
-  ["path", { d: "M3 10h18", key: "8toen8" }],
-  ["path", { d: "M8 2v4", key: "1cmpym" }]
-];
-const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$h);
-const __iconNode$g = [
-  ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
-  ["path", { d: "M18 17V9", key: "2bz60n" }],
-  ["path", { d: "M13 17V5", key: "1frdt8" }],
-  ["path", { d: "M8 17v-3", key: "17ska0" }]
-];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$g);
-const __iconNode$f = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$f);
-const __iconNode$e = [
-  ["path", { d: "M12 6v6h4", key: "135r8i" }],
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
-];
-const Clock3 = createLucideIcon("clock-3", __iconNode$e);
-const __iconNode$d = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
-  ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
-  ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
-  ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
-];
-const Crosshair = createLucideIcon("crosshair", __iconNode$d);
-const __iconNode$c = [
-  ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-  ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-  ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
-];
-const ExternalLink = createLucideIcon("external-link", __iconNode$c);
-const __iconNode$b = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
-];
-const LogOut = createLucideIcon("log-out", __iconNode$b);
-const __iconNode$a = [
-  [
-    "path",
-    {
-      d: "M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z",
-      key: "vbtd3f"
-    }
-  ],
-  ["path", { d: "M12 17v4", key: "1riwvh" }],
-  ["path", { d: "M8 21h8", key: "1ev6f3" }],
-  ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2", key: "x3v2xh" }]
-];
-const MonitorPlay = createLucideIcon("monitor-play", __iconNode$a);
-const __iconNode$9 = [
-  [
-    "path",
-    {
-      d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z",
-      key: "1a8usu"
-    }
-  ],
-  ["path", { d: "m15 5 4 4", key: "1mk7zo" }]
-];
-const Pencil = createLucideIcon("pencil", __iconNode$9);
-const __iconNode$8 = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$8);
-const __iconNode$7 = [
-  [
-    "path",
-    {
-      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
-      key: "1c8476"
-    }
-  ],
-  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
-  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
-];
-const Save = createLucideIcon("save", __iconNode$7);
-const __iconNode$6 = [
-  [
-    "path",
-    {
-      d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
-      key: "1i5ecw"
-    }
-  ],
-  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
-];
-const Settings = createLucideIcon("settings", __iconNode$6);
-const __iconNode$5 = [
-  ["polyline", { points: "14.5 17.5 3 6 3 3 6 3 17.5 14.5", key: "1hfsw2" }],
-  ["line", { x1: "13", x2: "19", y1: "19", y2: "13", key: "1vrmhu" }],
-  ["line", { x1: "16", x2: "20", y1: "16", y2: "20", key: "1bron3" }],
-  ["line", { x1: "19", x2: "21", y1: "21", y2: "19", key: "13pww6" }],
-  ["polyline", { points: "14.5 6.5 18 3 21 3 21 6 17.5 9.5", key: "hbey2j" }],
-  ["line", { x1: "5", x2: "9", y1: "14", y2: "18", key: "1hf58s" }],
-  ["line", { x1: "7", x2: "4", y1: "17", y2: "20", key: "pidxm4" }],
-  ["line", { x1: "3", x2: "5", y1: "19", y2: "21", key: "1pehsh" }]
-];
-const Swords = createLucideIcon("swords", __iconNode$5);
-const __iconNode$4 = [
-  ["path", { d: "M10 11v6", key: "nco0om" }],
-  ["path", { d: "M14 11v6", key: "outv1u" }],
-  ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
-  ["path", { d: "M3 6h18", key: "d0wm0j" }],
-  ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
-];
-const Trash2 = createLucideIcon("trash-2", __iconNode$4);
-const __iconNode$3 = [
-  [
-    "path",
-    {
-      d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-      key: "wmoenq"
-    }
-  ],
-  ["path", { d: "M12 9v4", key: "juzpu7" }],
-  ["path", { d: "M12 17h.01", key: "p32p05" }]
-];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$3);
-const __iconNode$2 = [
-  ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
-  ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
-  ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
-  ["path", { d: "M4 22h16", key: "57wxv0" }],
-  ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
-  ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
-];
-const Trophy = createLucideIcon("trophy", __iconNode$2);
-const __iconNode$1 = [
-  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-  ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-];
-const Users = createLucideIcon("users", __iconNode$1);
-const __iconNode = [
-  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
-  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
-];
-const X = createLucideIcon("x", __iconNode);
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop().split(";").shift();
-  }
-  return "";
+function StatSummaryCard({ icon: Icon2, label, value, subLabel = "", caption, tone = "orange" }) {
+  const toneClass = {
+    orange: "text-bf-orange bg-bf-orange/10 border-bf-orange/20",
+    green: "text-emerald-200 bg-emerald-500/10 border-emerald-300/20",
+    blue: "text-sky-200 bg-sky-500/10 border-sky-300/20",
+    purple: "text-violet-200 bg-violet-500/10 border-violet-300/20",
+    red: "text-red-200 bg-red-500/10 border-red-300/20",
+    muted: "text-bf-cream/72 bg-black/24 border-bf-cream/10"
+  }[tone];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/22 p-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid h-10 w-10 place-items-center rounded-xl border ${toneClass}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 19 }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-black uppercase tracking-wide text-bf-cream/44", children: label }),
+        subLabel ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-[11px] font-semibold text-bf-cream/42", children: subLabel }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 truncate text-2xl font-black text-slate-100", children: value })
+      ] })
+    ] }),
+    caption ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-xs font-semibold text-bf-cream/46", children: caption }) : null
+  ] });
 }
-async function request(path, options = {}) {
-  const response = await fetch(path, {
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken"),
-      ...options.headers || {}
-    },
-    ...options
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    const error = new Error(data.error || "Request failed");
-    error.payload = data;
-    error.status = response.status;
-    throw error;
-  }
-  return data;
+function StatsBanner({ updatedAt, isRefreshing, onRefresh }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/25 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[620px]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl", children: "Статистика Overwatch" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-bf-cream/58", children: "Данные OverFast API по первому BattleTag каждого игрока." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid justify-items-start gap-3 lg:justify-items-end", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-semibold text-bf-cream/35", children: [
+        "Последнее обновление: ",
+        formatShortDateTime(updatedAt)
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "inline-flex min-h-11 items-center gap-3 rounded-xl bg-bf-orange px-5 font-black text-white shadow-[0_10px_24px_rgba(243,112,30,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ff812e] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
+          type: "button",
+          onClick: onRefresh,
+          disabled: isRefreshing,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: isRefreshing ? "animate-spin" : "", size: 18 }),
+            isRefreshing ? "Обновляю данные..." : "Обновить данные"
+          ]
+        }
+      )
+    ] })
+  ] }) });
 }
-function bootstrap() {
-  return request("/api/bootstrap/", { method: "GET" });
+function StatsFilterBar() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-bf-cream/10 bg-black/20 p-3", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: OVERWATCH_STATS_MODES.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "span",
+      {
+        className: "rounded-xl bg-bf-orange/18 px-4 py-2 text-xs font-black uppercase text-bf-orange shadow-[0_0_14px_rgba(243,112,30,0.10)] transition",
+        children: item.label
+      },
+      item.value
+    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-2 text-xs font-black uppercase text-bf-cream/35", children: "All-time" })
+  ] });
 }
-function fetchGameUpdates() {
-  return request("/api/game-updates/", { method: "GET" });
+function PlayerStatsTable({ players }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 overflow-x-auto rounded-xl border border-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[1240px] w-full border-collapse bg-[#111925]/86 text-left", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Игрок" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Ранг" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "SR" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Основной герой" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Winrate" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Матчей" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "W / L" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Последние игры" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "K/D" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Сред. убийств" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Средняя смерть" })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: players.map((player) => {
+      const isReady = player.status === "ready";
+      const winrateWidth = `${Math.min(Math.max(player.winrate || 0, 0), 100)}%`;
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-black/10 last:border-b-0 hover:bg-bf-steel/10", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-10 w-10 object-cover" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-sm font-black text-slate-100", children: player.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex flex-wrap items-center gap-1.5", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor }),
+              player.battleTag ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-semibold text-bf-cream/42", children: player.battleTag }) : null
+            ] }),
+            !isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs font-semibold text-amber-100/75", children: player.error || "Данные недоступны" }) : null
+          ] })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          player.rank.rankIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-5 w-5", src: player.rank.rankIcon, alt: "" }) : null,
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: player.rank.label })
+        ] }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-bf-cream/42", children: "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-black", children: player.mainHero.heroLabel }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-xs text-bf-cream/42", children: formatHours(player.mainHero.timePlayed) })
+        ] }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: formatPercent(player.winrate) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full rounded-full bg-emerald-400", style: { width: winrateWidth } }) })
+        ] }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatInteger(player.matches) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
+            formatInteger(player.wins),
+            "W"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1 text-bf-cream/28", children: "/" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-300", children: [
+            formatInteger(player.losses),
+            "L"
+          ] })
+        ] }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-bf-cream/42", children: "Недоступно" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isReady ? formatDecimal(player.kd, 2) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
+      ] }, player.id);
+    }) })
+  ] }) });
 }
-function fetchGameUpdateDetail(slug) {
-  return request(`/api/game-updates/${slug}/`, { method: "GET" });
+function StatsCharts({ stats }) {
+  const rankRows = (stats.rankDistribution || []).filter((item) => item.count > 0);
+  const topHeroes = stats.topHeroes || [];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-4 grid gap-4 xl:grid-cols-[1fr_1.15fr]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Распределение рангов" }),
+      rankRows.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-64", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(BarChart, { data: rankRows, layout: "vertical", margin: { top: 4, right: 12, left: 18, bottom: 4 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(CartesianGrid, { stroke: "rgba(255,255,255,0.06)", horizontal: false }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(XAxis, { type: "number", allowDecimals: false, stroke: "rgba(236,241,248,0.36)", tickLine: false, axisLine: false }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(YAxis, { dataKey: "divisionLabel", type: "category", width: 90, stroke: "rgba(236,241,248,0.56)", tickLine: false, axisLine: false }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Tooltip,
+          {
+            cursor: { fill: "rgba(243,112,30,0.08)" },
+            contentStyle: { background: "#070c14", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, color: "#fff" },
+            labelStyle: { color: "#fff" },
+            itemStyle: { color: "#fff" },
+            formatter: (value) => [value, "Количество"]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Bar, { dataKey: "count", radius: [0, 10, 10, 0], children: rankRows.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(Cell, { fill: RANK_CHART_COLORS[item.divisionLabel] || "#f3701e" }, item.division)) })
+      ] }) }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-sm text-bf-cream/52", children: "Ранги появятся после успешной синхронизации competitive профилей." })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Топ героев" }),
+      topHeroes.length ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(0,1fr)_80px_80px_90px] gap-3 border-b border-bf-cream/10 pb-2 text-[11px] font-black uppercase tracking-wide text-bf-cream/38", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Герой" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Winrate" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Матчей" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Часы" })
+        ] }),
+        topHeroes.map((hero) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(0,1fr)_80px_80px_90px] items-center gap-3 rounded-xl bg-black/18 px-3 py-2 text-sm", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate font-black text-slate-100", children: hero.heroLabel }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-black text-emerald-300", children: formatPercent(hero.winrate) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-bf-cream/72", children: formatInteger(hero.matches) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-bf-cream/72", children: formatHours(hero.timePlayed) })
+        ] }, hero.hero))
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-sm text-bf-cream/52", children: "Герои появятся после загрузки статистики OverFast." })
+    ] })
+  ] });
 }
-function fetchOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
-}
-function refreshOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
-}
-function createSlot(payload) {
-  return request("/api/slots/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function updateSlot(id2, payload) {
-  return request(`/api/slots/${id2}/`, {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function deleteSlot(id2) {
-  return request(`/api/slots/${id2}/delete/`, {
-    method: "DELETE"
-  });
-}
-function updateProfile(payload) {
-  return request("/api/profile/", {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function changePassword(payload) {
-  return request("/api/profile/password/", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-function disconnectDiscord() {
-  return request("/api/discord/disconnect/", { method: "POST" });
-}
-function logout() {
-  return request("/api/logout/", { method: "POST" });
+function OverwatchStatsPage({
+  stats,
+  isLoading,
+  isRefreshing,
+  error,
+  onRefresh
+}) {
+  const team = stats?.team || {};
+  const players = stats?.players || [];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt, isRefreshing, onRefresh }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 md:grid-cols-2 xl:grid-cols-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          StatSummaryCard,
+          {
+            icon: Trophy,
+            label: "Средний рейтинг",
+            value: team.averageRank || "—",
+            subLabel: team.averageRating ? `Рейтинг: ${formatInteger(team.averageRating)}` : "Рейтинг: —",
+            caption: "Competitive",
+            tone: "purple"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Check, label: "Процент побед", value: formatPercent(team.winrate), caption: "По загруженным игрокам", tone: "green" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Clock3, label: "Все сыграно", value: formatHours(team.timePlayed), caption: "All-time", tone: "orange" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Swords, label: "Лучшая серия", value: team.bestStreak || "Недоступно", caption: "Нет истории матчей", tone: "muted" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: TriangleAlert, label: "Худшая серия", value: team.worstStreak || "Недоступно", caption: "Нет истории матчей", tone: "red" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(StatsFilterBar, {}),
+      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю кэш статистики..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.cacheEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "Данные OverFast еще не загружены. Нажмите «Обновить данные», чтобы собрать статистику по BattleTag игроков." }) : null,
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-3 text-sm text-bf-cream/42", children: stats?.unavailableMessage || "SR, история последних матчей и серии не доступны в OverFast API." })
+  ] });
 }
 const EVENT_STYLES = {
   scrim: {
@@ -45017,19 +45306,6 @@ function formatClock(timeZone) {
     timeZone
   }).format(/* @__PURE__ */ new Date());
 }
-function Avatar({ src, alt, fallbackLabel, className = "" }) {
-  if (src) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: `rounded-full border border-bf-cream/15 ${className}`, src, alt });
-  }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "img",
-    {
-      className: "h-[70%] w-[70%] object-contain opacity-95",
-      src: "/static/design_assets/Logo.png",
-      alt: fallbackLabel || "Black Flock"
-    }
-  ) });
-}
 function useClocks() {
   const [clocks, setClocks] = reactExports.useState({
     utc: "--:--",
@@ -45096,15 +45372,6 @@ function buildDayEventMap(dayEventTypes = []) {
   });
   return map2;
 }
-function hexToRgba(hexColor, alpha2) {
-  if (!hexColor || !/^#[0-9A-Fa-f]{6}$/.test(hexColor)) {
-    return `rgba(232, 237, 245, ${alpha2})`;
-  }
-  const red = Number.parseInt(hexColor.slice(1, 3), 16);
-  const green = Number.parseInt(hexColor.slice(3, 5), 16);
-  const blue = Number.parseInt(hexColor.slice(5, 7), 16);
-  return `rgba(${red}, ${green}, ${blue}, ${alpha2})`;
-}
 function formatPublishedDate(value) {
   if (!value) return "";
   return new Intl.DateTimeFormat("ru-RU", {
@@ -45113,50 +45380,6 @@ function formatPublishedDate(value) {
     year: "numeric"
   }).format(new Date(value));
 }
-function formatShortDateTime(value) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date(value));
-}
-function formatInteger(value) {
-  return new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 0
-  }).format(Number.isFinite(value) ? value : 0);
-}
-function formatDecimal(value, digits = 1) {
-  if (!Number.isFinite(value)) return "—";
-  return new Intl.NumberFormat("ru-RU", {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits
-  }).format(value);
-}
-function formatPercent(value) {
-  if (!Number.isFinite(value)) return "—";
-  return `${formatDecimal(value, 1)}%`;
-}
-function formatHours(seconds) {
-  const hours = Math.round((Number(seconds) || 0) / 3600);
-  return `${formatInteger(hours)} ч.`;
-}
-const OVERWATCH_STATS_MODES = [
-  { value: "overview", label: "Общая статистика" },
-  { value: "competitive", label: "Competitive" }
-];
-const RANK_CHART_COLORS = {
-  Champion: "#f6d266",
-  Grandmaster: "#e6c462",
-  Master: "#b58df4",
-  Diamond: "#7fc7ff",
-  Platinum: "#67dcc8",
-  Gold: "#f2bf61",
-  Silver: "#c9d2dc",
-  Bronze: "#b4764f"
-};
 const UPDATE_TYPE_STYLES = {
   Hotfix: "border-amber-300/30 bg-amber-500/10 text-amber-100",
   "Bug Fix": "border-rose-300/30 bg-rose-500/10 text-rose-100",
@@ -45164,24 +45387,6 @@ const UPDATE_TYPE_STYLES = {
   "Patch Notes": "border-sky-300/30 bg-sky-500/10 text-sky-100",
   Update: "border-bf-cream/10 bg-black/20 text-bf-cream/72"
 };
-function roleBadgeStyle(color2) {
-  return {
-    borderColor: hexToRgba(color2, 0.35),
-    backgroundColor: hexToRgba(color2, 0.12),
-    color: color2
-  };
-}
-function RoleBadge({ role, color: color2, className = "" }) {
-  if (!role) return null;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "span",
-    {
-      className: `rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
-      style: roleBadgeStyle(color2),
-      children: role
-    }
-  );
-}
 function DiscordClouds({ displayTag }) {
   if (!displayTag) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-bf-cream/42", children: "Не подключен" });
@@ -45750,214 +45955,6 @@ function UpdatesPage({
         ) })
       ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-6 text-sm text-bf-cream/62", children: "Выберите обновление из списка." }) })
     ] })
-  ] });
-}
-function StatSummaryCard({ icon: Icon2, label, value, subLabel = "", caption, tone = "orange" }) {
-  const toneClass = {
-    orange: "text-bf-orange bg-bf-orange/10 border-bf-orange/20",
-    green: "text-emerald-200 bg-emerald-500/10 border-emerald-300/20",
-    blue: "text-sky-200 bg-sky-500/10 border-sky-300/20",
-    purple: "text-violet-200 bg-violet-500/10 border-violet-300/20",
-    red: "text-red-200 bg-red-500/10 border-red-300/20",
-    muted: "text-bf-cream/72 bg-black/24 border-bf-cream/10"
-  }[tone];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/22 p-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid h-10 w-10 place-items-center rounded-xl border ${toneClass}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 19 }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-black uppercase tracking-wide text-bf-cream/44", children: label }),
-        subLabel ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-[11px] font-semibold text-bf-cream/42", children: subLabel }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 truncate text-2xl font-black text-slate-100", children: value })
-      ] })
-    ] }),
-    caption ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-xs font-semibold text-bf-cream/46", children: caption }) : null
-  ] });
-}
-function StatsBanner({ updatedAt, isRefreshing, onRefresh }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/25 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[620px]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl", children: "Статистика Overwatch" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-bf-cream/58", children: "Данные OverFast API по первому BattleTag каждого игрока." })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid justify-items-start gap-3 lg:justify-items-end", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-semibold text-bf-cream/35", children: [
-        "Последнее обновление: ",
-        formatShortDateTime(updatedAt)
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: "inline-flex min-h-11 items-center gap-3 rounded-xl bg-bf-orange px-5 font-black text-white shadow-[0_10px_24px_rgba(243,112,30,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ff812e] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
-          type: "button",
-          onClick: onRefresh,
-          disabled: isRefreshing,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: isRefreshing ? "animate-spin" : "", size: 18 }),
-            isRefreshing ? "Обновляю данные..." : "Обновить данные"
-          ]
-        }
-      )
-    ] })
-  ] }) });
-}
-function StatsFilterBar() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-bf-cream/10 bg-black/20 p-3", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: OVERWATCH_STATS_MODES.map((item) => {
-      const isActive = item.value === "overview" || item.value === "competitive";
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "span",
-        {
-          className: `rounded-xl px-4 py-2 text-xs font-black uppercase transition ${isActive ? "bg-bf-orange/18 text-bf-orange shadow-[0_0_14px_rgba(243,112,30,0.10)]" : "text-bf-cream/48 hover:bg-bf-steel/10 hover:text-slate-100"}`,
-          children: item.label
-        },
-        item.value
-      );
-    }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-2 text-xs font-black uppercase text-bf-cream/35", children: "All-time" })
-  ] });
-}
-function PlayerStatsTable({ players }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 overflow-x-auto rounded-xl border border-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[1240px] w-full border-collapse bg-[#111925]/86 text-left", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Игрок" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Ранг" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "SR" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Основной герой" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Winrate" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Матчей" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "W / L" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Последние игры" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "K/D" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Сред. убийств" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Средняя смерть" })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: players.map((player) => {
-      const isReady = player.status === "ready";
-      const winrateWidth = `${Math.min(Math.max(player.winrate || 0, 0), 100)}%`;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-black/10 last:border-b-0 hover:bg-bf-steel/10", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-10 w-10 object-cover" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-sm font-black text-slate-100", children: player.name }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex flex-wrap items-center gap-1.5", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor }),
-              player.battleTag ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-semibold text-bf-cream/42", children: player.battleTag }) : null
-            ] }),
-            !isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs font-semibold text-amber-100/75", children: player.error || "Данные недоступны" }) : null
-          ] })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-          player.rank.rankIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-5 w-5", src: player.rank.rankIcon, alt: "" }) : null,
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: player.rank.label })
-        ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-bf-cream/42", children: "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-black", children: player.mainHero.heroLabel }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-xs text-bf-cream/42", children: formatHours(player.mainHero.timePlayed) })
-        ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: formatPercent(player.winrate) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full rounded-full bg-emerald-400", style: { width: winrateWidth } }) })
-        ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatInteger(player.matches) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
-            formatInteger(player.wins),
-            "W"
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1 text-bf-cream/28", children: "/" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-300", children: [
-            formatInteger(player.losses),
-            "L"
-          ] })
-        ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-bf-cream/42", children: "Недоступно" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isReady ? formatDecimal(player.kd, 2) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
-      ] }, player.id);
-    }) })
-  ] }) });
-}
-function StatsCharts({ stats }) {
-  const rankRows = (stats.rankDistribution || []).filter((item) => item.count > 0);
-  const topHeroes = stats.topHeroes || [];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-4 grid gap-4 xl:grid-cols-[1fr_1.15fr]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Распределение рангов" }),
-      rankRows.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-64", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(BarChart, { data: rankRows, layout: "vertical", margin: { top: 4, right: 12, left: 18, bottom: 4 }, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(CartesianGrid, { stroke: "rgba(255,255,255,0.06)", horizontal: false }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(XAxis, { type: "number", allowDecimals: false, stroke: "rgba(236,241,248,0.36)", tickLine: false, axisLine: false }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(YAxis, { dataKey: "divisionLabel", type: "category", width: 90, stroke: "rgba(236,241,248,0.56)", tickLine: false, axisLine: false }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Tooltip,
-          {
-            cursor: { fill: "rgba(243,112,30,0.08)" },
-            contentStyle: { background: "#070c14", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, color: "#fff" },
-            labelStyle: { color: "#fff" },
-            itemStyle: { color: "#fff" },
-            formatter: (value) => [value, "Количество"]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Bar, { dataKey: "count", radius: [0, 10, 10, 0], children: rankRows.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(Cell, { fill: RANK_CHART_COLORS[item.divisionLabel] || "#f3701e" }, item.division)) })
-      ] }) }) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-sm text-bf-cream/52", children: "Ранги появятся после успешной синхронизации competitive профилей." })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Топ героев" }),
-      topHeroes.length ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(0,1fr)_80px_80px_90px] gap-3 border-b border-bf-cream/10 pb-2 text-[11px] font-black uppercase tracking-wide text-bf-cream/38", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Герой" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Winrate" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Матчей" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Часы" })
-        ] }),
-        topHeroes.map((hero) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(0,1fr)_80px_80px_90px] items-center gap-3 rounded-xl bg-black/18 px-3 py-2 text-sm", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate font-black text-slate-100", children: hero.heroLabel }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-black text-emerald-300", children: formatPercent(hero.winrate) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-bf-cream/72", children: formatInteger(hero.matches) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-semibold text-bf-cream/72", children: formatHours(hero.timePlayed) })
-        ] }, hero.hero))
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-sm text-bf-cream/52", children: "Герои появятся после загрузки статистики OverFast." })
-    ] })
-  ] });
-}
-function OverwatchStatsPage({
-  stats,
-  isLoading,
-  isRefreshing,
-  error,
-  onRefresh
-}) {
-  const team = stats?.team || {};
-  const players = stats?.players || [];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt, isRefreshing, onRefresh }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 md:grid-cols-2 xl:grid-cols-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          StatSummaryCard,
-          {
-            icon: Trophy,
-            label: "Средний рейтинг",
-            value: team.averageRank || "—",
-            subLabel: team.averageRating ? `Рейтинг: ${formatInteger(team.averageRating)}` : "Рейтинг: —",
-            caption: "Competitive",
-            tone: "purple"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Check, label: "Процент побед", value: formatPercent(team.winrate), caption: "По загруженным игрокам", tone: "green" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Clock3, label: "Все сыграно", value: formatHours(team.timePlayed), caption: "All-time", tone: "orange" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Swords, label: "Лучшая серия", value: team.bestStreak || "Недоступно", caption: "Нет истории матчей", tone: "muted" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: TriangleAlert, label: "Худшая серия", value: team.worstStreak || "Недоступно", caption: "Нет истории матчей", tone: "red" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(StatsFilterBar, {}),
-      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю кэш статистики..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.cacheEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "Данные OverFast еще не загружены. Нажмите «Обновить данные», чтобы собрать статистику по BattleTag игроков." }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-3 text-sm text-bf-cream/42", children: stats?.unavailableMessage || "SR, история последних матчей и серии не доступны в OverFast API." })
   ] });
 }
 function ProfilePage({ user, profile, profileType, onSaved }) {
