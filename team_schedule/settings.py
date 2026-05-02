@@ -162,7 +162,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    ('design_assets', BASE_DIR / 'design_assets'),
 ]
 
 MEDIA_URL = '/media/'

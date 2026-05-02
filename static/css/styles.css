@@ -328,7 +328,7 @@ textarea {
     inset: 0;
     background:
         linear-gradient(90deg, rgba(9, 14, 23, 0.98) 0%, rgba(10, 16, 26, 0.8) 32%, rgba(8, 13, 22, 0.3) 60%, rgba(8, 13, 22, 0.84) 100%),
-        url("/static/design_assets/Header.png") center center / auto 126% no-repeat;
+        url("/static/img/Header.png") center center / auto 126% no-repeat;
 }
 
 .hero-strip::after {
@@ -708,7 +708,7 @@ h2 {
     inset: 0;
     background:
         linear-gradient(90deg, rgba(20, 28, 40, 0.94) 0%, rgba(20, 28, 40, 0.68) 38%, rgba(20, 28, 40, 0.22) 68%, rgba(20, 28, 40, 0.78) 100%),
-        url("/static/design_assets/Header.png") center center / cover no-repeat;
+        url("/static/img/Header.png") center center / cover no-repeat;
 }
 
 .auth-login-hero::after {

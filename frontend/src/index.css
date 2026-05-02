@@ -356,7 +356,7 @@ textarea {
   pointer-events: none;
   background:
     linear-gradient(90deg, rgba(26, 34, 48, 0.86) 0%, rgba(26, 34, 48, 0.42) 34%, rgba(232, 237, 245, 0.1) 62%, rgba(26, 34, 48, 0.62) 100%),
-    url("/static/design_assets/Header.png") center center / auto 128% no-repeat;
+    url("/static/img/Header.png") center center / auto 128% no-repeat;
   opacity: 0.96;
 }
 
@@ -374,7 +374,7 @@ textarea {
   .hero-banner::before {
     background:
       linear-gradient(180deg, rgba(26, 34, 48, 0.88) 0%, rgba(26, 34, 48, 0.78) 38%, rgba(18, 26, 38, 0.9) 100%),
-      url("/static/design_assets/Header.png") center center / cover no-repeat;
+      url("/static/img/Header.png") center center / cover no-repeat;
   }
 }
 

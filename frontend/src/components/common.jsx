@@ -7,7 +7,7 @@ export function Avatar({ src, alt, fallbackLabel, className = '' }) {
     <div className={`grid place-items-center rounded-full border border-bf-cream/15 bg-black/30 ${className}`}>
       <img
         className="h-[70%] w-[70%] object-contain opacity-95"
-        src="/static/design_assets/Logo.png"
+        src="/static/img/Logo.png"
         alt={fallbackLabel || 'Black Flock'}
       />
     </div>

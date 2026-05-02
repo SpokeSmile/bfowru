@@ -12827,7 +12827,7 @@ function Avatar({ src, alt, fallbackLabel, className = "" }) {
     "img",
     {
       className: "h-[70%] w-[70%] object-contain opacity-95",
-      src: "/static/design_assets/Logo.png",
+      src: "/static/img/Logo.png",
       alt: fallbackLabel || "Black Flock"
     }
   ) });
@@ -12902,7 +12902,7 @@ function Header({ user }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "top-header", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "top-header-brand", href: "/", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/design_assets/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "top-header-logo", src: "/static/img/Logo.png", alt: "" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Black Flock" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
@@ -12975,7 +12975,7 @@ function Sidebar({ pathname }) {
     }
   ];
   return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/design_assets/Logo.png", alt: "" }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/img/Logo.png", alt: "" }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
       const Icon2 = item.icon;
       return /* @__PURE__ */ jsxRuntimeExports.jsxs(

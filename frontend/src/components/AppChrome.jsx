@@ -49,7 +49,7 @@ export function Header({ user }) {
   return (
     <header className="top-header">
       <a className="top-header-brand" href="/">
-        <img className="top-header-logo" src="/static/design_assets/Logo.png" alt="" />
+        <img className="top-header-logo" src="/static/img/Logo.png" alt="" />
         <span>Black Flock</span>
       </a>
 
@@ -127,7 +127,7 @@ export function Sidebar({ pathname }) {
       <div className="sidebar-shell">
         <div className="sidebar-head">
           <a className="sidebar-brand" href="/" aria-label="Black Flock">
-            <img className="brand-logo" src="/static/design_assets/Logo.png" alt="" />
+            <img className="brand-logo" src="/static/img/Logo.png" alt="" />
           </a>
         </div>
 
