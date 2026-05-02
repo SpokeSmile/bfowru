@@ -12506,7 +12506,6 @@ function requireClient() {
   return client.exports;
 }
 var clientExports = requireClient();
-var reactDomExports = requireReactDom();
 const LayoutGroupContext = reactExports.createContext({});
 function useConstant(init) {
   const ref = reactExports.useRef(null);
@@ -21244,6 +21243,7 @@ var Layer = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     ref
   }), children);
 });
+var reactDomExports = requireReactDom();
 var LegendPortalContext = /* @__PURE__ */ reactExports.createContext(null);
 function constant$1(x2) {
   return function constant2() {
@@ -45369,6 +45369,66 @@ function OverwatchStatsPage({
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/20 px-4 py-3 text-sm text-bf-cream/42", children: stats?.unavailableMessage || "SR, история последних матчей и серии не доступны в OverFast API." })
   ] });
 }
+function CommentTooltip({ tooltip }) {
+  const needsEmergencyWrap = /\S{30,}/.test(tooltip.text || "");
+  const [position, setPosition] = reactExports.useState({
+    left: 0,
+    top: 0,
+    placement: tooltip.placement || "bottom"
+  });
+  const [maxWidth, setMaxWidth] = reactExports.useState(Math.min(320, window.innerWidth - 32));
+  const [isReady, setIsReady] = reactExports.useState(false);
+  const tooltipRef = reactExports.useRef(null);
+  reactExports.useLayoutEffect(() => {
+    const tooltipNode = tooltipRef.current;
+    if (!tooltipNode) return;
+    const viewportPadding = 16;
+    const offset = 8;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const desiredMaxWidth = Math.min(320, viewportWidth - viewportPadding * 2);
+    setMaxWidth(desiredMaxWidth);
+    const tooltipWidth = tooltipNode.offsetWidth;
+    const tooltipHeight = tooltipNode.offsetHeight;
+    let left = tooltip.anchorRect.left;
+    if (left + tooltipWidth > viewportWidth - viewportPadding) {
+      left = viewportWidth - viewportPadding - tooltipWidth;
+    }
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    }
+    let placement = "bottom";
+    let top = tooltip.anchorRect.bottom + offset;
+    if (top + tooltipHeight > viewportHeight - viewportPadding) {
+      placement = "top";
+      top = tooltip.anchorRect.top - tooltipHeight - offset;
+    }
+    if (top < viewportPadding) {
+      top = Math.max(viewportPadding, viewportHeight - tooltipHeight - viewportPadding);
+    }
+    setPosition({ left, top, placement });
+    setIsReady(true);
+  }, [tooltip]);
+  return reactDomExports.createPortal(
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        ref: (node) => {
+          tooltipRef.current = node;
+        },
+        className: `comment-tooltip${needsEmergencyWrap ? " comment-tooltip--force-break" : ""}`,
+        style: {
+          left: `${position.left}px`,
+          top: `${position.top}px`,
+          maxWidth: `${maxWidth}px`,
+          opacity: isReady ? 1 : 0
+        },
+        children: tooltip.text
+      }
+    ),
+    document.body
+  );
+}
 function TeamBanner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-2 lg:max-w-[520px]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
@@ -45690,66 +45750,6 @@ function buildDayEventMap(dayEventTypes = []) {
     map2.set(Number(dayEvent.dayOfWeek), dayEvent);
   });
   return map2;
-}
-function CommentTooltip({ tooltip }) {
-  const needsEmergencyWrap = /\S{30,}/.test(tooltip.text || "");
-  const [position, setPosition] = reactExports.useState({
-    left: 0,
-    top: 0,
-    placement: tooltip.placement || "bottom"
-  });
-  const [maxWidth, setMaxWidth] = reactExports.useState(Math.min(320, window.innerWidth - 32));
-  const [isReady, setIsReady] = reactExports.useState(false);
-  const tooltipRef = reactExports.useRef(null);
-  reactExports.useLayoutEffect(() => {
-    const tooltipNode = tooltipRef.current;
-    if (!tooltipNode) return;
-    const viewportPadding = 16;
-    const offset = 8;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const desiredMaxWidth = Math.min(320, viewportWidth - viewportPadding * 2);
-    setMaxWidth(desiredMaxWidth);
-    const tooltipWidth = tooltipNode.offsetWidth;
-    const tooltipHeight = tooltipNode.offsetHeight;
-    let left = tooltip.anchorRect.left;
-    if (left + tooltipWidth > viewportWidth - viewportPadding) {
-      left = viewportWidth - viewportPadding - tooltipWidth;
-    }
-    if (left < viewportPadding) {
-      left = viewportPadding;
-    }
-    let placement = "bottom";
-    let top = tooltip.anchorRect.bottom + offset;
-    if (top + tooltipHeight > viewportHeight - viewportPadding) {
-      placement = "top";
-      top = tooltip.anchorRect.top - tooltipHeight - offset;
-    }
-    if (top < viewportPadding) {
-      top = Math.max(viewportPadding, viewportHeight - tooltipHeight - viewportPadding);
-    }
-    setPosition({ left, top, placement });
-    setIsReady(true);
-  }, [tooltip]);
-  return reactDomExports.createPortal(
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        ref: (node) => {
-          tooltipRef.current = node;
-        },
-        className: `comment-tooltip${needsEmergencyWrap ? " comment-tooltip--force-break" : ""}`,
-        style: {
-          left: `${position.left}px`,
-          top: `${position.top}px`,
-          maxWidth: `${maxWidth}px`,
-          opacity: isReady ? 1 : 0
-        },
-        children: tooltip.text
-      }
-    ),
-    document.body
-  );
 }
 function HeroBanner({ canAdd, onAdd }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]", children: [
