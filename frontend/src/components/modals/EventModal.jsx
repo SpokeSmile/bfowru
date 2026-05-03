@@ -5,7 +5,7 @@ import { Save, Trash2, X } from 'lucide-react';
 import { createSlot, deleteSlot, updateSlot } from '../../api.js';
 import { timeChoices } from '../../scheduleConfig.js';
 
-export default function EventModal({ event, day, days, onClose, onSaved, onDeleted }) {
+export default function EventModal({ event, day, days, weekStart, onClose, onSaved, onDeleted }) {
   const isEditing = Boolean(event);
   const [slotType, setSlotType] = useState(event?.slotType || 'available');
   const [dayOfWeek, setDayOfWeek] = useState(event?.dayOfWeek ?? day ?? days[0]?.value ?? 0);
@@ -21,6 +21,7 @@ export default function EventModal({ event, day, days, onClose, onSaved, onDelet
     setErrors({});
 
     const payload = {
+      weekStart: event?.weekStart || weekStart,
       slotType,
       dayOfWeek,
       startTimeMinutes,

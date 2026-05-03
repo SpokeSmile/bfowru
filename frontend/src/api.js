@@ -30,8 +30,9 @@ async function request(path, options = {}) {
   return data;
 }
 
-export function bootstrap() {
-  return request('/api/bootstrap/', { method: 'GET' });
+export function bootstrap(weekStart = '') {
+  const query = weekStart ? `?week=${encodeURIComponent(weekStart)}` : '';
+  return request(`/api/bootstrap/${query}`, { method: 'GET' });
 }
 
 export function fetchGameUpdates() {

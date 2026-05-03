@@ -1,11 +1,13 @@
 import base64
 import mimetypes
+from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 
 HEX_COLOR_VALIDATOR = RegexValidator(
     regex=r'^#[0-9A-Fa-f]{6}$',
@@ -13,6 +15,11 @@ HEX_COLOR_VALIDATOR = RegexValidator(
 )
 
 DEFAULT_ROLE_COLOR = '#4b607f'
+
+
+def default_week_start():
+    today = timezone.localdate()
+    return today - timedelta(days=today.weekday())
 
 
 class DiscordConnection(models.Model):
@@ -260,6 +267,7 @@ class ScheduleSlot(models.Model):
         on_delete=models.CASCADE,
         related_name='slots',
     )
+    week_start = models.DateField('неделя', default=default_week_start, db_index=True)
     slot_type = models.CharField(
         'тип записи',
         max_length=24,
@@ -274,7 +282,7 @@ class ScheduleSlot(models.Model):
     updated_at = models.DateTimeField('обновлено', auto_now=True)
 
     class Meta:
-        ordering = ['player_id', 'day_of_week', 'start_time_minutes']
+        ordering = ['week_start', 'player_id', 'day_of_week', 'start_time_minutes']
         verbose_name = 'слот расписания'
         verbose_name_plural = 'слоты расписания'
         constraints = [
@@ -384,6 +392,9 @@ class ScheduleSlot(models.Model):
         return self.time_range
 
     def clean(self):
+        if self.week_start is None:
+            self.week_start = default_week_start()
+
         if self.slot_type in {self.UNAVAILABLE, self.FULL_DAY_AVAILABLE, self.TENTATIVE}:
             self.start_time_minutes = None
             self.end_time_minutes = None

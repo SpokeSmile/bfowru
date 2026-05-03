@@ -8,7 +8,7 @@ from .api_utils import form_errors_payload, parse_body
 from .forms import ScheduleSlotForm
 from .models import DayEventType, ScheduleSlot
 from .profile_lookup import get_current_player
-from .roster import ensure_current_roster_week
+from .roster import get_current_week_start, is_week_editable, parse_week_start
 
 
 def form_data_from_payload(payload):
@@ -21,10 +21,20 @@ def form_data_from_payload(payload):
     }
 
 
+def week_start_from_payload(payload):
+    raw_week_start = payload.get('weekStart')
+    if not raw_week_start:
+        return get_current_week_start()
+    return parse_week_start(raw_week_start)
+
+
+def readonly_week_response():
+    return JsonResponse({'error': 'Прошлые недели доступны только для просмотра.'}, status=403)
+
+
 @require_POST
 @login_required
 def slot_create(request):
-    ensure_current_roster_week()
     current_player = get_current_player(request.user)
     if current_player is None:
         return JsonResponse({'error': 'Аккаунт не привязан к игроку.'}, status=403)
@@ -33,12 +43,21 @@ def slot_create(request):
     if payload is None:
         return JsonResponse({'error': 'Некорректный JSON.'}, status=400)
 
+    try:
+        selected_week_start = week_start_from_payload(payload)
+    except ValueError:
+        return JsonResponse({'error': 'Некорректная неделя.'}, status=400)
+
+    if not is_week_editable(selected_week_start):
+        return readonly_week_response()
+
     form = ScheduleSlotForm(form_data_from_payload(payload))
     if not form.is_valid():
         return JsonResponse({'errors': form_errors_payload(form)}, status=400)
 
     slot = form.save(commit=False)
     slot.player = current_player
+    slot.week_start = selected_week_start
     slot.full_clean()
     slot.save()
     day_event_map = {slot.day_of_week: DayEventType.objects.filter(day_of_week=slot.day_of_week).first()}
@@ -49,12 +68,14 @@ def slot_create(request):
 @require_http_methods(['PATCH', 'POST'])
 @login_required
 def slot_update(request, pk):
-    ensure_current_roster_week()
     current_player = get_current_player(request.user)
     if current_player is None:
         return JsonResponse({'error': 'Аккаунт не привязан к игроку.'}, status=403)
 
     slot = get_object_or_404(ScheduleSlot, pk=pk, player=current_player)
+    if not is_week_editable(slot.week_start):
+        return readonly_week_response()
+
     payload = parse_body(request)
     if payload is None:
         return JsonResponse({'error': 'Некорректный JSON.'}, status=400)
@@ -75,12 +96,14 @@ def slot_update(request, pk):
 @require_http_methods(['DELETE', 'POST'])
 @login_required
 def slot_delete(request, pk):
-    ensure_current_roster_week()
     current_player = get_current_player(request.user)
     if current_player is None:
         return JsonResponse({'error': 'Аккаунт не привязан к игроку.'}, status=403)
 
     slot = get_object_or_404(ScheduleSlot, pk=pk, player=current_player)
+    if not is_week_editable(slot.week_start):
+        return readonly_week_response()
+
     slot.delete()
 
     return JsonResponse({'deleted': True})

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarPlus, Clock3, Pencil, Users } from 'lucide-react';
+import { CalendarPlus, ChevronLeft, ChevronRight, Clock3, Pencil, Users } from 'lucide-react';
 
 import { Avatar, RoleBadge } from '../common.jsx';
 import {
@@ -10,7 +10,40 @@ import {
   previewNote,
 } from '../../scheduleConfig.js';
 
-function HeroBanner({ canAdd, onAdd }) {
+function shiftWeek(weekStart, offsetDays) {
+  const [year, month, day] = weekStart.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  date.setUTCDate(date.getUTCDate() + offsetDays);
+  return date.toISOString().slice(0, 10);
+}
+
+function WeekSwitcher({ selectedWeekStart, weekRangeLabel, onWeekChange }) {
+  return (
+    <div className="inline-grid grid-cols-[44px_minmax(150px,1fr)_44px] items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-[#101826]/90 shadow-[0_10px_26px_rgba(0,0,0,0.18)]">
+      <button
+        className="grid h-11 place-items-center border-r border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange"
+        type="button"
+        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, -7))}
+        aria-label="Предыдущая неделя"
+      >
+        <ChevronLeft size={18} />
+      </button>
+      <div className="px-4 text-center text-sm font-black tabular-nums text-slate-100">
+        {weekRangeLabel}
+      </div>
+      <button
+        className="grid h-11 place-items-center border-l border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange"
+        type="button"
+        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, 7))}
+        aria-label="Следующая неделя"
+      >
+        <ChevronRight size={18} />
+      </button>
+    </div>
+  );
+}
+
+function HeroBanner({ hasPlayerProfile, canAdd, canEditSelectedWeek, onAdd }) {
   return (
     <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8">
       <div className="relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
@@ -31,6 +64,10 @@ function HeroBanner({ canAdd, onAdd }) {
               <CalendarPlus size={20} />
               Добавить время
             </button>
+          ) : hasPlayerProfile && !canEditSelectedWeek ? (
+            <span className="rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70">
+              Архивная неделя
+            </span>
           ) : (
             <span className="rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70">
               Аккаунт не привязан к игроку
@@ -171,6 +208,10 @@ function RosterTable({
   players,
   slots,
   dayEventTypes,
+  selectedWeekStart,
+  weekRangeLabel,
+  canEditSelectedWeek,
+  onWeekChange,
   onAdd,
   onEdit,
   onNoteHoverStart,
@@ -196,6 +237,11 @@ function RosterTable({
           <Users className="text-bf-orange" size={22} />
           Расписание на неделю
         </div>
+        <WeekSwitcher
+          selectedWeekStart={selectedWeekStart}
+          weekRangeLabel={weekRangeLabel}
+          onWeekChange={onWeekChange}
+        />
       </div>
 
       <div className="roster-scroll overflow-x-auto">
@@ -264,7 +310,7 @@ function RosterTable({
                             onNoteHoverEnd={onNoteHoverEnd}
                           />
                         ))}
-                        {player.canEdit ? (
+                        {player.canEdit && canEditSelectedWeek ? (
                           <button
                             className="justify-self-end text-[11px] font-black text-bf-cream/45 transition hover:text-bf-orange"
                             type="button"
@@ -274,7 +320,7 @@ function RosterTable({
                           </button>
                         ) : null}
                       </div>
-                    ) : player.canEdit ? (
+                    ) : player.canEdit && canEditSelectedWeek ? (
                       <button
                         className="grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/28 transition hover:scale-105 hover:text-bf-orange"
                         type="button"
@@ -302,7 +348,11 @@ function RosterTable({
 }
 
 export default function RosterPage({
+  hasPlayerProfile,
   canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  weekRangeLabel,
   days,
   players,
   slots,
@@ -311,17 +361,27 @@ export default function RosterPage({
   lastUpdated,
   onAdd,
   onEdit,
+  onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
   return (
     <>
-      <HeroBanner canAdd={canAdd} onAdd={onAdd} />
+      <HeroBanner
+        hasPlayerProfile={hasPlayerProfile}
+        canAdd={canAdd}
+        canEditSelectedWeek={canEditSelectedWeek}
+        onAdd={onAdd}
+      />
       <RosterTable
         days={days}
         players={players}
         slots={slots}
         dayEventTypes={dayEventTypes}
+        selectedWeekStart={selectedWeekStart}
+        weekRangeLabel={weekRangeLabel}
+        canEditSelectedWeek={canEditSelectedWeek}
+        onWeekChange={onWeekChange}
         onAdd={onAdd}
         onEdit={onEdit}
         onNoteHoverStart={onNoteHoverStart}

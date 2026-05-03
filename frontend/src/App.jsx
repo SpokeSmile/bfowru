@@ -17,6 +17,21 @@ import RosterPage from './components/schedule/RosterPage.jsx';
 import TeamPage from './components/TeamPage.jsx';
 import UpdatesPage from './components/UpdatesPage.jsx';
 
+function getScheduleWeekParam() {
+  return new URLSearchParams(window.location.search).get('week') || '';
+}
+
+function setScheduleWeekParam(weekStart) {
+  const params = new URLSearchParams(window.location.search);
+  if (weekStart) {
+    params.set('week', weekStart);
+  } else {
+    params.delete('week');
+  }
+  const query = params.toString();
+  window.history.replaceState({}, document.title, `${window.location.pathname}${query ? `?${query}` : ''}`);
+}
+
 export default function App() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,11 +50,14 @@ export default function App() {
   const [isRefreshingStats, setIsRefreshingStats] = useState(false);
   const [statsError, setStatsError] = useState('');
 
-  async function loadData() {
+  async function loadData(weekStart = getScheduleWeekParam()) {
     setIsLoading(true);
     try {
-      const response = await bootstrap();
+      const response = await bootstrap(weekStart);
       setData(response);
+      if (window.location.pathname === '/' && response.selectedWeekStart) {
+        setScheduleWeekParam(response.selectedWeekStart);
+      }
       setError('');
     } catch (loadError) {
       setError(loadError.message);
@@ -205,12 +223,17 @@ export default function App() {
   }
 
   function upsertSlot(slot) {
-    setData((current) => ({
-      ...current,
-      slots: current.slots.some((existing) => existing.id === slot.id)
-        ? current.slots.map((existing) => (existing.id === slot.id ? slot : existing))
-        : [...current.slots, slot],
-    }));
+    setData((current) => {
+      if (slot.weekStart !== current.selectedWeekStart) {
+        return current;
+      }
+      return {
+        ...current,
+        slots: current.slots.some((existing) => existing.id === slot.id)
+          ? current.slots.map((existing) => (existing.id === slot.id ? slot : existing))
+          : [...current.slots, slot],
+      };
+    });
     setSlotModal(null);
   }
 
@@ -220,6 +243,11 @@ export default function App() {
       slots: current.slots.filter((slot) => slot.id !== id),
     }));
     setSlotModal(null);
+  }
+
+  async function handleWeekChange(weekStart) {
+    setScheduleWeekParam(weekStart);
+    await loadData(weekStart);
   }
 
   async function updatePlayerProfile(player, options = {}) {
@@ -252,7 +280,8 @@ export default function App() {
     return <ErrorView error={error} onRetry={loadData} />;
   }
 
-  const canAdd = Boolean(data.user.playerId);
+  const hasPlayerProfile = Boolean(data.user.playerId);
+  const canAdd = hasPlayerProfile && data.canEditSelectedWeek;
   const isProfilePage = pathname.startsWith('/profile');
   const isTeamPage = pathname.startsWith('/team');
   const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
@@ -298,7 +327,11 @@ export default function App() {
           ) : (
             <>
               <RosterPage
+                hasPlayerProfile={hasPlayerProfile}
                 canAdd={canAdd}
+                canEditSelectedWeek={data.canEditSelectedWeek}
+                selectedWeekStart={data.selectedWeekStart}
+                weekRangeLabel={data.weekRangeLabel}
                 days={data.days}
                 players={data.players}
                 slots={data.slots}
@@ -307,6 +340,7 @@ export default function App() {
                 lastUpdated={data.lastUpdated}
                 onAdd={(day) => setSlotModal({ day })}
                 onEdit={(event) => setSlotModal({ event })}
+                onWeekChange={handleWeekChange}
                 onNoteHoverStart={handleNoteHoverStart}
                 onNoteHoverEnd={handleNoteHoverEnd}
               />
@@ -319,6 +353,7 @@ export default function App() {
           event={slotModal.event}
           day={slotModal.day}
           days={data.days}
+          weekStart={data.selectedWeekStart}
           onClose={() => setSlotModal(null)}
           onSaved={upsertSlot}
           onDeleted={removeSlot}

@@ -50,9 +50,10 @@ def discord_payload(connection):
     }
 
 
-def build_days():
-    today = timezone.localdate()
-    week_start = today - timedelta(days=today.weekday())
+def build_days(week_start=None):
+    if week_start is None:
+        today = timezone.localdate()
+        week_start = today - timedelta(days=today.weekday())
 
     return [
         {
@@ -146,7 +147,7 @@ def event_meta_for_day(day_of_week, day_event_map):
     }
 
 
-def serialize_slot(slot, current_player, day_event_map=None):
+def serialize_slot(slot, current_player, day_event_map=None, can_edit_week=True):
     day_event_map = day_event_map or {}
     event_meta = event_meta_for_day(slot.day_of_week, day_event_map)
     is_all_day_status = slot.is_unavailable or slot.is_full_day_available or slot.is_tentative
@@ -154,6 +155,7 @@ def serialize_slot(slot, current_player, day_event_map=None):
     return {
         'id': slot.id,
         'playerId': slot.player_id,
+        'weekStart': slot.week_start.isoformat(),
         'slotType': slot.slot_type,
         'eventType': '' if is_all_day_status else event_meta['eventType'],
         'eventLabel': slot.label if is_all_day_status else event_meta['eventLabel'],
@@ -173,5 +175,5 @@ def serialize_slot(slot, current_player, day_event_map=None):
         'label': slot.label if is_all_day_status else event_meta['eventLabel'],
         'note': slot.note,
         'displayNote': slot.note or (slot.label if is_all_day_status else event_meta['eventLabel']),
-        'canEdit': current_player == slot.player,
+        'canEdit': can_edit_week and current_player == slot.player,
     }

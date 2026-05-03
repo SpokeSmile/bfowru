@@ -1,9 +1,10 @@
 from datetime import date
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
 from .forms import ScheduleSlotForm
 from .models import DayEventType, DiscordConnection, Player, RosterState, ScheduleSlot, StaffMember
@@ -270,6 +271,10 @@ class ScheduleApiTests(TestCase):
         self.assertTrue(any(staff_member['discordDisplayTag'] == '@coach_raven' for staff_member in data['staffMembers']))
         self.assertTrue(any(event_type['value'] == ScheduleSlot.SCRIM for event_type in data['eventTypes']))
         self.assertTrue(any(day_event['eventType'] == ScheduleSlot.SCRIM for day_event in data['dayEventTypes']))
+        self.assertIn('selectedWeekStart', data)
+        self.assertIn('currentWeekStart', data)
+        self.assertIn('weekRangeLabel', data)
+        self.assertTrue(data['canEditSelectedWeek'])
 
     def test_bootstrap_returns_players_in_admin_order(self):
         Player.objects.exclude(pk__in=[self.player_one.pk, self.player_two.pk]).update(sort_order=10)
@@ -285,6 +290,49 @@ class ScheduleApiTests(TestCase):
         players = response.json()['players']
         self.assertEqual(players[0]['id'], self.player_two.id)
         self.assertEqual(players[1]['id'], self.player_one.id)
+
+    def test_bootstrap_filters_slots_by_selected_week(self):
+        current_week = date(2026, 4, 27)
+        previous_week = date(2026, 4, 20)
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': current_week})
+        ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=previous_week,
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+            note='old week',
+        )
+        ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=current_week,
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=720,
+            end_time_minutes=840,
+            note='current week',
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.client.get(reverse('api_bootstrap'), {'week': '2026-04-22'})
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['selectedWeekStart'], '2026-04-20')
+        self.assertEqual(data['currentWeekStart'], '2026-04-27')
+        self.assertEqual(data['weekRangeLabel'], '20.04-26.04')
+        self.assertFalse(data['canEditSelectedWeek'])
+        self.assertEqual([slot['note'] for slot in data['slots']], ['old week'])
+        self.assertEqual(data['days'][0]['date'], '20.04')
+
+    def test_bootstrap_rejects_invalid_week_query(self):
+        self.client.login(username='player1', password='secret-pass')
+
+        response = self.client.get(reverse('api_bootstrap'), {'week': 'bad-week'})
+
+        self.assertEqual(response.status_code, 400)
 
     def test_api_creates_event_using_day_type(self):
         DayEventType.objects.update_or_create(
@@ -302,8 +350,45 @@ class ScheduleApiTests(TestCase):
 
         self.assertEqual(response.status_code, 201)
         slot = ScheduleSlot.objects.get(player=self.player_one, day_of_week=ScheduleSlot.SATURDAY)
+        self.assertEqual(response.json()['slot']['weekStart'], slot.week_start.isoformat())
         self.assertEqual(response.json()['slot']['eventType'], ScheduleSlot.TOURNAMENT)
         self.assertEqual(response.json()['slot']['eventLabel'], 'Tournament')
+
+    def test_api_creates_slot_for_future_week(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_create', {
+                'weekStart': '2026-05-06',
+                'slotType': ScheduleSlot.AVAILABLE,
+                'dayOfWeek': ScheduleSlot.SATURDAY,
+                'startTimeMinutes': 1200,
+                'endTimeMinutes': 1380,
+                'note': 'future',
+            })
+
+        self.assertEqual(response.status_code, 201)
+        slot = ScheduleSlot.objects.get(player=self.player_one, note='future')
+        self.assertEqual(str(slot.week_start), '2026-05-04')
+        self.assertEqual(response.json()['slot']['weekStart'], '2026-05-04')
+
+    def test_api_rejects_create_for_past_week(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_create', {
+                'weekStart': '2026-04-20',
+                'slotType': ScheduleSlot.AVAILABLE,
+                'dayOfWeek': ScheduleSlot.SATURDAY,
+                'startTimeMinutes': 1200,
+                'endTimeMinutes': 1380,
+                'note': '',
+            })
+
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(ScheduleSlot.objects.filter(week_start=date(2026, 4, 20)).exists())
 
     def test_api_allows_available_without_day_event_type(self):
         self.client.login(username='player1', password='secret-pass')
@@ -407,6 +492,32 @@ class ScheduleApiTests(TestCase):
         self.assertEqual(slot.end_time_minutes, 1020)
         self.assertEqual(slot.note, 'Новый слот')
 
+    def test_api_rejects_update_for_past_week(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        slot = ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=date(2026, 4, 20),
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.patch_json('api_slot_update', {
+                'slotType': ScheduleSlot.AVAILABLE,
+                'dayOfWeek': ScheduleSlot.WEDNESDAY,
+                'startTimeMinutes': 900,
+                'endTimeMinutes': 1020,
+                'note': 'archive edit',
+            }, args=[slot.pk])
+
+        self.assertEqual(response.status_code, 403)
+        slot.refresh_from_db()
+        self.assertEqual(slot.day_of_week, ScheduleSlot.MONDAY)
+        self.assertEqual(slot.note, '')
+
     def test_api_deletes_own_slot(self):
         slot = ScheduleSlot.objects.create(
             player=self.player_one,
@@ -421,6 +532,24 @@ class ScheduleApiTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(ScheduleSlot.objects.filter(pk=slot.pk).exists())
+
+    def test_api_rejects_delete_for_past_week(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        slot = ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=date(2026, 4, 20),
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.client.delete(reverse('api_slot_delete', args=[slot.pk]))
+
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(ScheduleSlot.objects.filter(pk=slot.pk).exists())
 
     def test_api_updates_own_profile(self):
         self.client.login(username='player1', password='secret-pass')
@@ -547,10 +676,11 @@ class RosterResetTests(TestCase):
         self.player = Player.objects.get(name='Игрок 1')
         self.user = User.objects.create_superuser(username='admin', email='admin@example.com', password='secret-pass')
 
-    def test_auto_reset_clears_only_slots_on_new_week(self):
+    def test_auto_week_advance_keeps_historical_slots(self):
         original_player_count = Player.objects.count()
         ScheduleSlot.objects.create(
             player=self.player,
+            week_start=date(2026, 4, 20),
             slot_type=ScheduleSlot.AVAILABLE,
             day_of_week=ScheduleSlot.MONDAY,
             start_time_minutes=600,
@@ -561,13 +691,13 @@ class RosterResetTests(TestCase):
         changed, deleted_count = ensure_current_roster_week(today=date(2026, 4, 27))
 
         self.assertTrue(changed)
-        self.assertGreaterEqual(deleted_count, 1)
-        self.assertEqual(ScheduleSlot.objects.count(), 0)
+        self.assertEqual(deleted_count, 0)
+        self.assertEqual(ScheduleSlot.objects.count(), 1)
         self.assertEqual(Player.objects.count(), original_player_count)
         self.assertEqual(StaffMember.objects.count(), 0)
         self.assertEqual(str(RosterState.objects.get(pk=1).current_week_start), '2026-04-27')
 
-    def test_admin_reset_button_clears_schedule(self):
+    def test_admin_reset_button_is_removed(self):
         ScheduleSlot.objects.create(
             player=self.player,
             slot_type=ScheduleSlot.AVAILABLE,
@@ -577,7 +707,6 @@ class RosterResetTests(TestCase):
         )
         self.client.login(username='admin', password='secret-pass')
 
-        response = self.client.post(reverse('admin:scheduler_scheduleslot_reset_table'))
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(ScheduleSlot.objects.count(), 0)
+        with self.assertRaises(NoReverseMatch):
+            reverse('admin:scheduler_scheduleslot_reset_table')
+        self.assertEqual(ScheduleSlot.objects.count(), 1)

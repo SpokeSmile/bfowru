@@ -12533,8 +12533,9 @@ async function request(path, options = {}) {
   }
   return data;
 }
-function bootstrap() {
-  return request("/api/bootstrap/", { method: "GET" });
+function bootstrap(weekStart = "") {
+  const query = weekStart ? `?week=${encodeURIComponent(weekStart)}` : "";
+  return request(`/api/bootstrap/${query}`, { method: "GET" });
 }
 function fetchGameUpdates() {
   return request("/api/game-updates/", { method: "GET" });
@@ -12658,7 +12659,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$i = [
+const __iconNode$k = [
   [
     "path",
     {
@@ -12669,8 +12670,8 @@ const __iconNode$i = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$i);
-const __iconNode$h = [
+const BookText = createLucideIcon("book-text", __iconNode$k);
+const __iconNode$j = [
   ["path", { d: "M16 19h6", key: "xwg31i" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["path", { d: "M19 16v6", key: "tddt3s" }],
@@ -12678,16 +12679,20 @@ const __iconNode$h = [
   ["path", { d: "M3 10h18", key: "8toen8" }],
   ["path", { d: "M8 2v4", key: "1cmpym" }]
 ];
-const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$h);
-const __iconNode$g = [
+const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$j);
+const __iconNode$i = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$g);
-const __iconNode$f = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$f);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$i);
+const __iconNode$h = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$h);
+const __iconNode$g = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$g);
+const __iconNode$f = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$f);
 const __iconNode$e = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
@@ -20893,7 +20898,7 @@ function buildDayEventMap(dayEventTypes = []) {
   });
   return map2;
 }
-function EventModal({ event, day, days, onClose, onSaved, onDeleted }) {
+function EventModal({ event, day, days, weekStart, onClose, onSaved, onDeleted }) {
   const isEditing = Boolean(event);
   const [slotType, setSlotType] = reactExports.useState(event?.slotType || "available");
   const [dayOfWeek, setDayOfWeek] = reactExports.useState(event?.dayOfWeek ?? day ?? days[0]?.value ?? 0);
@@ -20907,6 +20912,7 @@ function EventModal({ event, day, days, onClose, onSaved, onDeleted }) {
     setIsSaving(true);
     setErrors({});
     const payload = {
+      weekStart: event?.weekStart || weekStart,
       slotType,
       dayOfWeek,
       startTimeMinutes,
@@ -46010,7 +46016,38 @@ function CommentTooltip({ tooltip }) {
     document.body
   );
 }
-function HeroBanner({ canAdd, onAdd }) {
+function shiftWeek(weekStart, offsetDays) {
+  const [year, month, day] = weekStart.split("-").map(Number);
+  const date2 = new Date(Date.UTC(year, month - 1, day));
+  date2.setUTCDate(date2.getUTCDate() + offsetDays);
+  return date2.toISOString().slice(0, 10);
+}
+function WeekSwitcher({ selectedWeekStart, weekRangeLabel, onWeekChange }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-grid grid-cols-[44px_minmax(150px,1fr)_44px] items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-[#101826]/90 shadow-[0_10px_26px_rgba(0,0,0,0.18)]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        className: "grid h-11 place-items-center border-r border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange",
+        type: "button",
+        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, -7)),
+        "aria-label": "Предыдущая неделя",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { size: 18 })
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 text-center text-sm font-black tabular-nums text-slate-100", children: weekRangeLabel }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        className: "grid h-11 place-items-center border-l border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange",
+        type: "button",
+        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, 7)),
+        "aria-label": "Следующая неделя",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 18 })
+      }
+    )
+  ] });
+}
+function HeroBanner({ hasPlayerProfile, canAdd, canEditSelectedWeek, onAdd }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[440px]", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
@@ -46027,7 +46064,7 @@ function HeroBanner({ canAdd, onAdd }) {
           "Добавить время"
         ]
       }
-    ) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70", children: "Аккаунт не привязан к игроку" }) })
+    ) : hasPlayerProfile && !canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70", children: "Архивная неделя" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70", children: "Аккаунт не привязан к игроку" }) })
   ] }) });
 }
 function PlayerRow({ player }) {
@@ -46109,6 +46146,10 @@ function RosterTable({
   players,
   slots,
   dayEventTypes,
+  selectedWeekStart,
+  weekRangeLabel,
+  canEditSelectedWeek,
+  onWeekChange,
   onAdd,
   onEdit,
   onNoteHoverStart,
@@ -46126,10 +46167,20 @@ function RosterTable({
     return grouped;
   }, [slots]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-3 flex items-center justify-between gap-4 max-md:flex-col max-md:items-stretch", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 text-lg font-black uppercase text-slate-100", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "text-bf-orange", size: 22 }),
-      "Расписание на неделю"
-    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3 flex items-center justify-between gap-4 max-md:flex-col max-md:items-stretch", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 text-lg font-black uppercase text-slate-100", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "text-bf-orange", size: 22 }),
+        "Расписание на неделю"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        WeekSwitcher,
+        {
+          selectedWeekStart,
+          weekRangeLabel,
+          onWeekChange
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roster-scroll overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid min-w-[1180px] grid-cols-[180px_repeat(7,minmax(134px,1fr))] overflow-visible rounded-xl border border-bf-cream/10 bg-[#182231]/75", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid min-h-[84px] content-center border-b border-r border-bf-cream/10 bg-[#151f2e]/78 px-4 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 font-black uppercase text-slate-100", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 19, className: "text-bf-orange" }),
@@ -46185,7 +46236,7 @@ function RosterTable({
                   },
                   slot.id
                 )),
-                player.canEdit ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                player.canEdit && canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx(
                   "button",
                   {
                     className: "justify-self-end text-[11px] font-black text-bf-cream/45 transition hover:text-bf-orange",
@@ -46194,7 +46245,7 @@ function RosterTable({
                     children: "+ запись"
                   }
                 ) : null
-              ] }) : player.canEdit ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+              ] }) : player.canEdit && canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
                   className: "grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/28 transition hover:scale-105 hover:text-bf-orange",
@@ -46217,7 +46268,11 @@ function RosterTable({
   ] });
 }
 function RosterPage({
+  hasPlayerProfile,
   canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  weekRangeLabel,
   days,
   players,
   slots,
@@ -46226,11 +46281,20 @@ function RosterPage({
   lastUpdated,
   onAdd,
   onEdit,
+  onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(HeroBanner, { canAdd, onAdd }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HeroBanner,
+      {
+        hasPlayerProfile,
+        canAdd,
+        canEditSelectedWeek,
+        onAdd
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       RosterTable,
       {
@@ -46238,6 +46302,10 @@ function RosterPage({
         players,
         slots,
         dayEventTypes,
+        selectedWeekStart,
+        weekRangeLabel,
+        canEditSelectedWeek,
+        onWeekChange,
         onAdd,
         onEdit,
         onNoteHoverStart,
@@ -46460,6 +46528,19 @@ function UpdatesPage({
     ] })
   ] });
 }
+function getScheduleWeekParam() {
+  return new URLSearchParams(window.location.search).get("week") || "";
+}
+function setScheduleWeekParam(weekStart) {
+  const params = new URLSearchParams(window.location.search);
+  if (weekStart) {
+    params.set("week", weekStart);
+  } else {
+    params.delete("week");
+  }
+  const query = params.toString();
+  window.history.replaceState({}, document.title, `${window.location.pathname}${query ? `?${query}` : ""}`);
+}
 function App() {
   const [data, setData] = reactExports.useState(null);
   const [isLoading, setIsLoading] = reactExports.useState(true);
@@ -46477,11 +46558,14 @@ function App() {
   const [isLoadingStats, setIsLoadingStats] = reactExports.useState(false);
   const [isRefreshingStats, setIsRefreshingStats] = reactExports.useState(false);
   const [statsError, setStatsError] = reactExports.useState("");
-  async function loadData() {
+  async function loadData(weekStart = getScheduleWeekParam()) {
     setIsLoading(true);
     try {
-      const response = await bootstrap();
+      const response = await bootstrap(weekStart);
       setData(response);
+      if (window.location.pathname === "/" && response.selectedWeekStart) {
+        setScheduleWeekParam(response.selectedWeekStart);
+      }
       setError("");
     } catch (loadError) {
       setError(loadError.message);
@@ -46624,10 +46708,15 @@ function App() {
     setCommentTooltip(null);
   }
   function upsertSlot(slot) {
-    setData((current2) => ({
-      ...current2,
-      slots: current2.slots.some((existing) => existing.id === slot.id) ? current2.slots.map((existing) => existing.id === slot.id ? slot : existing) : [...current2.slots, slot]
-    }));
+    setData((current2) => {
+      if (slot.weekStart !== current2.selectedWeekStart) {
+        return current2;
+      }
+      return {
+        ...current2,
+        slots: current2.slots.some((existing) => existing.id === slot.id) ? current2.slots.map((existing) => existing.id === slot.id ? slot : existing) : [...current2.slots, slot]
+      };
+    });
     setSlotModal(null);
   }
   function removeSlot(id2) {
@@ -46636,6 +46725,10 @@ function App() {
       slots: current2.slots.filter((slot) => slot.id !== id2)
     }));
     setSlotModal(null);
+  }
+  async function handleWeekChange(weekStart) {
+    setScheduleWeekParam(weekStart);
+    await loadData(weekStart);
   }
   async function updatePlayerProfile(player, options = {}) {
     if (options.reload) {
@@ -46663,7 +46756,8 @@ function App() {
   if (error) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorView, { error, onRetry: loadData });
   }
-  const canAdd = Boolean(data.user.playerId);
+  const hasPlayerProfile = Boolean(data.user.playerId);
+  const canAdd = hasPlayerProfile && data.canEditSelectedWeek;
   const isProfilePage = pathname.startsWith("/profile");
   const isTeamPage = pathname.startsWith("/team");
   const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
@@ -46708,7 +46802,11 @@ function App() {
         ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           RosterPage,
           {
+            hasPlayerProfile,
             canAdd,
+            canEditSelectedWeek: data.canEditSelectedWeek,
+            selectedWeekStart: data.selectedWeekStart,
+            weekRangeLabel: data.weekRangeLabel,
             days: data.days,
             players: data.players,
             slots: data.slots,
@@ -46717,6 +46815,7 @@ function App() {
             lastUpdated: data.lastUpdated,
             onAdd: (day) => setSlotModal({ day }),
             onEdit: (event) => setSlotModal({ event }),
+            onWeekChange: handleWeekChange,
             onNoteHoverStart: handleNoteHoverStart,
             onNoteHoverEnd: handleNoteHoverEnd
           }
@@ -46729,6 +46828,7 @@ function App() {
         event: slotModal.event,
         day: slotModal.day,
         days: data.days,
+        weekStart: data.selectedWeekStart,
         onClose: () => setSlotModal(null),
         onSaved: upsertSlot,
         onDeleted: removeSlot
