@@ -322,7 +322,7 @@ class ScheduleApiTests(TestCase):
         data = response.json()
         self.assertEqual(data['selectedWeekStart'], '2026-04-20')
         self.assertEqual(data['currentWeekStart'], '2026-04-27')
-        self.assertEqual(data['weekRangeLabel'], '20.04-26.04')
+        self.assertEqual(data['weekRangeLabel'], '20 Апреля - 26 Апреля')
         self.assertFalse(data['canEditSelectedWeek'])
         self.assertEqual([slot['note'] for slot in data['slots']], ['old week'])
         self.assertEqual(data['days'][0]['date'], '20.04')

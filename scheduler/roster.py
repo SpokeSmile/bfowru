@@ -7,6 +7,21 @@ from .models import RosterState
 # Weekly roster helpers. Older weeks are retained as history, so advancing the
 # active week must never delete ScheduleSlot rows.
 
+MONTH_NAMES_GENITIVE = {
+    1: 'Января',
+    2: 'Февраля',
+    3: 'Марта',
+    4: 'Апреля',
+    5: 'Мая',
+    6: 'Июня',
+    7: 'Июля',
+    8: 'Августа',
+    9: 'Сентября',
+    10: 'Октября',
+    11: 'Ноября',
+    12: 'Декабря',
+}
+
 
 def week_start_for(day=None):
     current_day = day or timezone.localdate()
@@ -27,7 +42,9 @@ def parse_week_start(raw_value):
 
 def week_range_label(week_start):
     week_end = week_start + timedelta(days=6)
-    return f'{week_start:%d.%m}-{week_end:%d.%m}'
+    start_month = MONTH_NAMES_GENITIVE[week_start.month]
+    end_month = MONTH_NAMES_GENITIVE[week_end.month]
+    return f'{week_start.day} {start_month} - {week_end.day} {end_month}'
 
 
 def ensure_current_roster_week(today=None, force=False):
