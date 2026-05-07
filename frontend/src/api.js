@@ -47,10 +47,6 @@ export function fetchOverwatchStats(mode = 'competitive') {
   return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: 'GET' });
 }
 
-export function refreshOverwatchStats(mode = 'competitive') {
-  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: 'POST' });
-}
-
 export function createSlot(payload) {
   return request('/api/slots/', {
     method: 'POST',
