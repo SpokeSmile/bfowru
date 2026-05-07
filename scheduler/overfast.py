@@ -9,6 +9,13 @@ from .overfast_client import (
     normalize_battle_tag,
     overfast_get,
 )
+from .overfast_live import (
+    LiveOverwatchStatsRecord,
+    fetch_live_overwatch_records,
+    live_error_record,
+    live_missing_battletag_record,
+    live_ready_record,
+)
 from .overfast_metrics import (
     RANK_DIVISIONS,
     RANK_LABELS,
@@ -51,6 +58,7 @@ __all__ = [
     'RANK_LABELS',
     'ROLE_ALIASES',
     'OverfastError',
+    'LiveOverwatchStatsRecord',
     'aggregate_top_heroes',
     'average_eliminations',
     'build_overwatch_stats_dashboard',
@@ -60,9 +68,13 @@ __all__ = [
     'fetch_overfast_heroes',
     'fetch_overfast_stats',
     'fetch_overfast_summary',
+    'fetch_live_overwatch_records',
     'get_hero_portrait_map',
     'hero_label',
     'hero_time_played',
+    'live_error_record',
+    'live_missing_battletag_record',
+    'live_ready_record',
     'main_hero_from_stats',
     'normalize_battle_tag',
     'normalize_rank_division',

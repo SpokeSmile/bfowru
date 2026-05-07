@@ -111,7 +111,7 @@ function StatsBanner({ updatedAt }) {
 
         <div className="grid justify-items-start gap-3 lg:justify-items-end">
           <div className="text-sm font-semibold text-bf-cream/35">
-            Последнее обновление: {formatShortDateTime(updatedAt)}
+            Данные загружены: {formatShortDateTime(updatedAt)}
           </div>
         </div>
       </div>
@@ -345,15 +345,15 @@ export default function OverwatchStatsPage({
 
         {isLoading && !stats ? (
           <div className="mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62">
-            Загружаю кэш статистики...
+            Загружаю статистику OverFast...
           </div>
         ) : error ? (
           <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100">
             {error}
           </div>
-        ) : stats?.cacheEmpty ? (
+        ) : stats?.dataEmpty ? (
           <div className="mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74">
-            Данные OverFast еще не загружены. Обновление статистики временно выполняется администратором.
+            OverFast не вернул доступные данные. Проверьте BattleTag игроков или доступность профилей.
           </div>
         ) : null}
 

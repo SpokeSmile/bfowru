@@ -87,7 +87,7 @@ Patch note content is shown in the original English text.
 
 ## Overwatch Statistics
 
-The `Stats` tab shows OverFast API data for each player's first BattleTag.
+The `Stats` tab loads live OverFast API data for each player's first BattleTag when the page is opened.
 
 Available metrics:
 
@@ -108,6 +108,7 @@ OverFast API limitations:
 - recent match history is not available;
 - real win/loss streaks are not available;
 - data depends on the Battle.net profile being available to OverFast.
+- if OverFast is rate-limited or unavailable, the affected player rows show an error instead of cached data.
 
 If a player has no BattleTag or the profile is unavailable, the table shows a per-player status message.
 

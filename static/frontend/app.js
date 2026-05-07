@@ -45832,7 +45832,7 @@ function StatsBanner({ updatedAt }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-bf-cream/58", children: "Данные OverFast API по первому BattleTag каждого игрока." })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid justify-items-start gap-3 lg:justify-items-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-semibold text-bf-cream/35", children: [
-      "Последнее обновление: ",
+      "Данные загружены: ",
       formatShortDateTime(updatedAt)
     ] }) })
   ] }) });
@@ -45988,7 +45988,7 @@ function OverwatchStatsPage({
         /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(StatsFilterBar, {}),
-      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю кэш статистики..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.cacheEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "Данные OverFast еще не загружены. Обновление статистики временно выполняется администратором." }) : null,
+      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю статистику OverFast..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.dataEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "OverFast не вернул доступные данные. Проверьте BattleTag игроков или доступность профилей." }) : null,
       /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} })

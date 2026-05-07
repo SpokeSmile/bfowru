@@ -15,6 +15,7 @@ from .overfast_metrics import (
     safe_number,
     weighted_mode_summary,
 )
+from .overfast_live import fetch_live_overwatch_records
 from .overfast_sync import OVERFAST_MODES, primary_battle_tag
 
 # The frontend consumes this payload directly. Avoid inventing fields that
@@ -75,10 +76,10 @@ def main_hero_from_stats(stats, hero_portraits=None):
     }
 
 
-def serialize_player_row(player, cache, hero_portraits=None):
-    status = cache.status if cache else OverwatchStatsCache.STATUS_ERROR
-    stats = cache.stats_json if cache and cache.stats_json else {}
-    summary = cache.summary_json if cache and cache.summary_json else {}
+def serialize_player_row(player, record, hero_portraits=None):
+    status = record.status if record else OverwatchStatsCache.STATUS_ERROR
+    stats = record.stats_json if record and record.stats_json else {}
+    summary = record.summary_json if record and record.summary_json else {}
     general = stats.get('general') or {}
     total = general.get('total') or {}
     average = general.get('average') or {}
@@ -96,11 +97,11 @@ def serialize_player_row(player, cache, hero_portraits=None):
         'role': player.role,
         'roleColor': player.role_color,
         'avatarUrl': connection.avatar_url if connection else '',
-        'battleTag': cache.battle_tag if cache else primary_battle_tag(player),
-        'playerId': cache.overfast_player_id if cache else normalize_battle_tag(primary_battle_tag(player)),
+        'battleTag': record.battle_tag if record else primary_battle_tag(player),
+        'playerId': record.overfast_player_id if record else normalize_battle_tag(primary_battle_tag(player)),
         'status': status,
-        'error': cache.error if cache else 'Данные еще не загружены.',
-        'updatedAt': cache.fetched_at.isoformat() if cache and cache.fetched_at else '',
+        'error': record.error if record else 'Данные OverFast недоступны.',
+        'updatedAt': record.fetched_at.isoformat() if record and record.fetched_at else '',
         'rank': rank,
         'winrate': safe_number(general.get('winrate')),
         'matches': safe_number(general.get('games_played')),
@@ -114,13 +115,13 @@ def serialize_player_row(player, cache, hero_portraits=None):
     }
 
 
-def aggregate_top_heroes(caches, hero_portraits=None):
+def aggregate_top_heroes(records, hero_portraits=None):
     hero_portraits = hero_portraits or {}
     heroes = {}
-    for cache in caches:
-        if cache.status != OverwatchStatsCache.STATUS_READY:
+    for record in records:
+        if record.status != OverwatchStatsCache.STATUS_READY:
             continue
-        for hero_key, payload in (cache.stats_json.get('heroes') or {}).items():
+        for hero_key, payload in (record.stats_json.get('heroes') or {}).items():
             entry = heroes.setdefault(hero_key, {
                 'hero': hero_key,
                 'heroLabel': hero_label(hero_key),
@@ -159,21 +160,16 @@ def build_overwatch_stats_dashboard(mode=OverwatchStatsCache.COMPETITIVE, hero_p
     hero_portraits = hero_portraits or {}
 
     players = list(Player.objects.select_related('user__discord_connection').order_by('sort_order', 'id'))
-    caches = list(
-        OverwatchStatsCache.objects.select_related('player').filter(
-            player__in=players,
-            mode__in=OVERFAST_MODES,
-        )
-    )
-    cache_map = {(cache.player_id, cache.mode): cache for cache in caches}
-    selected_caches = [cache for cache in caches if cache.mode == mode]
+    records = fetch_live_overwatch_records(players, mode)
+    record_map = {(record.player.id, record.mode): record for record in records}
+    selected_records = [record for record in records if record.mode == mode]
     rows = [
-        serialize_player_row(player, cache_map.get((player.id, mode)), hero_portraits)
+        serialize_player_row(player, record_map.get((player.id, mode)), hero_portraits)
         for player in players
     ]
     # Team-level cards are weighted by real win/loss counts, not by averaging
     # player percentages, so low-match accounts do not skew the dashboard.
-    team_summary = weighted_mode_summary(selected_caches)
+    team_summary = weighted_mode_summary(selected_records, OverwatchStatsCache.STATUS_READY)
     rank_scores = [row['rank']['score'] for row in rows if row.get('rank')]
     average_rank_score = sum(rank_scores) / len(rank_scores) if rank_scores else None
     team_summary.update({
@@ -183,16 +179,18 @@ def build_overwatch_stats_dashboard(mode=OverwatchStatsCache.COMPETITIVE, hero_p
         'unavailablePlayers': len([row for row in rows if row['status'] != OverwatchStatsCache.STATUS_READY]),
     })
 
-    latest_cache = max([cache for cache in caches if cache.fetched_at], key=lambda item: item.fetched_at, default=None)
+    latest_record = max([record for record in records if record.fetched_at], key=lambda item: item.fetched_at, default=None)
+    data_empty = not any(row['status'] == OverwatchStatsCache.STATUS_READY for row in rows)
 
     return {
         'mode': mode,
         'period': {'value': 'all_time', 'label': 'All-time'},
         'platform': 'pc',
-        'updatedAt': latest_cache.fetched_at.isoformat() if latest_cache else '',
-        'cacheEmpty': not caches,
+        'updatedAt': latest_record.fetched_at.isoformat() if latest_record else '',
+        'dataEmpty': data_empty,
+        'live': True,
         'players': rows,
         'team': team_summary,
         'rankDistribution': rank_distribution(rows),
-        'topHeroes': aggregate_top_heroes(selected_caches, hero_portraits),
+        'topHeroes': aggregate_top_heroes(selected_records, hero_portraits),
     }

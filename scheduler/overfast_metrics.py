@@ -1,5 +1,5 @@
 # Pure metric helpers for OverFast data. Keep these deterministic and
-# database-free so they can be tested separately from fetching and cache writes.
+# database-free so they can be tested separately from fetching and persistence.
 # OverFast exposes the top competitive rank as "ultimate", while the player-
 # facing Overwatch rank name is Champion. Keep the API value canonical so cached
 # payloads are handled correctly, but show the familiar label in the UI.
@@ -121,15 +121,15 @@ def rank_distribution(player_rows):
     ]
 
 
-def weighted_mode_summary(caches):
+def weighted_mode_summary(records, ready_status='ready'):
     wins = 0
     losses = 0
     matches = 0
     time_played = 0
-    for cache in caches:
-        if cache.status != cache.STATUS_READY:
+    for record in records:
+        if getattr(record, 'status', '') != ready_status:
             continue
-        general = (cache.stats_json or {}).get('general') or {}
+        general = (getattr(record, 'stats_json', {}) or {}).get('general') or {}
         wins += safe_number(general.get('games_won'))
         losses += safe_number(general.get('games_lost'))
         matches += safe_number(general.get('games_played'))
