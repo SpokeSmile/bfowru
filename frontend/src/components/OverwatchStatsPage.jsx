@@ -2,7 +2,6 @@ import {
   BarChart3,
   Check,
   Clock3,
-  RefreshCw,
   Trophy,
 } from 'lucide-react';
 import {
@@ -96,7 +95,7 @@ function StatSummaryCard({ icon: Icon, label, value, subLabel = '', caption, ton
   );
 }
 
-function StatsBanner({ updatedAt, isRefreshing, onRefresh }) {
+function StatsBanner({ updatedAt }) {
   return (
     <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/25 px-6 py-6 lg:px-8">
       <div className="relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
@@ -114,15 +113,6 @@ function StatsBanner({ updatedAt, isRefreshing, onRefresh }) {
           <div className="text-sm font-semibold text-bf-cream/35">
             Последнее обновление: {formatShortDateTime(updatedAt)}
           </div>
-          <button
-            className="inline-flex min-h-11 items-center gap-3 rounded-xl bg-bf-orange px-5 font-black text-white shadow-[0_10px_24px_rgba(243,112,30,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ff812e] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-            type="button"
-            onClick={onRefresh}
-            disabled={isRefreshing}
-          >
-            <RefreshCw className={isRefreshing ? 'animate-spin' : ''} size={18} />
-            {isRefreshing ? 'Обновляю данные...' : 'Обновить данные'}
-          </button>
         </div>
       </div>
     </section>
@@ -328,16 +318,14 @@ function StatsCharts({ stats }) {
 export default function OverwatchStatsPage({
   stats,
   isLoading,
-  isRefreshing,
   error,
-  onRefresh,
 }) {
   const team = stats?.team || {};
   const players = stats?.players || [];
 
   return (
     <>
-      <StatsBanner updatedAt={stats?.updatedAt} isRefreshing={isRefreshing} onRefresh={onRefresh} />
+      <StatsBanner updatedAt={stats?.updatedAt} />
       <section className="glass-panel mt-4 rounded-xl p-4">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           <StatSummaryCard
@@ -365,7 +353,7 @@ export default function OverwatchStatsPage({
           </div>
         ) : stats?.cacheEmpty ? (
           <div className="mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74">
-            Данные OverFast еще не загружены. Нажмите «Обновить данные», чтобы собрать статистику по BattleTag игроков.
+            Данные OverFast еще не загружены. Обновление статистики временно выполняется администратором.
           </div>
         ) : null}
 

@@ -12537,17 +12537,8 @@ function bootstrap(weekStart = "") {
   const query = weekStart ? `?week=${encodeURIComponent(weekStart)}` : "";
   return request(`/api/bootstrap/${query}`, { method: "GET" });
 }
-function fetchGameUpdates() {
-  return request("/api/game-updates/", { method: "GET" });
-}
-function fetchGameUpdateDetail(slug) {
-  return request(`/api/game-updates/${slug}/`, { method: "GET" });
-}
 function fetchOverwatchStats(mode = "competitive") {
   return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
-}
-function refreshOverwatchStats(mode = "competitive") {
-  return request(`/api/overwatch-stats/refresh/?mode=${encodeURIComponent(mode)}`, { method: "POST" });
 }
 function createSlot(payload) {
   return request("/api/slots/", {
@@ -45833,32 +45824,17 @@ function StatSummaryCard({ icon: Icon2, label, value, subLabel = "", caption, to
     caption ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-xs font-semibold text-bf-cream/46", children: caption }) : null
   ] });
 }
-function StatsBanner({ updatedAt, isRefreshing, onRefresh }) {
+function StatsBanner({ updatedAt }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/25 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[620px]", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl", children: "Статистика Overwatch" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm font-semibold text-bf-cream/58", children: "Данные OverFast API по первому BattleTag каждого игрока." })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid justify-items-start gap-3 lg:justify-items-end", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-semibold text-bf-cream/35", children: [
-        "Последнее обновление: ",
-        formatShortDateTime(updatedAt)
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: "inline-flex min-h-11 items-center gap-3 rounded-xl bg-bf-orange px-5 font-black text-white shadow-[0_10px_24px_rgba(243,112,30,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ff812e] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
-          type: "button",
-          onClick: onRefresh,
-          disabled: isRefreshing,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: isRefreshing ? "animate-spin" : "", size: 18 }),
-            isRefreshing ? "Обновляю данные..." : "Обновить данные"
-          ]
-        }
-      )
-    ] })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid justify-items-start gap-3 lg:justify-items-end", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-sm font-semibold text-bf-cream/35", children: [
+      "Последнее обновление: ",
+      formatShortDateTime(updatedAt)
+    ] }) })
   ] }) });
 }
 function StatsFilterBar() {
@@ -45988,14 +45964,12 @@ function StatsCharts({ stats }) {
 function OverwatchStatsPage({
   stats,
   isLoading,
-  isRefreshing,
-  error,
-  onRefresh
+  error
 }) {
   const team = stats?.team || {};
   const players = stats?.players || [];
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt, isRefreshing, onRefresh }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 md:grid-cols-2 xl:grid-cols-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -46014,7 +45988,7 @@ function OverwatchStatsPage({
         /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(StatsFilterBar, {}),
-      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю кэш статистики..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.cacheEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "Данные OverFast еще не загружены. Нажмите «Обновить данные», чтобы собрать статистику по BattleTag игроков." }) : null,
+      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю кэш статистики..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.cacheEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "Данные OverFast еще не загружены. Обновление статистики временно выполняется администратором." }) : null,
       /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} })
@@ -46849,6 +46823,7 @@ function UpdateContentBlock({ block }) {
   return null;
 }
 function UpdatesPage({
+  disabled = false,
   updates,
   selectedSlug,
   selectedUpdate,
@@ -46859,6 +46834,18 @@ function UpdatesPage({
 }) {
   const visibleUpdates = updates.slice(0, 10);
   const hasUpdates = visibleUpdates.length > 0;
+  if (disabled) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(UpdatesBanner, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel mt-4 rounded-xl p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid h-12 w-12 place-items-center rounded-xl border border-bf-orange/24 bg-bf-orange/10 text-bf-orange", children: /* @__PURE__ */ jsxRuntimeExports.jsx(BookText, { size: 22 }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-lg font-black uppercase text-slate-100", children: "Раздел обновлений временно отключен" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 max-w-2xl text-sm leading-6 text-bf-cream/62", children: "Мы ограничили загрузку patch notes, чтобы снизить нагрузку на базу данных. Логика синхронизации и данные не удалены." })
+        ] })
+      ] }) })
+    ] });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(UpdatesBanner, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-4 grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]", children: [
@@ -46930,6 +46917,7 @@ function UpdatesPage({
     ] })
   ] });
 }
+const UPDATES_DISABLED = true;
 function getScheduleWeekParam() {
   return new URLSearchParams(window.location.search).get("week") || "";
 }
@@ -46959,7 +46947,6 @@ function App() {
   const statsMode = "competitive";
   const [statsByMode, setStatsByMode] = reactExports.useState({});
   const [isLoadingStats, setIsLoadingStats] = reactExports.useState(false);
-  const [isRefreshingStats, setIsRefreshingStats] = reactExports.useState(false);
   const [statsError, setStatsError] = reactExports.useState("");
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
@@ -46984,40 +46971,6 @@ function App() {
   reactExports.useEffect(() => {
     loadData();
   }, []);
-  async function loadUpdatesList() {
-    setIsLoadingUpdatesList(true);
-    setUpdatesError("");
-    try {
-      const response = await fetchGameUpdates();
-      setUpdatesList(response.updates || []);
-      return response.updates || [];
-    } catch (loadError) {
-      setUpdatesError(loadError.message);
-      return [];
-    } finally {
-      setIsLoadingUpdatesList(false);
-    }
-  }
-  async function loadUpdateDetail(slug) {
-    if (!slug || updatesBySlug[slug]) {
-      return updatesBySlug[slug] || null;
-    }
-    setIsLoadingUpdateDetail(true);
-    setUpdatesError("");
-    try {
-      const response = await fetchGameUpdateDetail(slug);
-      setUpdatesBySlug((current2) => ({
-        ...current2,
-        [slug]: response.update
-      }));
-      return response.update;
-    } catch (loadError) {
-      setUpdatesError(loadError.message);
-      return null;
-    } finally {
-      setIsLoadingUpdateDetail(false);
-    }
-  }
   function selectUpdate(slug) {
     setSelectedUpdateSlug(slug);
     const params = new URLSearchParams(window.location.search);
@@ -47046,21 +46999,6 @@ function App() {
       setIsLoadingStats(false);
     }
   }
-  async function handleOverwatchStatsRefresh() {
-    setIsRefreshingStats(true);
-    setStatsError("");
-    try {
-      const response = await refreshOverwatchStats(statsMode);
-      setStatsByMode((current2) => ({
-        ...current2,
-        [response.stats.mode]: response.stats
-      }));
-    } catch (refreshError) {
-      setStatsError(refreshError.message);
-    } finally {
-      setIsRefreshingStats(false);
-    }
-  }
   reactExports.useEffect(() => {
     if (!commentTooltip) return;
     const handleViewportChange = () => setCommentTooltip(null);
@@ -47076,30 +47014,10 @@ function App() {
   const isUpdatesPage = pathname.startsWith("/updates");
   const isStatsPage = pathname.startsWith("/stats");
   reactExports.useEffect(() => {
-    if (!isUpdatesPage) return;
-    let isMounted = true;
-    loadUpdatesList().then((updates) => {
-      if (!isMounted) return;
-      const requestedSlug = new URLSearchParams(window.location.search).get("patch") || "";
-      const initialSlug = updates.some((item) => item.slug === requestedSlug) ? requestedSlug : updates[0]?.slug || "";
-      if (initialSlug) {
-        setSelectedUpdateSlug(initialSlug);
-        const params = new URLSearchParams(window.location.search);
-        if (params.get("patch") !== initialSlug) {
-          params.set("patch", initialSlug);
-          window.history.replaceState({}, document.title, `${window.location.pathname}?${params.toString()}`);
-        }
-      } else {
-        setSelectedUpdateSlug("");
-      }
-    });
-    return () => {
-      isMounted = false;
-    };
+    return;
   }, [isUpdatesPage]);
   reactExports.useEffect(() => {
-    if (!isUpdatesPage || !selectedUpdateSlug) return;
-    loadUpdateDetail(selectedUpdateSlug);
+    return;
   }, [isUpdatesPage, selectedUpdateSlug]);
   reactExports.useEffect(() => {
     if (!isStatsPage) return;
@@ -47204,6 +47122,7 @@ function App() {
         ) : isTeamPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(TeamPage, { players: data.players, staffMembers: data.staffMembers }) : isUpdatesPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
           UpdatesPage,
           {
+            disabled: UPDATES_DISABLED,
             updates: updatesList,
             selectedSlug: selectedUpdateSlug,
             selectedUpdate,
@@ -47217,9 +47136,7 @@ function App() {
           {
             stats: selectedStats,
             isLoading: isLoadingStats,
-            isRefreshing: isRefreshingStats,
-            error: statsError,
-            onRefresh: handleOverwatchStatsRefresh
+            error: statsError
           }
         ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           RosterPage,

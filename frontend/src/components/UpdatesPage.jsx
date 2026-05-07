@@ -83,6 +83,7 @@ function UpdateContentBlock({ block }) {
 }
 
 export default function UpdatesPage({
+  disabled = false,
   updates,
   selectedSlug,
   selectedUpdate,
@@ -93,6 +94,29 @@ export default function UpdatesPage({
 }) {
   const visibleUpdates = updates.slice(0, 10);
   const hasUpdates = visibleUpdates.length > 0;
+
+  if (disabled) {
+    return (
+      <>
+        <UpdatesBanner />
+        <section className="glass-panel mt-4 rounded-xl p-6">
+          <div className="grid gap-4 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center">
+            <div className="grid h-12 w-12 place-items-center rounded-xl border border-bf-orange/24 bg-bf-orange/10 text-bf-orange">
+              <BookText size={22} />
+            </div>
+            <div>
+              <div className="text-lg font-black uppercase text-slate-100">
+                Раздел обновлений временно отключен
+              </div>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-bf-cream/62">
+                Мы ограничили загрузку patch notes, чтобы снизить нагрузку на базу данных. Логика синхронизации и данные не удалены.
+              </p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>

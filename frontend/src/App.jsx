@@ -5,7 +5,6 @@ import {
   fetchGameUpdateDetail,
   fetchGameUpdates,
   fetchOverwatchStats,
-  refreshOverwatchStats,
 } from './api.js';
 import { Header, Sidebar } from './components/AppChrome.jsx';
 import { ErrorView, LoadingView } from './components/AppStateViews.jsx';
@@ -18,6 +17,8 @@ import CommentTooltip from './components/schedule/CommentTooltip.jsx';
 import RosterPage from './components/schedule/RosterPage.jsx';
 import TeamPage from './components/TeamPage.jsx';
 import UpdatesPage from './components/UpdatesPage.jsx';
+
+const UPDATES_DISABLED = true;
 
 function getScheduleWeekParam() {
   return new URLSearchParams(window.location.search).get('week') || '';
@@ -50,7 +51,6 @@ export default function App() {
   const statsMode = 'competitive';
   const [statsByMode, setStatsByMode] = useState({});
   const [isLoadingStats, setIsLoadingStats] = useState(false);
-  const [isRefreshingStats, setIsRefreshingStats] = useState(false);
   const [statsError, setStatsError] = useState('');
 
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
@@ -145,22 +145,6 @@ export default function App() {
     }
   }
 
-  async function handleOverwatchStatsRefresh() {
-    setIsRefreshingStats(true);
-    setStatsError('');
-    try {
-      const response = await refreshOverwatchStats(statsMode);
-      setStatsByMode((current) => ({
-        ...current,
-        [response.stats.mode]: response.stats,
-      }));
-    } catch (refreshError) {
-      setStatsError(refreshError.message);
-    } finally {
-      setIsRefreshingStats(false);
-    }
-  }
-
   useEffect(() => {
     if (!commentTooltip) return;
 
@@ -180,7 +164,7 @@ export default function App() {
   const isStatsPage = pathname.startsWith('/stats');
 
   useEffect(() => {
-    if (!isUpdatesPage) return;
+    if (!isUpdatesPage || UPDATES_DISABLED) return;
 
     let isMounted = true;
 
@@ -209,7 +193,7 @@ export default function App() {
   }, [isUpdatesPage]);
 
   useEffect(() => {
-    if (!isUpdatesPage || !selectedUpdateSlug) return;
+    if (!isUpdatesPage || UPDATES_DISABLED || !selectedUpdateSlug) return;
     loadUpdateDetail(selectedUpdateSlug);
   }, [isUpdatesPage, selectedUpdateSlug]);
 
@@ -330,6 +314,7 @@ export default function App() {
             <TeamPage players={data.players} staffMembers={data.staffMembers} />
           ) : isUpdatesPage ? (
             <UpdatesPage
+              disabled={UPDATES_DISABLED}
               updates={updatesList}
               selectedSlug={selectedUpdateSlug}
               selectedUpdate={selectedUpdate}
@@ -342,9 +327,7 @@ export default function App() {
             <OverwatchStatsPage
               stats={selectedStats}
               isLoading={isLoadingStats}
-              isRefreshing={isRefreshingStats}
               error={statsError}
-              onRefresh={handleOverwatchStatsRefresh}
             />
           ) : (
             <>
