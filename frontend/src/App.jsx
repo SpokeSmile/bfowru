@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   bootstrap,
@@ -19,6 +19,13 @@ import TeamPage from './components/TeamPage.jsx';
 import UpdatesPage from './components/UpdatesPage.jsx';
 
 const UPDATES_DISABLED = true;
+const STATS_MIN_LOADING_MS = 3000;
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
 
 function getScheduleWeekParam() {
   return new URLSearchParams(window.location.search).get('week') || '';
@@ -52,6 +59,7 @@ export default function App() {
   const [statsByMode, setStatsByMode] = useState({});
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [statsError, setStatsError] = useState('');
+  const statsRequestIdRef = useRef(0);
 
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
@@ -128,20 +136,40 @@ export default function App() {
   }
 
   async function loadOverwatchStats(mode) {
+    const requestId = statsRequestIdRef.current + 1;
+    statsRequestIdRef.current = requestId;
+    const startedAt = window.performance.now();
+
     setIsLoadingStats(true);
     setStatsError('');
     try {
       const response = await fetchOverwatchStats(mode);
+      const remainingLoadingTime = STATS_MIN_LOADING_MS - (window.performance.now() - startedAt);
+      if (remainingLoadingTime > 0) {
+        await wait(remainingLoadingTime);
+      }
+      if (statsRequestIdRef.current !== requestId) {
+        return null;
+      }
       setStatsByMode((current) => ({
         ...current,
         [response.stats.mode]: response.stats,
       }));
       return response.stats;
     } catch (loadError) {
+      const remainingLoadingTime = STATS_MIN_LOADING_MS - (window.performance.now() - startedAt);
+      if (remainingLoadingTime > 0) {
+        await wait(remainingLoadingTime);
+      }
+      if (statsRequestIdRef.current !== requestId) {
+        return null;
+      }
       setStatsError(loadError.message);
       return null;
     } finally {
-      setIsLoadingStats(false);
+      if (statsRequestIdRef.current === requestId) {
+        setIsLoadingStats(false);
+      }
     }
   }
 
@@ -326,6 +354,7 @@ export default function App() {
           ) : isStatsPage ? (
             <OverwatchStatsPage
               stats={selectedStats}
+              basePlayers={data.players}
               isLoading={isLoadingStats}
               error={statsError}
             />

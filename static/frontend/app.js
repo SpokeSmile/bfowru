@@ -12656,7 +12656,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$o = [
+const __iconNode$p = [
   [
     "path",
     {
@@ -12667,8 +12667,8 @@ const __iconNode$o = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$o);
-const __iconNode$n = [
+const BookText = createLucideIcon("book-text", __iconNode$p);
+const __iconNode$o = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12680,8 +12680,8 @@ const __iconNode$n = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$n);
-const __iconNode$m = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$o);
+const __iconNode$n = [
   ["path", { d: "M16 19h6", key: "xwg31i" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["path", { d: "M19 16v6", key: "tddt3s" }],
@@ -12689,44 +12689,46 @@ const __iconNode$m = [
   ["path", { d: "M3 10h18", key: "8toen8" }],
   ["path", { d: "M8 2v4", key: "1cmpym" }]
 ];
-const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$m);
-const __iconNode$l = [
+const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$n);
+const __iconNode$m = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$l);
-const __iconNode$k = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$k);
-const __iconNode$j = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$j);
-const __iconNode$i = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$i);
-const __iconNode$h = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$m);
+const __iconNode$l = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$l);
+const __iconNode$k = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$k);
+const __iconNode$j = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
+const ChevronLeft = createLucideIcon("chevron-left", __iconNode$j);
+const __iconNode$i = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$h);
-const __iconNode$g = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$i);
+const __iconNode$h = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$g);
-const __iconNode$f = [
+const Copy = createLucideIcon("copy", __iconNode$h);
+const __iconNode$g = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
   ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
   ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
   ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
 ];
-const Crosshair = createLucideIcon("crosshair", __iconNode$f);
-const __iconNode$e = [
+const Crosshair = createLucideIcon("crosshair", __iconNode$g);
+const __iconNode$f = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$e);
+const ExternalLink = createLucideIcon("external-link", __iconNode$f);
+const __iconNode$e = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$e);
 const __iconNode$d = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
@@ -45789,6 +45791,33 @@ function formatHours(seconds) {
   const hours = Math.round((Number(seconds) || 0) / 3600);
   return `${formatInteger(hours)} ч.`;
 }
+function basePlayerToStatsRow(player) {
+  return {
+    id: player.id,
+    name: player.name,
+    role: player.role,
+    roleColor: player.roleColor,
+    avatarUrl: player.avatarUrl,
+    battleTag: player.battleTag || player.battleTags?.[0] || "",
+    status: "loading"
+  };
+}
+function useRollingNumber(min2, max2, intervalMs = 140, precision = 0) {
+  const [value, setValue] = reactExports.useState(() => min2);
+  reactExports.useEffect(() => {
+    let step = 0;
+    const range2 = max2 - min2;
+    const timer = window.setInterval(() => {
+      step += 1;
+      const wave = (Math.sin(step * 1.37) + 1) / 2;
+      const jitter = step * 17 % 11 / 10;
+      const next = min2 + (wave * range2 + jitter) % Math.max(range2, 1);
+      setValue(Number(next.toFixed(precision)));
+    }, intervalMs);
+    return () => window.clearInterval(timer);
+  }, [intervalMs, max2, min2, precision]);
+  return value;
+}
 const OVERWATCH_STATS_MODES = [
   { value: "overview", label: "Общая статистика" },
   { value: "competitive", label: "Competitive" }
@@ -45854,7 +45883,102 @@ function HeroIcon({ hero, className = "h-8 w-8" }) {
   const initial = (hero?.heroLabel || hero?.hero || "?").trim().slice(0, 1).toUpperCase();
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `grid shrink-0 place-items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-black/28 ${className}`, children: hero?.heroIconUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-full w-full object-cover", src: hero.heroIconUrl, alt: "", loading: "lazy" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-black text-bf-cream/58", children: initial }) });
 }
-function PlayerStatsTable({ players }) {
+function LoadingMetric({ min: min2, max: max2, suffix: suffix2 = "", precision = 0, className = "text-sm font-semibold text-slate-100" }) {
+  const value = useRollingNumber(min2, max2, 115, precision);
+  const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`, children: [
+    formattedValue,
+    suffix2
+  ] });
+}
+function LoadingPercentBar() {
+  const value = useRollingNumber(35, 75, 95, 1);
+  const width = `${Math.min(Math.max(value, 0), 100)}%`;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 transition-all duration-300", children: formatPercent(value) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "h-full rounded-full bg-emerald-400 transition-all duration-300 ease-in-out",
+        style: { width }
+      }
+    ) })
+  ] });
+}
+function LoadingRankCell() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm font-semibold text-bf-cream/58", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-5 w-5 animate-spin text-bf-orange" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-4 w-20 rounded-full bg-bf-cream/10" })
+  ] });
+}
+function LoadingHeroCell() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "grid h-8 w-8 place-items-center rounded-xl border border-bf-cream/10 bg-black/28", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-4 w-4 animate-spin text-bf-orange" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-4 w-24 rounded-full bg-bf-cream/10" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-3 w-12 rounded-full bg-bf-cream/8" })
+    ] })
+  ] });
+}
+function LoadingWinLossCell() {
+  const matches2 = Math.round(useRollingNumber(5, 120, 130, 0));
+  const winrate = useRollingNumber(35, 75, 130, 0) / 100;
+  const wins = Math.max(0, Math.round(matches2 * winrate));
+  const losses = Math.max(0, matches2 - wins);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "transition-all duration-300", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
+      formatInteger(wins),
+      "W"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mx-1 text-bf-cream/28", children: "/" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-red-300", children: [
+      formatInteger(losses),
+      "L"
+    ] })
+  ] });
+}
+function LoadingStatSummaryValue({ type }) {
+  if (type === "rank") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block h-7 w-28 rounded-full bg-bf-cream/10 align-middle" });
+  }
+  if (type === "percent") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 42, max: 68, suffix: "%", precision: 1, className: "text-2xl font-black text-slate-100" });
+  }
+  if (type === "hours") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 60, max: 420, suffix: " ч.", className: "text-2xl font-black text-slate-100" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 40, max: 520, className: "text-2xl font-black text-slate-100" });
+}
+function LoadingCharts() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-4 grid gap-4 xl:grid-cols-[1fr_1.15fr]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Распределение рангов" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid h-64 content-center gap-3", children: [72, 52, 84, 45, 64].map((width, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-3 w-24 rounded-full bg-bf-cream/8" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "h-4 rounded-full bg-bf-orange/30 transition-all duration-500",
+            style: { width: `${width - index % 2 * 16}%` }
+          }
+        )
+      ] }, width)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-slate-100", children: "Топ героев" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-2", children: [0, 1, 2, 3, 4].map((item) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[minmax(0,1fr)_80px_80px_90px] items-center gap-3 rounded-xl bg-black/18 px-3 py-2 text-sm", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "grid h-7 w-7 place-items-center rounded-xl border border-bf-cream/10 bg-black/28", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3.5 w-3.5 animate-spin text-bf-orange" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-4 w-24 rounded-full bg-bf-cream/10" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 35, max: 75, suffix: "%", precision: 1, className: "font-black text-emerald-300" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 4, max: 45, className: "font-semibold text-bf-cream/72" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 2, max: 90, suffix: " ч.", className: "font-semibold text-bf-cream/72" })
+      ] }, item)) })
+    ] })
+  ] });
+}
+function PlayerStatsTable({ players, isLoading }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 overflow-x-auto rounded-xl border border-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[1240px] w-full border-collapse bg-[#111925]/86 text-left", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Игрок" }),
@@ -45868,9 +45992,9 @@ function PlayerStatsTable({ players }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Средняя смерть" })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: players.map((player) => {
-      const isReady = player.status === "ready";
+      const isReady = !isLoading && player.status === "ready";
       const winrateWidth = `${Math.min(Math.max(player.winrate || 0, 0), 100)}%`;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-black/10 last:border-b-0 hover:bg-bf-steel/10", children: [
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-black/10 transition-colors duration-300 last:border-b-0 hover:bg-bf-steel/10", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-10 w-10 object-cover" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
@@ -45879,26 +46003,26 @@ function PlayerStatsTable({ players }) {
               /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor }),
               player.battleTag ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-semibold text-bf-cream/42", children: player.battleTag }) : null
             ] }),
-            !isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs font-semibold text-amber-100/75", children: player.error || "Данные недоступны" }) : null
+            !isLoading && !isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs font-semibold text-amber-100/75", children: player.error || "Данные недоступны" }) : null
           ] })
         ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingRankCell, {}) : isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
           player.rank.rankIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-5 w-5", src: player.rank.rankIcon, alt: "" }) : null,
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: player.rank.label })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingHeroCell, {}) : isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(HeroIcon, { hero: player.mainHero }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate font-black", children: player.mainHero.heroLabel }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-xs text-bf-cream/42", children: formatHours(player.mainHero.timePlayed) })
           ] })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingPercentBar, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: formatPercent(player.winrate) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full rounded-full bg-emerald-400", style: { width: winrateWidth } }) })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatInteger(player.matches) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 5, max: 120 }) : isReady ? formatInteger(player.matches) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingWinLossCell, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
             formatInteger(player.wins),
             "W"
@@ -45909,9 +46033,9 @@ function PlayerStatsTable({ players }) {
             "L"
           ] })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isReady ? formatDecimal(player.kd, 2) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 0.8, max: 3.2, precision: 2, className: "text-sm font-black text-emerald-300" }) : isReady ? formatDecimal(player.kd, 2) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 4, max: 22, precision: 1 }) : isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 3, max: 10, precision: 1 }) : isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
       ] }, player.id);
     }) })
   ] }) });
@@ -45963,11 +46087,14 @@ function StatsCharts({ stats }) {
 }
 function OverwatchStatsPage({
   stats,
+  basePlayers = [],
   isLoading,
   error
 }) {
   const team = stats?.team || {};
-  const players = stats?.players || [];
+  const loadingPlayers = reactExports.useMemo(() => basePlayers.map(basePlayerToStatsRow), [basePlayers]);
+  const players = isLoading ? loadingPlayers : stats?.players || loadingPlayers;
+  const showLoadingSummary = isLoading;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
@@ -45977,21 +46104,21 @@ function OverwatchStatsPage({
           {
             icon: Trophy,
             label: "Средний рейтинг",
-            value: team.averageRank || "—",
-            subLabel: team.averageRating ? `Рейтинг: ${formatInteger(team.averageRating)}` : "Рейтинг: —",
+            value: showLoadingSummary ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingStatSummaryValue, { type: "rank" }) : team.averageRank || "—",
+            subLabel: showLoadingSummary ? "Рейтинг: считается..." : team.averageRating ? `Рейтинг: ${formatInteger(team.averageRating)}` : "Рейтинг: —",
             caption: "Competitive",
             tone: "purple"
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Check, label: "Процент побед", value: formatPercent(team.winrate), caption: "По загруженным игрокам", tone: "green" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Clock3, label: "Все сыграно", value: formatHours(team.timePlayed), caption: "All-time", tone: "orange" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Check, label: "Процент побед", value: showLoadingSummary ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingStatSummaryValue, { type: "percent" }) : formatPercent(team.winrate), caption: "По загруженным игрокам", tone: "green" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: Clock3, label: "Все сыграно", value: showLoadingSummary ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingStatSummaryValue, { type: "hours" }) : formatHours(team.timePlayed), caption: "All-time", tone: "orange" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(StatSummaryCard, { icon: ChartColumn, label: "Матчей сыграно", value: showLoadingSummary ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingStatSummaryValue, { type: "matches" }) : formatInteger(team.matches || 0), caption: "Competitive", tone: "blue" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(StatsFilterBar, {}),
-      isLoading && !stats ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-cream/10 bg-black/18 px-4 py-8 text-center text-sm text-bf-cream/62", children: "Загружаю статистику OverFast..." }) : error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.dataEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "OverFast не вернул доступные данные. Проверьте BattleTag игроков или доступность профилей." }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players })
+      error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-6 text-sm font-semibold text-red-100", children: error }) : stats?.dataEmpty ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-bf-orange/25 bg-bf-orange/10 px-4 py-6 text-sm text-bf-cream/74", children: "OverFast не вернул доступные данные. Проверьте BattleTag игроков или доступность профилей." }) : null,
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerStatsTable, { players, isLoading })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} })
+    showLoadingSummary ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingCharts, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(StatsCharts, { stats: stats || {} })
   ] });
 }
 function ProfilePage({ user, profile, profileType, onSaved }) {
@@ -46918,6 +47045,12 @@ function UpdatesPage({
   ] });
 }
 const UPDATES_DISABLED = true;
+const STATS_MIN_LOADING_MS = 3e3;
+function wait(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
 function getScheduleWeekParam() {
   return new URLSearchParams(window.location.search).get("week") || "";
 }
@@ -46948,6 +47081,7 @@ function App() {
   const [statsByMode, setStatsByMode] = reactExports.useState({});
   const [isLoadingStats, setIsLoadingStats] = reactExports.useState(false);
   const [statsError, setStatsError] = reactExports.useState("");
+  const statsRequestIdRef = reactExports.useRef(0);
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
     if (shouldShowLoading) {
@@ -46983,20 +47117,39 @@ function App() {
     window.history.replaceState({}, document.title, `${window.location.pathname}${query ? `?${query}` : ""}`);
   }
   async function loadOverwatchStats(mode) {
+    const requestId = statsRequestIdRef.current + 1;
+    statsRequestIdRef.current = requestId;
+    const startedAt = window.performance.now();
     setIsLoadingStats(true);
     setStatsError("");
     try {
       const response = await fetchOverwatchStats(mode);
+      const remainingLoadingTime = STATS_MIN_LOADING_MS - (window.performance.now() - startedAt);
+      if (remainingLoadingTime > 0) {
+        await wait(remainingLoadingTime);
+      }
+      if (statsRequestIdRef.current !== requestId) {
+        return null;
+      }
       setStatsByMode((current2) => ({
         ...current2,
         [response.stats.mode]: response.stats
       }));
       return response.stats;
     } catch (loadError) {
+      const remainingLoadingTime = STATS_MIN_LOADING_MS - (window.performance.now() - startedAt);
+      if (remainingLoadingTime > 0) {
+        await wait(remainingLoadingTime);
+      }
+      if (statsRequestIdRef.current !== requestId) {
+        return null;
+      }
       setStatsError(loadError.message);
       return null;
     } finally {
-      setIsLoadingStats(false);
+      if (statsRequestIdRef.current === requestId) {
+        setIsLoadingStats(false);
+      }
     }
   }
   reactExports.useEffect(() => {
@@ -47135,6 +47288,7 @@ function App() {
           OverwatchStatsPage,
           {
             stats: selectedStats,
+            basePlayers: data.players,
             isLoading: isLoadingStats,
             error: statsError
           }
