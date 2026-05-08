@@ -66,7 +66,12 @@ function basePlayerToStatsRow(player) {
   };
 }
 
-function useRollingNumber(min, max, durationMs = 2800, precision = 0) {
+function easeInOutSmooth(value) {
+  const clamped = Math.min(Math.max(value, 0), 1);
+  return clamped * clamped * clamped * (clamped * (clamped * 6 - 15) + 10);
+}
+
+function useRollingNumber(min, max, durationMs = 4200, precision = 0) {
   const [value, setValue] = useState(() => min);
   const [motion] = useState(() => ({
     duration: durationMs + Math.round(Math.random() * 700),
@@ -83,7 +88,7 @@ function useRollingNumber(min, max, durationMs = 2800, precision = 0) {
       const progress = elapsed <= halfDuration
         ? elapsed / halfDuration
         : 1 - ((elapsed - halfDuration) / halfDuration);
-      const eased = 0.5 - Math.cos(progress * Math.PI) / 2;
+      const eased = easeInOutSmooth(progress);
       const next = min + eased * range;
       setValue(Number(next.toFixed(precision)));
       animationFrame = window.requestAnimationFrame(animate);
@@ -96,12 +101,6 @@ function useRollingNumber(min, max, durationMs = 2800, precision = 0) {
   return value;
 }
 
-function easeInOutCubic(value) {
-  return value < 0.5
-    ? 4 * value * value * value
-    : 1 - ((-2 * value + 2) ** 3) / 2;
-}
-
 function seededNumber(seed, min, max) {
   const text = String(seed);
   let hash = 0;
@@ -111,7 +110,7 @@ function seededNumber(seed, min, max) {
   return min + (hash / 100000) * (max - min);
 }
 
-function useAnimatedNumber(target, startValue, durationMs = 850, precision = 0) {
+function useAnimatedNumber(target, startValue, durationMs = 1400, precision = 0) {
   const normalizedTarget = Number.isFinite(target) ? target : 0;
   const [value, setValue] = useState(() => Number(startValue.toFixed(precision)));
   const valueRef = useRef(value);
@@ -126,7 +125,7 @@ function useAnimatedNumber(target, startValue, durationMs = 850, precision = 0) 
 
     function animate(now) {
       const progress = Math.min((now - startedAt) / durationMs, 1);
-      const next = from + (to - from) * easeInOutCubic(progress);
+      const next = from + (to - from) * easeInOutSmooth(progress);
       const rounded = Number(next.toFixed(precision));
       valueRef.current = rounded;
       setValue(rounded);
@@ -245,7 +244,7 @@ function HeroIcon({ hero, className = 'h-8 w-8' }) {
 }
 
 function LoadingMetric({ min = 10, max = 99, suffix = '', precision = 0, className = 'text-sm font-semibold text-slate-100' }) {
-  const value = useRollingNumber(min, max, 3000, precision);
+  const value = useRollingNumber(min, max, 4600, precision);
   const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
   return (
     <span className={`inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`}>
@@ -269,7 +268,7 @@ function AnimatedMetric({
     () => seededNumber(seed, min, max),
     [max, min, seed],
   );
-  const animatedValue = useAnimatedNumber(target, startValue, 900, precision);
+  const animatedValue = useAnimatedNumber(target, startValue, 1500, precision);
   const content = formatter
     ? formatter(animatedValue)
     : `${precision ? formatDecimal(animatedValue, precision) : formatInteger(Math.round(animatedValue))}${suffix}`;
@@ -282,7 +281,7 @@ function AnimatedMetric({
 }
 
 function LoadingPercentBar() {
-  const value = useRollingNumber(0, 100, 3200, 1);
+  const value = useRollingNumber(0, 100, 4800, 1);
   const syncedValue = Math.min(Math.max(value, 0), 100);
   const width = `${syncedValue}%`;
 
@@ -301,7 +300,7 @@ function LoadingPercentBar() {
 
 function AnimatedPercentBar({ value, seed }) {
   const startValue = useMemo(() => seededNumber(seed, 0, 100), [seed]);
-  const animatedValue = useAnimatedNumber(value, startValue, 950, 1);
+  const animatedValue = useAnimatedNumber(value, startValue, 1600, 1);
   const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
   const width = `${syncedValue}%`;
 
@@ -344,8 +343,8 @@ function LoadingHeroCell() {
 }
 
 function LoadingWinLossCell() {
-  const wins = Math.round(useRollingNumber(10, 99, 3300, 0));
-  const losses = Math.round(useRollingNumber(10, 99, 3600, 0));
+  const wins = Math.round(useRollingNumber(10, 99, 5000, 0));
+  const losses = Math.round(useRollingNumber(10, 99, 5400, 0));
 
   return (
     <span className="transition-all duration-300">

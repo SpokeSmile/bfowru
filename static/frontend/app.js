@@ -45802,7 +45802,11 @@ function basePlayerToStatsRow(player) {
     status: "loading"
   };
 }
-function useRollingNumber(min2, max2, durationMs = 2800, precision = 0) {
+function easeInOutSmooth(value) {
+  const clamped = Math.min(Math.max(value, 0), 1);
+  return clamped * clamped * clamped * (clamped * (clamped * 6 - 15) + 10);
+}
+function useRollingNumber(min2, max2, durationMs = 4200, precision = 0) {
   const [value, setValue] = reactExports.useState(() => min2);
   const [motion2] = reactExports.useState(() => ({
     duration: durationMs + Math.round(Math.random() * 700),
@@ -45815,7 +45819,7 @@ function useRollingNumber(min2, max2, durationMs = 2800, precision = 0) {
       const elapsed = (window.performance.now() + motion2.phase) % motion2.duration;
       const halfDuration = motion2.duration / 2;
       const progress2 = elapsed <= halfDuration ? elapsed / halfDuration : 1 - (elapsed - halfDuration) / halfDuration;
-      const eased = 0.5 - Math.cos(progress2 * Math.PI) / 2;
+      const eased = easeInOutSmooth(progress2);
       const next = min2 + eased * range2;
       setValue(Number(next.toFixed(precision)));
       animationFrame = window.requestAnimationFrame(animate);
@@ -45825,9 +45829,6 @@ function useRollingNumber(min2, max2, durationMs = 2800, precision = 0) {
   }, [max2, min2, motion2, precision]);
   return value;
 }
-function easeInOutCubic(value) {
-  return value < 0.5 ? 4 * value * value * value : 1 - (-2 * value + 2) ** 3 / 2;
-}
 function seededNumber(seed2, min2, max2) {
   const text = String(seed2);
   let hash = 0;
@@ -45836,7 +45837,7 @@ function seededNumber(seed2, min2, max2) {
   }
   return min2 + hash / 1e5 * (max2 - min2);
 }
-function useAnimatedNumber(target, startValue, durationMs = 850, precision = 0) {
+function useAnimatedNumber(target, startValue, durationMs = 1400, precision = 0) {
   const normalizedTarget = Number.isFinite(target) ? target : 0;
   const [value, setValue] = reactExports.useState(() => Number(startValue.toFixed(precision)));
   const valueRef = reactExports.useRef(value);
@@ -45849,7 +45850,7 @@ function useAnimatedNumber(target, startValue, durationMs = 850, precision = 0) 
     previousTargetRef.current = to2;
     function animate(now2) {
       const progress2 = Math.min((now2 - startedAt) / durationMs, 1);
-      const next = from2 + (to2 - from2) * easeInOutCubic(progress2);
+      const next = from2 + (to2 - from2) * easeInOutSmooth(progress2);
       const rounded = Number(next.toFixed(precision));
       valueRef.current = rounded;
       setValue(rounded);
@@ -45928,7 +45929,7 @@ function HeroIcon({ hero, className = "h-8 w-8" }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `grid shrink-0 place-items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-black/28 ${className}`, children: hero?.heroIconUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-full w-full object-cover", src: hero.heroIconUrl, alt: "", loading: "lazy" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-black text-bf-cream/58", children: initial }) });
 }
 function LoadingMetric({ min: min2 = 10, max: max2 = 99, suffix: suffix2 = "", precision = 0, className = "text-sm font-semibold text-slate-100" }) {
-  const value = useRollingNumber(min2, max2, 3e3, precision);
+  const value = useRollingNumber(min2, max2, 4600, precision);
   const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`, children: [
     formattedValue,
@@ -45950,12 +45951,12 @@ function AnimatedMetric({
     () => seededNumber(seed2, min2, max2),
     [max2, min2, seed2]
   );
-  const animatedValue = useAnimatedNumber(target, startValue, 900, precision);
+  const animatedValue = useAnimatedNumber(target, startValue, 1500, precision);
   const content = formatter ? formatter(animatedValue) : `${precision ? formatDecimal(animatedValue, precision) : formatInteger(Math.round(animatedValue))}${suffix2}`;
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `inline-flex min-w-[5ch] items-center whitespace-nowrap tabular-nums transition-colors duration-300 ${className}`, children: content });
 }
 function LoadingPercentBar() {
-  const value = useRollingNumber(0, 100, 3200, 1);
+  const value = useRollingNumber(0, 100, 4800, 1);
   const syncedValue = Math.min(Math.max(value, 0), 100);
   const width = `${syncedValue}%`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
@@ -45971,7 +45972,7 @@ function LoadingPercentBar() {
 }
 function AnimatedPercentBar({ value, seed: seed2 }) {
   const startValue = reactExports.useMemo(() => seededNumber(seed2, 0, 100), [seed2]);
-  const animatedValue = useAnimatedNumber(value, startValue, 950, 1);
+  const animatedValue = useAnimatedNumber(value, startValue, 1600, 1);
   const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
   const width = `${syncedValue}%`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[118px]", children: [
@@ -46001,8 +46002,8 @@ function LoadingHeroCell() {
   ] });
 }
 function LoadingWinLossCell() {
-  const wins = Math.round(useRollingNumber(10, 99, 3300, 0));
-  const losses = Math.round(useRollingNumber(10, 99, 3600, 0));
+  const wins = Math.round(useRollingNumber(10, 99, 5e3, 0));
+  const losses = Math.round(useRollingNumber(10, 99, 5400, 0));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "transition-all duration-300", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
       formatInteger(wins),
