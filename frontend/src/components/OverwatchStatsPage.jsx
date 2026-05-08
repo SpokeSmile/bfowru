@@ -282,15 +282,16 @@ function AnimatedMetric({
 }
 
 function LoadingPercentBar() {
-  const value = useRollingNumber(0, 100, 3200, 0);
-  const width = `${Math.min(Math.max(value, 0), 100)}%`;
+  const value = useRollingNumber(0, 100, 3200, 1);
+  const syncedValue = Math.min(Math.max(value, 0), 100);
+  const width = `${syncedValue}%`;
 
   return (
     <div className="min-w-[110px]">
-      <div className="text-sm font-black text-slate-100 transition-all duration-300">{formatPercent(value)}</div>
+      <div className="text-sm font-black text-slate-100 transition-colors duration-300">{formatPercent(syncedValue)}</div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
         <div
-          className="h-full rounded-full bg-emerald-400 transition-all duration-300 ease-in-out"
+          className="h-full rounded-full bg-emerald-400"
           style={{ width }}
         />
       </div>
@@ -301,16 +302,17 @@ function LoadingPercentBar() {
 function AnimatedPercentBar({ value, seed }) {
   const startValue = useMemo(() => seededNumber(seed, 0, 100), [seed]);
   const animatedValue = useAnimatedNumber(value, startValue, 950, 1);
-  const width = `${Math.min(Math.max(animatedValue || 0, 0), 100)}%`;
+  const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
+  const width = `${syncedValue}%`;
 
   return (
     <div className="min-w-[118px]">
       <div className="text-sm font-black text-slate-100 tabular-nums transition-colors duration-300">
-        {formatPercent(animatedValue)}
+        {formatPercent(syncedValue)}
       </div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
         <div
-          className="h-full rounded-full bg-emerald-400 transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-emerald-400"
           style={{ width }}
         />
       </div>

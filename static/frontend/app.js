@@ -45955,14 +45955,15 @@ function AnimatedMetric({
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `inline-flex min-w-[5ch] items-center whitespace-nowrap tabular-nums transition-colors duration-300 ${className}`, children: content });
 }
 function LoadingPercentBar() {
-  const value = useRollingNumber(0, 100, 3200, 0);
-  const width = `${Math.min(Math.max(value, 0), 100)}%`;
+  const value = useRollingNumber(0, 100, 3200, 1);
+  const syncedValue = Math.min(Math.max(value, 0), 100);
+  const width = `${syncedValue}%`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 transition-all duration-300", children: formatPercent(value) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 transition-colors duration-300", children: formatPercent(syncedValue) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       {
-        className: "h-full rounded-full bg-emerald-400 transition-all duration-300 ease-in-out",
+        className: "h-full rounded-full bg-emerald-400",
         style: { width }
       }
     ) })
@@ -45971,13 +45972,14 @@ function LoadingPercentBar() {
 function AnimatedPercentBar({ value, seed: seed2 }) {
   const startValue = reactExports.useMemo(() => seededNumber(seed2, 0, 100), [seed2]);
   const animatedValue = useAnimatedNumber(value, startValue, 950, 1);
-  const width = `${Math.min(Math.max(animatedValue || 0, 0), 100)}%`;
+  const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
+  const width = `${syncedValue}%`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[118px]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 tabular-nums transition-colors duration-300", children: formatPercent(animatedValue) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 tabular-nums transition-colors duration-300", children: formatPercent(syncedValue) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       {
-        className: "h-full rounded-full bg-emerald-400 transition-[width] duration-500 ease-out",
+        className: "h-full rounded-full bg-emerald-400",
         style: { width }
       }
     ) })
