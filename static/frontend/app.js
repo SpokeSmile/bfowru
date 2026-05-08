@@ -45802,20 +45802,27 @@ function basePlayerToStatsRow(player) {
     status: "loading"
   };
 }
-function useRollingNumber(min2, max2, intervalMs = 140, precision = 0) {
+function useRollingNumber(min2, max2, durationMs = 2800, precision = 0) {
   const [value, setValue] = reactExports.useState(() => min2);
+  const [motion2] = reactExports.useState(() => ({
+    duration: durationMs + Math.round(Math.random() * 700),
+    phase: Math.random() * durationMs
+  }));
   reactExports.useEffect(() => {
-    let step = 0;
+    let animationFrame = 0;
     const range2 = max2 - min2;
-    const timer = window.setInterval(() => {
-      step += 1;
-      const wave = (Math.sin(step * 1.37) + 1) / 2;
-      const jitter = step * 17 % 11 / 10;
-      const next = min2 + (wave * range2 + jitter) % Math.max(range2, 1);
+    function animate() {
+      const elapsed = (window.performance.now() + motion2.phase) % motion2.duration;
+      const halfDuration = motion2.duration / 2;
+      const progress2 = elapsed <= halfDuration ? elapsed / halfDuration : 1 - (elapsed - halfDuration) / halfDuration;
+      const eased = 0.5 - Math.cos(progress2 * Math.PI) / 2;
+      const next = min2 + eased * range2;
       setValue(Number(next.toFixed(precision)));
-    }, intervalMs);
-    return () => window.clearInterval(timer);
-  }, [intervalMs, max2, min2, precision]);
+      animationFrame = window.requestAnimationFrame(animate);
+    }
+    animationFrame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [max2, min2, motion2, precision]);
   return value;
 }
 const OVERWATCH_STATS_MODES = [
@@ -45883,8 +45890,8 @@ function HeroIcon({ hero, className = "h-8 w-8" }) {
   const initial = (hero?.heroLabel || hero?.hero || "?").trim().slice(0, 1).toUpperCase();
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `grid shrink-0 place-items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-black/28 ${className}`, children: hero?.heroIconUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-full w-full object-cover", src: hero.heroIconUrl, alt: "", loading: "lazy" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs font-black text-bf-cream/58", children: initial }) });
 }
-function LoadingMetric({ min: min2, max: max2, suffix: suffix2 = "", precision = 0, className = "text-sm font-semibold text-slate-100" }) {
-  const value = useRollingNumber(min2, max2, 115, precision);
+function LoadingMetric({ min: min2 = 10, max: max2 = 99, suffix: suffix2 = "", precision = 0, className = "text-sm font-semibold text-slate-100" }) {
+  const value = useRollingNumber(min2, max2, 3e3, precision);
   const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`, children: [
     formattedValue,
@@ -45892,7 +45899,7 @@ function LoadingMetric({ min: min2, max: max2, suffix: suffix2 = "", precision =
   ] });
 }
 function LoadingPercentBar() {
-  const value = useRollingNumber(35, 75, 95, 1);
+  const value = useRollingNumber(0, 100, 3200, 0);
   const width = `${Math.min(Math.max(value, 0), 100)}%`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 transition-all duration-300", children: formatPercent(value) }),
@@ -45921,10 +45928,8 @@ function LoadingHeroCell() {
   ] });
 }
 function LoadingWinLossCell() {
-  const matches2 = Math.round(useRollingNumber(5, 120, 130, 0));
-  const winrate = useRollingNumber(35, 75, 130, 0) / 100;
-  const wins = Math.max(0, Math.round(matches2 * winrate));
-  const losses = Math.max(0, matches2 - wins);
+  const wins = Math.round(useRollingNumber(10, 99, 3300, 0));
+  const losses = Math.round(useRollingNumber(10, 99, 3600, 0));
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "transition-all duration-300", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
       formatInteger(wins),
@@ -45942,12 +45947,12 @@ function LoadingStatSummaryValue({ type }) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block h-7 w-28 rounded-full bg-bf-cream/10 align-middle" });
   }
   if (type === "percent") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 42, max: 68, suffix: "%", precision: 1, className: "text-2xl font-black text-slate-100" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 0, max: 100, suffix: "%", className: "text-2xl font-black text-slate-100" });
   }
   if (type === "hours") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 60, max: 420, suffix: " ч.", className: "text-2xl font-black text-slate-100" });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { suffix: " ч.", className: "text-2xl font-black text-slate-100" });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 40, max: 520, className: "text-2xl font-black text-slate-100" });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { className: "text-2xl font-black text-slate-100" });
 }
 function LoadingCharts() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "mt-4 grid gap-4 xl:grid-cols-[1fr_1.15fr]", children: [
@@ -45971,9 +45976,9 @@ function LoadingCharts() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "grid h-7 w-7 place-items-center rounded-xl border border-bf-cream/10 bg-black/28", children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-3.5 w-3.5 animate-spin text-bf-orange" }) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "h-4 w-24 rounded-full bg-bf-cream/10" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 35, max: 75, suffix: "%", precision: 1, className: "font-black text-emerald-300" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 4, max: 45, className: "font-semibold text-bf-cream/72" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 2, max: 90, suffix: " ч.", className: "font-semibold text-bf-cream/72" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 0, max: 100, suffix: "%", className: "font-black text-emerald-300" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { className: "font-semibold text-bf-cream/72" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { suffix: " ч.", className: "font-semibold text-bf-cream/72" })
       ] }, item)) })
     ] })
   ] });
@@ -46021,7 +46026,7 @@ function PlayerStatsTable({ players, isLoading }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: formatPercent(player.winrate) }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full rounded-full bg-emerald-400", style: { width: winrateWidth } }) })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 5, max: 120 }) : isReady ? formatInteger(player.matches) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? formatInteger(player.matches) : "—" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingWinLossCell, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-emerald-300", children: [
             formatInteger(player.wins),
@@ -46033,9 +46038,9 @@ function PlayerStatsTable({ players, isLoading }) {
             "L"
           ] })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 0.8, max: 3.2, precision: 2, className: "text-sm font-black text-emerald-300" }) : isReady ? formatDecimal(player.kd, 2) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 4, max: 22, precision: 1 }) : isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { min: 3, max: 10, precision: 1 }) : isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { className: "text-sm font-black text-emerald-300" }) : isReady ? formatDecimal(player.kd, 2) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? formatDecimal(player.avgEliminations, 1) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? formatDecimal(player.avgDeaths, 1) : "—" })
       ] }, player.id);
     }) })
   ] }) });
@@ -46093,7 +46098,7 @@ function OverwatchStatsPage({
 }) {
   const team = stats?.team || {};
   const loadingPlayers = reactExports.useMemo(() => basePlayers.map(basePlayerToStatsRow), [basePlayers]);
-  const players = isLoading ? loadingPlayers : stats?.players || loadingPlayers;
+  const players = isLoading ? stats?.players || loadingPlayers : stats?.players || loadingPlayers;
   const showLoadingSummary = isLoading;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(StatsBanner, { updatedAt: stats?.updatedAt }),

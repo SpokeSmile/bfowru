@@ -66,22 +66,32 @@ function basePlayerToStatsRow(player) {
   };
 }
 
-function useRollingNumber(min, max, intervalMs = 140, precision = 0) {
+function useRollingNumber(min, max, durationMs = 2800, precision = 0) {
   const [value, setValue] = useState(() => min);
+  const [motion] = useState(() => ({
+    duration: durationMs + Math.round(Math.random() * 700),
+    phase: Math.random() * durationMs,
+  }));
 
   useEffect(() => {
-    let step = 0;
+    let animationFrame = 0;
     const range = max - min;
-    const timer = window.setInterval(() => {
-      step += 1;
-      const wave = (Math.sin(step * 1.37) + 1) / 2;
-      const jitter = ((step * 17) % 11) / 10;
-      const next = min + ((wave * range) + jitter) % Math.max(range, 1);
-      setValue(Number(next.toFixed(precision)));
-    }, intervalMs);
 
-    return () => window.clearInterval(timer);
-  }, [intervalMs, max, min, precision]);
+    function animate() {
+      const elapsed = (window.performance.now() + motion.phase) % motion.duration;
+      const halfDuration = motion.duration / 2;
+      const progress = elapsed <= halfDuration
+        ? elapsed / halfDuration
+        : 1 - ((elapsed - halfDuration) / halfDuration);
+      const eased = 0.5 - Math.cos(progress * Math.PI) / 2;
+      const next = min + eased * range;
+      setValue(Number(next.toFixed(precision)));
+      animationFrame = window.requestAnimationFrame(animate);
+    }
+
+    animationFrame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [max, min, motion, precision]);
 
   return value;
 }
@@ -187,8 +197,8 @@ function HeroIcon({ hero, className = 'h-8 w-8' }) {
   );
 }
 
-function LoadingMetric({ min, max, suffix = '', precision = 0, className = 'text-sm font-semibold text-slate-100' }) {
-  const value = useRollingNumber(min, max, 115, precision);
+function LoadingMetric({ min = 10, max = 99, suffix = '', precision = 0, className = 'text-sm font-semibold text-slate-100' }) {
+  const value = useRollingNumber(min, max, 3000, precision);
   const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
   return (
     <span className={`inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`}>
@@ -198,7 +208,7 @@ function LoadingMetric({ min, max, suffix = '', precision = 0, className = 'text
 }
 
 function LoadingPercentBar() {
-  const value = useRollingNumber(35, 75, 95, 1);
+  const value = useRollingNumber(0, 100, 3200, 0);
   const width = `${Math.min(Math.max(value, 0), 100)}%`;
 
   return (
@@ -238,10 +248,8 @@ function LoadingHeroCell() {
 }
 
 function LoadingWinLossCell() {
-  const matches = Math.round(useRollingNumber(5, 120, 130, 0));
-  const winrate = useRollingNumber(35, 75, 130, 0) / 100;
-  const wins = Math.max(0, Math.round(matches * winrate));
-  const losses = Math.max(0, matches - wins);
+  const wins = Math.round(useRollingNumber(10, 99, 3300, 0));
+  const losses = Math.round(useRollingNumber(10, 99, 3600, 0));
 
   return (
     <span className="transition-all duration-300">
@@ -257,12 +265,12 @@ function LoadingStatSummaryValue({ type }) {
     return <span className="inline-block h-7 w-28 rounded-full bg-bf-cream/10 align-middle" />;
   }
   if (type === 'percent') {
-    return <LoadingMetric min={42} max={68} suffix="%" precision={1} className="text-2xl font-black text-slate-100" />;
+    return <LoadingMetric min={0} max={100} suffix="%" className="text-2xl font-black text-slate-100" />;
   }
   if (type === 'hours') {
-    return <LoadingMetric min={60} max={420} suffix=" ч." className="text-2xl font-black text-slate-100" />;
+    return <LoadingMetric suffix=" ч." className="text-2xl font-black text-slate-100" />;
   }
-  return <LoadingMetric min={40} max={520} className="text-2xl font-black text-slate-100" />;
+  return <LoadingMetric className="text-2xl font-black text-slate-100" />;
 }
 
 function LoadingCharts() {
@@ -294,9 +302,9 @@ function LoadingCharts() {
                 </span>
                 <span className="h-4 w-24 rounded-full bg-bf-cream/10" />
               </div>
-              <LoadingMetric min={35} max={75} suffix="%" precision={1} className="font-black text-emerald-300" />
-              <LoadingMetric min={4} max={45} className="font-semibold text-bf-cream/72" />
-              <LoadingMetric min={2} max={90} suffix=" ч." className="font-semibold text-bf-cream/72" />
+              <LoadingMetric min={0} max={100} suffix="%" className="font-black text-emerald-300" />
+              <LoadingMetric className="font-semibold text-bf-cream/72" />
+              <LoadingMetric suffix=" ч." className="font-semibold text-bf-cream/72" />
             </div>
           ))}
         </div>
@@ -383,7 +391,7 @@ function PlayerStatsTable({ players, isLoading }) {
                   ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric min={5} max={120} /> : isReady ? formatInteger(player.matches) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? formatInteger(player.matches) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-black">
                   {isLoading ? (
@@ -397,13 +405,13 @@ function PlayerStatsTable({ players, isLoading }) {
                   ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-black text-emerald-300">
-                  {isLoading ? <LoadingMetric min={0.8} max={3.2} precision={2} className="text-sm font-black text-emerald-300" /> : isReady ? formatDecimal(player.kd, 2) : '—'}
+                  {isLoading ? <LoadingMetric className="text-sm font-black text-emerald-300" /> : isReady ? formatDecimal(player.kd, 2) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric min={4} max={22} precision={1} /> : isReady ? formatDecimal(player.avgEliminations, 1) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? formatDecimal(player.avgEliminations, 1) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric min={3} max={10} precision={1} /> : isReady ? formatDecimal(player.avgDeaths, 1) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? formatDecimal(player.avgDeaths, 1) : '—'}
                 </td>
               </tr>
             );
@@ -491,7 +499,7 @@ export default function OverwatchStatsPage({
 }) {
   const team = stats?.team || {};
   const loadingPlayers = useMemo(() => basePlayers.map(basePlayerToStatsRow), [basePlayers]);
-  const players = isLoading ? loadingPlayers : stats?.players || loadingPlayers;
+  const players = isLoading ? stats?.players || loadingPlayers : stats?.players || loadingPlayers;
   const showLoadingSummary = isLoading;
 
   return (
