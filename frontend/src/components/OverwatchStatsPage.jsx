@@ -5,7 +5,7 @@ import {
   Loader2,
   Trophy,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -92,6 +92,53 @@ function useRollingNumber(min, max, durationMs = 2800, precision = 0) {
     animationFrame = window.requestAnimationFrame(animate);
     return () => window.cancelAnimationFrame(animationFrame);
   }, [max, min, motion, precision]);
+
+  return value;
+}
+
+function easeInOutCubic(value) {
+  return value < 0.5
+    ? 4 * value * value * value
+    : 1 - ((-2 * value + 2) ** 3) / 2;
+}
+
+function seededNumber(seed, min, max) {
+  const text = String(seed);
+  let hash = 0;
+  for (let index = 0; index < text.length; index += 1) {
+    hash = (hash * 31 + text.charCodeAt(index)) % 100000;
+  }
+  return min + (hash / 100000) * (max - min);
+}
+
+function useAnimatedNumber(target, startValue, durationMs = 850, precision = 0) {
+  const normalizedTarget = Number.isFinite(target) ? target : 0;
+  const [value, setValue] = useState(() => Number(startValue.toFixed(precision)));
+  const valueRef = useRef(value);
+  const previousTargetRef = useRef(null);
+
+  useEffect(() => {
+    let animationFrame = 0;
+    const from = previousTargetRef.current === null ? startValue : valueRef.current;
+    const to = normalizedTarget;
+    const startedAt = window.performance.now();
+    previousTargetRef.current = to;
+
+    function animate(now) {
+      const progress = Math.min((now - startedAt) / durationMs, 1);
+      const next = from + (to - from) * easeInOutCubic(progress);
+      const rounded = Number(next.toFixed(precision));
+      valueRef.current = rounded;
+      setValue(rounded);
+
+      if (progress < 1) {
+        animationFrame = window.requestAnimationFrame(animate);
+      }
+    }
+
+    animationFrame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [durationMs, normalizedTarget, precision, startValue]);
 
   return value;
 }
@@ -207,6 +254,33 @@ function LoadingMetric({ min = 10, max = 99, suffix = '', precision = 0, classNa
   );
 }
 
+function AnimatedMetric({
+  value,
+  seed,
+  min = 10,
+  max = 99,
+  precision = 0,
+  suffix = '',
+  formatter,
+  className = 'text-sm font-semibold text-slate-100',
+}) {
+  const target = Number(value);
+  const startValue = useMemo(
+    () => seededNumber(seed, min, max),
+    [max, min, seed],
+  );
+  const animatedValue = useAnimatedNumber(target, startValue, 900, precision);
+  const content = formatter
+    ? formatter(animatedValue)
+    : `${precision ? formatDecimal(animatedValue, precision) : formatInteger(Math.round(animatedValue))}${suffix}`;
+
+  return (
+    <span className={`inline-flex min-w-[5ch] items-center whitespace-nowrap tabular-nums transition-colors duration-300 ${className}`}>
+      {content}
+    </span>
+  );
+}
+
 function LoadingPercentBar() {
   const value = useRollingNumber(0, 100, 3200, 0);
   const width = `${Math.min(Math.max(value, 0), 100)}%`;
@@ -217,6 +291,26 @@ function LoadingPercentBar() {
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
         <div
           className="h-full rounded-full bg-emerald-400 transition-all duration-300 ease-in-out"
+          style={{ width }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function AnimatedPercentBar({ value, seed }) {
+  const startValue = useMemo(() => seededNumber(seed, 0, 100), [seed]);
+  const animatedValue = useAnimatedNumber(value, startValue, 950, 1);
+  const width = `${Math.min(Math.max(animatedValue || 0, 0), 100)}%`;
+
+  return (
+    <div className="min-w-[118px]">
+      <div className="text-sm font-black text-slate-100 tabular-nums transition-colors duration-300">
+        {formatPercent(animatedValue)}
+      </div>
+      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
+        <div
+          className="h-full rounded-full bg-emerald-400 transition-[width] duration-500 ease-out"
           style={{ width }}
         />
       </div>
@@ -256,6 +350,26 @@ function LoadingWinLossCell() {
       <span className="text-emerald-300">{formatInteger(wins)}W</span>
       <span className="mx-1 text-bf-cream/28">/</span>
       <span className="text-red-300">{formatInteger(losses)}L</span>
+    </span>
+  );
+}
+
+function AnimatedWinLossCell({ wins, losses, seed }) {
+  return (
+    <span className="inline-flex min-w-[9ch] items-center whitespace-nowrap tabular-nums transition-colors duration-300">
+      <AnimatedMetric
+        value={wins}
+        seed={`${seed}-wins`}
+        suffix="W"
+        className="font-black text-emerald-300"
+      />
+      <span className="mx-1 text-bf-cream/28">/</span>
+      <AnimatedMetric
+        value={losses}
+        seed={`${seed}-losses`}
+        suffix="L"
+        className="font-black text-red-300"
+      />
     </span>
   );
 }
@@ -316,7 +430,18 @@ function LoadingCharts() {
 function PlayerStatsTable({ players, isLoading }) {
   return (
     <div className="mt-4 overflow-x-auto rounded-xl border border-bf-cream/10">
-      <table className="min-w-[1240px] w-full border-collapse bg-[#111925]/86 text-left">
+      <table className="min-w-[1350px] w-full table-fixed border-collapse bg-[#111925]/86 text-left tabular-nums">
+        <colgroup>
+          <col className="w-[250px]" />
+          <col className="w-[150px]" />
+          <col className="w-[195px]" />
+          <col className="w-[145px]" />
+          <col className="w-[105px]" />
+          <col className="w-[125px]" />
+          <col className="w-[90px]" />
+          <col className="w-[145px]" />
+          <col className="w-[145px]" />
+        </colgroup>
         <thead>
           <tr className="border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42">
             <th className="px-4 py-3">Игрок</th>
@@ -333,7 +458,6 @@ function PlayerStatsTable({ players, isLoading }) {
         <tbody>
           {players.map((player) => {
             const isReady = !isLoading && player.status === 'ready';
-            const winrateWidth = `${Math.min(Math.max(player.winrate || 0, 0), 100)}%`;
             return (
               <tr key={player.id} className="border-b border-bf-cream/10 bg-black/10 transition-colors duration-300 last:border-b-0 hover:bg-bf-steel/10">
                 <td className="px-4 py-3">
@@ -382,36 +506,40 @@ function PlayerStatsTable({ players, isLoading }) {
                   {isLoading ? (
                     <LoadingPercentBar />
                   ) : isReady ? (
-                    <div className="min-w-[110px]">
-                      <div className="text-sm font-black text-slate-100">{formatPercent(player.winrate)}</div>
-                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
-                        <div className="h-full rounded-full bg-emerald-400" style={{ width: winrateWidth }} />
-                      </div>
-                    </div>
+                    <AnimatedPercentBar value={player.winrate} seed={`${player.id}-winrate`} />
                   ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric /> : isReady ? formatInteger(player.matches) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? (
+                    <AnimatedMetric value={player.matches} seed={`${player.id}-matches`} />
+                  ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-black">
                   {isLoading ? (
                     <LoadingWinLossCell />
                   ) : isReady ? (
-                    <span>
-                      <span className="text-emerald-300">{formatInteger(player.wins)}W</span>
-                      <span className="mx-1 text-bf-cream/28">/</span>
-                      <span className="text-red-300">{formatInteger(player.losses)}L</span>
-                    </span>
+                    <AnimatedWinLossCell wins={player.wins} losses={player.losses} seed={player.id} />
                   ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-black text-emerald-300">
-                  {isLoading ? <LoadingMetric className="text-sm font-black text-emerald-300" /> : isReady ? formatDecimal(player.kd, 2) : '—'}
+                  {isLoading ? <LoadingMetric className="text-sm font-black text-emerald-300" /> : isReady ? (
+                    <AnimatedMetric
+                      value={player.kd}
+                      seed={`${player.id}-kd`}
+                      precision={2}
+                      className="text-sm font-black text-emerald-300"
+                    />
+                  ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric /> : isReady ? formatDecimal(player.avgEliminations, 1) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? (
+                    <AnimatedMetric value={player.avgEliminations} seed={`${player.id}-avg-elims`} precision={1} />
+                  ) : '—'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-slate-100">
-                  {isLoading ? <LoadingMetric /> : isReady ? formatDecimal(player.avgDeaths, 1) : '—'}
+                  {isLoading ? <LoadingMetric /> : isReady ? (
+                    <AnimatedMetric value={player.avgDeaths} seed={`${player.id}-avg-deaths`} precision={1} />
+                  ) : '—'}
                 </td>
               </tr>
             );
