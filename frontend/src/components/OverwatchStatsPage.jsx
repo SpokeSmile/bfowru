@@ -71,7 +71,7 @@ function easeInOutSmooth(value) {
   return clamped * clamped * clamped * (clamped * (clamped * 6 - 15) + 10);
 }
 
-function useRollingNumber(min, max, durationMs = 4200, precision = 0) {
+function useRollingNumber(min, max, durationMs = 7600, precision = 0) {
   const [value, setValue] = useState(() => min);
   const [motion] = useState(() => ({
     duration: durationMs + Math.round(Math.random() * 700),
@@ -110,7 +110,7 @@ function seededNumber(seed, min, max) {
   return min + (hash / 100000) * (max - min);
 }
 
-function useAnimatedNumber(target, startValue, durationMs = 1400, precision = 0) {
+function useAnimatedNumber(target, startValue, durationMs = 2600, precision = 0) {
   const normalizedTarget = Number.isFinite(target) ? target : 0;
   const [value, setValue] = useState(() => Number(startValue.toFixed(precision)));
   const valueRef = useRef(value);
@@ -244,7 +244,7 @@ function HeroIcon({ hero, className = 'h-8 w-8' }) {
 }
 
 function LoadingMetric({ min = 10, max = 99, suffix = '', precision = 0, className = 'text-sm font-semibold text-slate-100' }) {
-  const value = useRollingNumber(min, max, 4600, precision);
+  const value = useRollingNumber(min, max, 8200, precision);
   const formattedValue = precision ? formatDecimal(value, precision) : formatInteger(Math.round(value));
   return (
     <span className={`inline-flex min-w-[42px] items-center transition-all duration-300 ${className}`}>
@@ -268,7 +268,7 @@ function AnimatedMetric({
     () => seededNumber(seed, min, max),
     [max, min, seed],
   );
-  const animatedValue = useAnimatedNumber(target, startValue, 1500, precision);
+  const animatedValue = useAnimatedNumber(target, startValue, 2800, precision);
   const content = formatter
     ? formatter(animatedValue)
     : `${precision ? formatDecimal(animatedValue, precision) : formatInteger(Math.round(animatedValue))}${suffix}`;
@@ -281,7 +281,7 @@ function AnimatedMetric({
 }
 
 function LoadingPercentBar() {
-  const value = useRollingNumber(0, 100, 4800, 1);
+  const value = useRollingNumber(0, 100, 9000, 1);
   const syncedValue = Math.min(Math.max(value, 0), 100);
   const width = `${syncedValue}%`;
 
@@ -300,7 +300,7 @@ function LoadingPercentBar() {
 
 function AnimatedPercentBar({ value, seed }) {
   const startValue = useMemo(() => seededNumber(seed, 0, 100), [seed]);
-  const animatedValue = useAnimatedNumber(value, startValue, 1600, 1);
+  const animatedValue = useAnimatedNumber(value, startValue, 3000, 1);
   const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
   const width = `${syncedValue}%`;
 
@@ -343,8 +343,8 @@ function LoadingHeroCell() {
 }
 
 function LoadingWinLossCell() {
-  const wins = Math.round(useRollingNumber(10, 99, 5000, 0));
-  const losses = Math.round(useRollingNumber(10, 99, 5400, 0));
+  const wins = Math.round(useRollingNumber(10, 99, 9200, 0));
+  const losses = Math.round(useRollingNumber(10, 99, 9800, 0));
 
   return (
     <span className="transition-all duration-300">
