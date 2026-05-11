@@ -30,7 +30,7 @@ function useClocks() {
       setClocks({
         utc: formatClock('UTC'),
         local: formatClock(),
-        cest: formatClock('Etc/GMT-2'),
+        cest: formatClock('Europe/Berlin'),
       });
     };
 
@@ -62,7 +62,7 @@ export function Header({ user }) {
         {[
           ['UTC', clocks.utc, false],
           ['Your', clocks.local, true],
-          ['CEST', clocks.cest, false],
+          ['CET', clocks.cest, false],
         ].map(([label, value, isActive]) => (
           <div key={label} className={`top-header-clock ${isActive ? 'top-header-clock-active' : ''}`}>
             <div className="top-header-clock-label">{label}</div>

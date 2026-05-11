@@ -12908,7 +12908,7 @@ function useClocks$1() {
       setClocks({
         utc: formatClock$1("UTC"),
         local: formatClock$1(),
-        cest: formatClock$1("Etc/GMT-2")
+        cest: formatClock$1("Europe/Berlin")
       });
     };
     update();
@@ -12932,7 +12932,7 @@ function Header({ user }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clocks", children: [
       ["UTC", clocks.utc, false],
       ["Your", clocks.local, true],
-      ["CEST", clocks.cest, false]
+      ["CET", clocks.cest, false]
     ].map(([label, value, isActive]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `top-header-clock ${isActive ? "top-header-clock-active" : ""}`, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-label", children: label }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "top-header-clock-value", children: value })
@@ -46595,7 +46595,7 @@ function useClocks() {
       setClocks({
         utc: formatClock("UTC"),
         local: formatClock(),
-        cet: formatClock("Etc/GMT-1")
+        cet: formatClock("Europe/Berlin")
       });
     };
     update();

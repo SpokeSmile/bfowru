@@ -14,7 +14,7 @@ const clockFormatters = {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-        timeZone: 'Etc/GMT-2',
+        timeZone: 'Europe/Berlin',
     }),
 };
 

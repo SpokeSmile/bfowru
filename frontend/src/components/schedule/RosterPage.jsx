@@ -94,7 +94,7 @@ function useClocks() {
       setClocks({
         utc: formatClock('UTC'),
         local: formatClock(),
-        cet: formatClock('Etc/GMT-1'),
+        cet: formatClock('Europe/Berlin'),
       });
     };
 
