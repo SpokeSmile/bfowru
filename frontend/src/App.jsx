@@ -190,6 +190,9 @@ export default function App() {
   const isMainPage = pathname.startsWith('/main');
   const isUpdatesPage = pathname.startsWith('/updates');
   const isStatsPage = pathname.startsWith('/stats');
+  const isProfilePage = pathname.startsWith('/profile');
+  const isTeamPage = pathname.startsWith('/team');
+  const isSchedulePage = !isMainPage && !isProfilePage && !isTeamPage && !isUpdatesPage && !isStatsPage;
 
   useEffect(() => {
     if (!isUpdatesPage || UPDATES_DISABLED) return;
@@ -308,14 +311,73 @@ export default function App() {
 
   const hasPlayerProfile = Boolean(data.user.playerId);
   const canAdd = hasPlayerProfile && data.canEditSelectedWeek;
-  const isProfilePage = pathname.startsWith('/profile');
-  const isTeamPage = pathname.startsWith('/team');
   const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
   const currentStaffMember = data.staffMembers.find((staffMember) => staffMember.id === data.user.staffMemberId) || null;
   const currentProfile = data.user.profileType === 'staff' ? currentStaffMember : currentPlayer;
   const handleProfileSaved = data.user.profileType === 'staff' ? updateStaffProfile : updatePlayerProfile;
   const selectedUpdate = selectedUpdateSlug ? updatesBySlug[selectedUpdateSlug] || null : null;
   const selectedStats = statsByMode[statsMode] || null;
+  const sharedModals = (
+    <>
+      {slotModal ? (
+        <EventModal
+          event={slotModal.event}
+          day={slotModal.day}
+          days={data.days}
+          weekStart={data.selectedWeekStart}
+          onClose={() => setSlotModal(null)}
+          onSaved={upsertSlot}
+          onDeleted={removeSlot}
+        />
+      ) : null}
+      {copyModalOpen ? (
+        <CopyScheduleModal
+          sourceWeeks={data.copySourceWeeks || []}
+          targetWeeks={data.copyTargetWeeks || []}
+          selectedWeekStart={data.selectedWeekStart}
+          currentWeekStart={data.currentWeekStart}
+          canEditSelectedWeek={data.canEditSelectedWeek}
+          onClose={() => setCopyModalOpen(false)}
+          onCopied={handleCopyWeekCopied}
+        />
+      ) : null}
+      {commentTooltip?.visible ? (
+        <CommentTooltip
+          key={`${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`}
+          tooltip={commentTooltip}
+        />
+      ) : null}
+    </>
+  );
+
+  if (isSchedulePage) {
+    return (
+      <main className="schedule-page-root">
+        <RosterPage
+          user={data.user}
+          hasPlayerProfile={hasPlayerProfile}
+          canAdd={canAdd}
+          canEditSelectedWeek={data.canEditSelectedWeek}
+          selectedWeekStart={data.selectedWeekStart}
+          weekRangeLabel={data.weekRangeLabel}
+          canGoPreviousWeek={data.canGoPreviousWeek}
+          days={data.days}
+          players={data.players}
+          slots={data.slots}
+          dayEventTypes={data.dayEventTypes}
+          eventTypes={data.eventTypes}
+          lastUpdated={data.lastUpdated}
+          onAdd={(day) => setSlotModal({ day })}
+          onEdit={(event) => setSlotModal({ event })}
+          onCopy={() => setCopyModalOpen(true)}
+          onWeekChange={handleWeekChange}
+          onNoteHoverStart={handleNoteHoverStart}
+          onNoteHoverEnd={handleNoteHoverEnd}
+        />
+        {sharedModals}
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]">
@@ -361,6 +423,7 @@ export default function App() {
           ) : (
             <>
               <RosterPage
+                user={data.user}
                 hasPlayerProfile={hasPlayerProfile}
                 canAdd={canAdd}
                 canEditSelectedWeek={data.canEditSelectedWeek}
@@ -384,34 +447,7 @@ export default function App() {
           )}
         </div>
       </div>
-      {slotModal ? (
-        <EventModal
-          event={slotModal.event}
-          day={slotModal.day}
-          days={data.days}
-          weekStart={data.selectedWeekStart}
-          onClose={() => setSlotModal(null)}
-          onSaved={upsertSlot}
-          onDeleted={removeSlot}
-        />
-      ) : null}
-      {copyModalOpen ? (
-        <CopyScheduleModal
-          sourceWeeks={data.copySourceWeeks || []}
-          targetWeeks={data.copyTargetWeeks || []}
-          selectedWeekStart={data.selectedWeekStart}
-          currentWeekStart={data.currentWeekStart}
-          canEditSelectedWeek={data.canEditSelectedWeek}
-          onClose={() => setCopyModalOpen(false)}
-          onCopied={handleCopyWeekCopied}
-        />
-      ) : null}
-      {commentTooltip?.visible ? (
-        <CommentTooltip
-          key={`${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`}
-          tooltip={commentTooltip}
-        />
-      ) : null}
+      {sharedModals}
     </main>
   );
 }

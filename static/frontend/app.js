@@ -12656,7 +12656,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$p = [
+const __iconNode$m = [
   [
     "path",
     {
@@ -12667,8 +12667,8 @@ const __iconNode$p = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$p);
-const __iconNode$o = [
+const BookText = createLucideIcon("book-text", __iconNode$m);
+const __iconNode$l = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12680,29 +12680,16 @@ const __iconNode$o = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$o);
-const __iconNode$n = [
-  ["path", { d: "M16 19h6", key: "xwg31i" }],
-  ["path", { d: "M16 2v4", key: "4m81vk" }],
-  ["path", { d: "M19 16v6", key: "tddt3s" }],
-  ["path", { d: "M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5", key: "1glfrc" }],
-  ["path", { d: "M3 10h18", key: "8toen8" }],
-  ["path", { d: "M8 2v4", key: "1cmpym" }]
-];
-const CalendarPlus = createLucideIcon("calendar-plus", __iconNode$n);
-const __iconNode$m = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$l);
+const __iconNode$k = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$m);
-const __iconNode$l = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$l);
-const __iconNode$k = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$k);
-const __iconNode$j = [["path", { d: "m15 18-6-6 6-6", key: "1wnfg3" }]];
-const ChevronLeft = createLucideIcon("chevron-left", __iconNode$j);
+const ChartColumn = createLucideIcon("chart-column", __iconNode$k);
+const __iconNode$j = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$j);
 const __iconNode$i = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
@@ -12899,7 +12886,7 @@ function DiscordClouds({ displayTag }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
 }
-function formatClock(timeZone) {
+function formatClock$1(timeZone) {
   const options = {
     hour: "2-digit",
     minute: "2-digit",
@@ -12910,7 +12897,7 @@ function formatClock(timeZone) {
   }
   return new Intl.DateTimeFormat("ru-RU", options).format(/* @__PURE__ */ new Date());
 }
-function useClocks() {
+function useClocks$1() {
   const [clocks, setClocks] = reactExports.useState({
     utc: "--:--",
     local: "--:--",
@@ -12919,9 +12906,9 @@ function useClocks() {
   reactExports.useEffect(() => {
     const update = () => {
       setClocks({
-        utc: formatClock("UTC"),
-        local: formatClock(),
-        cest: formatClock("Etc/GMT-2")
+        utc: formatClock$1("UTC"),
+        local: formatClock$1(),
+        cest: formatClock$1("Etc/GMT-2")
       });
     };
     update();
@@ -12931,7 +12918,7 @@ function useClocks() {
   return clocks;
 }
 function Header({ user }) {
-  const clocks = useClocks();
+  const clocks = useClocks$1();
   const isProfilePage = window.location.pathname.startsWith("/profile");
   async function handleLogout() {
     const response = await logout();
@@ -21145,12 +21132,6 @@ const EVENT_STYLES = {
     text: "text-[#d7deea]",
     glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
   }
-};
-const AVAILABLE_CARD_STYLE = {
-  border: "border-[#556076]/35",
-  bg: "bg-[#202b40]/80",
-  text: "text-[#e3e9f3]",
-  glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
 };
 function timeChoices(startHour, endHour) {
   return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
@@ -46534,96 +46515,338 @@ function CommentTooltip({ tooltip }) {
     document.body
   );
 }
+const CANVAS_WIDTH = 1920;
+const CANVAS_HEIGHT = 1080;
+const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+const NAV_ITEMS = [
+  { label: "Schedule", href: "/", icon: "schedule.png", active: true },
+  { label: "Roster", href: "/team/", icon: "roster.png" },
+  { label: "Updates", href: "/updates/", icon: "updates.png" },
+  { label: "Analytics", href: "/stats/", icon: "analytics.png" },
+  { label: "Drafts", href: "", icon: "drafts.png" },
+  { label: "Management", href: "/profile/", icon: "management.png" }
+];
+const STATUS_META = {
+  unavailable: {
+    label: "I CAN'T",
+    icon: TriangleAlert,
+    className: "sf-event-card--unavailable",
+    cellClassName: "sf-schedule-cell--unavailable"
+  },
+  full_day_available: {
+    label: "ALL AVAILABLE",
+    icon: Check,
+    className: "sf-event-card--available-all",
+    cellClassName: "sf-schedule-cell--available"
+  },
+  tentative: {
+    label: "NOT SURE",
+    icon: TriangleAlert,
+    className: "sf-event-card--tentative",
+    cellClassName: "sf-schedule-cell--tentative"
+  }
+};
 function shiftWeek(weekStart, offsetDays) {
   const [year, month, day] = weekStart.split("-").map(Number);
   const date2 = new Date(Date.UTC(year, month - 1, day));
   date2.setUTCDate(date2.getUTCDate() + offsetDays);
   return date2.toISOString().slice(0, 10);
 }
-function WeekSwitcher({ selectedWeekStart, weekRangeLabel, canGoPreviousWeek, onWeekChange }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-grid grid-cols-[44px_minmax(150px,1fr)_44px] items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-[#101826]/90 shadow-[0_10px_26px_rgba(0,0,0,0.18)]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        className: "grid h-11 place-items-center border-r border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange disabled:cursor-not-allowed disabled:text-bf-cream/22 disabled:hover:bg-transparent",
-        type: "button",
-        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, -7)),
-        disabled: !canGoPreviousWeek,
-        "aria-label": "Предыдущая неделя",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { size: 18 })
+function dateFromWeekStart(weekStart, offset = 0) {
+  const [year, month, day] = weekStart.split("-").map(Number);
+  const date2 = new Date(Date.UTC(year, month - 1, day));
+  date2.setUTCDate(date2.getUTCDate() + offset);
+  return date2;
+}
+function formatWeekRange(weekStart) {
+  if (!weekStart) return "";
+  const start = dateFromWeekStart(weekStart, 0);
+  const end = dateFromWeekStart(weekStart, 6);
+  return `${String(start.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[start.getUTCMonth()]} - ${String(end.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[end.getUTCMonth()]}`;
+}
+function formatClock(timeZone) {
+  const options = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  };
+  if (timeZone) {
+    options.timeZone = timeZone;
+  }
+  return new Intl.DateTimeFormat("ru-RU", options).format(/* @__PURE__ */ new Date());
+}
+function useClocks() {
+  const [clocks, setClocks] = reactExports.useState({
+    utc: "--:--",
+    local: "--:--",
+    cet: "--:--"
+  });
+  reactExports.useEffect(() => {
+    const update = () => {
+      setClocks({
+        utc: formatClock("UTC"),
+        local: formatClock(),
+        cet: formatClock("Etc/GMT-1")
+      });
+    };
+    update();
+    const timer = window.setInterval(update, 1e3);
+    return () => window.clearInterval(timer);
+  }, []);
+  return clocks;
+}
+function calculateScale() {
+  if (typeof window === "undefined") return 1;
+  return Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT, 1);
+}
+function useScheduleScale() {
+  const [scale2, setScale2] = reactExports.useState(calculateScale);
+  reactExports.useEffect(() => {
+    const update = () => setScale2(calculateScale());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return scale2;
+}
+function bestDaysByAvailability(days, slots, players) {
+  const playerIds = new Set(players.map((player) => player.id));
+  const rankedDays = days.map((day) => {
+    const availablePlayerIds = /* @__PURE__ */ new Set();
+    slots.forEach((slot) => {
+      const isAvailable = slot.slotType === "available" || slot.slotType === "full_day_available";
+      if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
+        availablePlayerIds.add(slot.playerId);
       }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 text-center text-sm font-black tabular-nums text-slate-100", children: weekRangeLabel }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "button",
-      {
-        className: "grid h-11 place-items-center border-l border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange",
-        type: "button",
-        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, 7)),
-        "aria-label": "Следующая неделя",
-        children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 18 })
+    });
+    return {
+      ...day,
+      score: availablePlayerIds.size,
+      label: DAY_NAMES[day.value] || day.label
+    };
+  });
+  return rankedDays.sort((left, right) => right.score - left.score || left.value - right.value).slice(0, 3);
+}
+function buildUpcoming(days, slots, dayEventTypes) {
+  const nowDay = days.find((day) => day.isToday)?.value ?? 0;
+  const dayEventMap = buildDayEventMap(dayEventTypes);
+  const candidates = days.map((day) => {
+    const dayEvent = dayEventMap.get(day.value);
+    const daySlots = slots.filter((slot) => slot.dayOfWeek === day.value && slot.startTime).sort((left, right) => left.startTimeMinutes - right.startTimeMinutes);
+    if (!dayEvent?.eventType && !daySlots.length) return null;
+    return {
+      day,
+      eventLabel: dayEvent?.eventLabel || "Activity",
+      dateLabel: day.date,
+      timeLabel: daySlots[0]?.startTime || "--:--",
+      order: day.value >= nowDay ? day.value - nowDay : day.value + 7 - nowDay
+    };
+  }).filter(Boolean).sort((left, right) => left.order - right.order);
+  return candidates[0] || {
+    eventLabel: "No event",
+    dateLabel: "--",
+    timeLabel: "--:--"
+  };
+}
+function availabilityByDay(days, players, slots) {
+  const playerIds = new Set(players.map((player) => player.id));
+  const totalPlayers = playerIds.size;
+  return days.map((day) => {
+    const availablePlayerIds = /* @__PURE__ */ new Set();
+    slots.forEach((slot) => {
+      const isAvailable = slot.slotType === "available" || slot.slotType === "full_day_available";
+      if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
+        availablePlayerIds.add(slot.playerId);
       }
-    )
+    });
+    const availableCount = availablePlayerIds.size;
+    const ratio = totalPlayers ? availableCount / totalPlayers : 0;
+    const tone = ratio >= 0.75 ? "high" : ratio >= 0.5 ? "mid" : "low";
+    return { ...day, availableCount, totalPlayers, ratio, tone };
+  });
+}
+function dayCellClass(slots) {
+  if (slots.some((slot) => slot.slotType === "unavailable")) {
+    return STATUS_META.unavailable.cellClassName;
+  }
+  if (slots.some((slot) => slot.slotType === "tentative")) {
+    return STATUS_META.tentative.cellClassName;
+  }
+  if (slots.some((slot) => slot.slotType === "full_day_available")) {
+    return STATUS_META.full_day_available.cellClassName;
+  }
+  return "";
+}
+function ClockPanel() {
+  const clocks = useClocks();
+  const entries = [
+    ["UTC", clocks.utc],
+    ["YOUR", clocks.local],
+    ["CET", clocks.cet]
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-panel", children: entries.map(([label, value], index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-clock-card", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-time", children: value }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-label", children: label }),
+    index === 1 ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-clock-accent" }) : null
+  ] }, label)) });
+}
+function ScheduleSidebar({ user }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "YOU TEAM" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
+      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+      ] });
+      if (!item.href) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
+      }
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: `sf-nav-item ${item.active ? "sf-nav-item--active" : ""}`, href: item.href, children: content }, item.label);
+    }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile", href: "/profile/", "aria-label": "Open profile", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: "⌃" })
+    ] })
   ] });
 }
-function HeroBanner({ hasPlayerProfile, canAdd, canEditSelectedWeek, onAdd, onCopy }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-3 lg:max-w-[440px]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-5xl font-black uppercase leading-none text-slate-100 max-md:text-4xl", children: "Weekly roster" })
+function HeroPanel() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-hero-panel", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-dot-layer" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-glow" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
+      "WEEKLY ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ROSTER" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 flex flex-wrap justify-self-start gap-3 lg:justify-self-end", children: hasPlayerProfile ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      canAdd ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BLACK FLOCK" })
+  ] });
+}
+function IconBox({ className = "", children }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `sf-icon-box ${className}`, children });
+}
+function ControlsRow({
+  selectedWeekStart,
+  canGoPreviousWeek,
+  canAdd,
+  hasPlayerProfile,
+  canEditSelectedWeek,
+  days,
+  slots,
+  dayEventTypes,
+  players,
+  onWeekChange,
+  onAdd,
+  onCopy
+}) {
+  const weekLabel2 = formatWeekRange(selectedWeekStart);
+  const bestDays = bestDaysByAvailability(days, slots, players);
+  const upcoming = buildUpcoming(days, slots, dayEventTypes);
+  const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-date-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-week-switcher", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => onWeekChange(shiftWeek(selectedWeekStart, -7)),
+            disabled: !canGoPreviousWeek,
+            "aria-label": "Previous week",
+            children: "<"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: weekLabel2 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => onWeekChange(shiftWeek(selectedWeekStart, 7)),
+            "aria-label": "Next week",
+            children: ">"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          className: "inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#f4f7fb] px-6 font-black text-[#151b26] shadow-[0_8px_18px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_22px_rgba(0,0,0,0.18)]",
+          className: "sf-square-action sf-square-action--primary",
           type: "button",
           onClick: () => onAdd(null),
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(CalendarPlus, { size: 20 }),
-            "Добавить время"
-          ]
+          disabled: !canUsePlayerActions || !canAdd,
+          "aria-label": "Add time",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 28 })
         }
-      ) : !canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70", children: "Архивная неделя" }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          className: "inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#f4f7fb] px-6 font-black text-[#151b26] shadow-[0_8px_18px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_22px_rgba(0,0,0,0.18)]",
+          className: "sf-square-action",
           type: "button",
           onClick: onCopy,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 19 }),
-            "Скопировать расписание"
-          ]
+          disabled: !hasPlayerProfile,
+          "aria-label": "Copy schedule",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 28 })
         }
       )
-    ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70", children: "Аккаунт не привязан к игроку" }) })
-  ] }) });
-}
-function PlayerRow({ player }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full min-w-0 items-center gap-2.5 px-4 py-2", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-10 w-10 object-cover" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-sm font-black text-slate-100", children: player.name }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex flex-wrap gap-1.5", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor, className: "max-w-28 truncate" }),
-        player.canEdit ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-orange/30 bg-bf-orange/10 px-2 py-0.5 text-xs font-bold text-bf-orange", children: "Вы" }) : null
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-best-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-control-title", children: "BEST DAY FOR GAME:" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/clock.png", alt: "" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-chip-row", children: bestDays.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: day.label }, day.value)) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-upcoming-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-control-title", children: "UPCOMING:" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/trophy.png", alt: "" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-chip-row", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: upcoming.eventLabel }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: upcoming.dateLabel }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: upcoming.timeLabel })
       ] })
     ] })
   ] });
 }
+function DayTypePill({ dayEvent }) {
+  const hasDayType = Boolean(dayEvent?.eventType);
+  const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
+  const Icon2 = hasDayType ? style.icon : Clock3;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `sf-day-type ${hasDayType ? "sf-day-type--active" : ""}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 12 }),
+    hasDayType ? dayEvent.eventLabel : "No type"
+  ] });
+}
+function PlayerCell({ player }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-cell", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sf-player-avatar" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-copy", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-player-name", children: player.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor, className: "sf-player-role" })
+    ] })
+  ] });
+}
 function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
+  const statusMeta = STATUS_META[event.slotType];
+  const isAllDayStatus = Boolean(statusMeta);
   const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const isUnavailable = event.slotType === "unavailable";
-  const isFullDayAvailable = event.slotType === "full_day_available";
-  const isTentative = event.slotType === "tentative";
-  const isAllDayStatus = isUnavailable || isFullDayAvailable || isTentative;
-  const style = isUnavailable ? EVENT_STYLES.unavailable : isFullDayAvailable ? EVENT_STYLES.full_day_available : isTentative ? EVENT_STYLES.tentative : AVAILABLE_CARD_STYLE;
-  const Icon2 = isUnavailable ? EVENT_STYLES.unavailable.icon : isFullDayAvailable ? EVENT_STYLES.full_day_available.icon : isTentative ? EVENT_STYLES.tentative.icon : eventStyle.icon;
+  const Icon2 = statusMeta?.icon || eventStyle.icon || Clock3;
+  const className = statusMeta?.className || "sf-event-card--time";
   const editableProps = event.canEdit ? {
     role: "button",
     tabIndex: 0,
-    "aria-label": "Редактировать событие",
+    "aria-label": "Edit schedule slot",
     onClick: () => onEdit(event),
     onKeyDown: (keyboardEvent) => {
       if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
@@ -46632,11 +46855,11 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
       }
     }
   } : {};
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     motion.article,
     {
-      whileHover: { scale: 1.015 },
-      className: `group relative z-0 max-w-full rounded-xl border ${style.border} ${style.bg} ${style.glow} p-2 transition hover:z-30 ${event.canEdit ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bf-orange" : ""}`,
+      whileHover: { y: -1 },
+      className: `sf-event-card ${className} ${event.canEdit ? "sf-event-card--editable" : ""}`,
       onMouseEnter: (mouseEvent) => {
         if (event.note) {
           onNoteHoverStart(event.note, mouseEvent.currentTarget.getBoundingClientRect());
@@ -46648,72 +46871,24 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
         }
       },
       ...editableProps,
-      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: `${style.text} shrink-0`, size: isAllDayStatus ? 16 : 17 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-w-0 flex-1", children: isAllDayStatus ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `whitespace-normal break-words text-[11px] font-black uppercase leading-tight ${style.text}`, children: isFullDayAvailable ? "Свободен весь день" : isTentative ? "Не уверен" : "Не могу в этот день" }),
-          event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative mt-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60", children: previewNote(event.note) }) }) : null
-        ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-[11px] font-black leading-tight ${style.text}`, children: event.timeRange }),
-          event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative mt-1", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60", children: previewNote(event.note) }) }) : null
-        ] }) })
-      ] })
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 14 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-event-main", children: isAllDayStatus ? statusMeta.label : event.timeRange }),
+        event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-event-note", children: previewNote(event.note) }) : null
+      ]
     }
   );
 }
-function Legend({ eventTypes }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-sm font-black uppercase text-bf-orange", children: "Event legend" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-4 gap-3 border-t border-bf-cream/10 pt-4 max-lg:grid-cols-2 max-sm:grid-cols-1", children: eventTypes.map((eventType) => {
-      const style = EVENT_STYLES[eventType.value] || EVENT_STYLES.fallback;
-      const Icon2 = style.icon;
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 border-r border-bf-cream/10 pr-3 last:border-r-0 last:pr-0 max-sm:border-r-0 max-sm:pr-0", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `grid h-9 w-9 place-items-center rounded-xl border ${style.border} ${style.bg}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: style.text, size: 17 }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-xs font-black ${style.text}`, children: eventType.label }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] text-bf-cream/52", children: eventType.description })
-        ] })
-      ] }, eventType.value);
-    }) })
-  ] });
-}
-const AVAILABILITY_TONE_STYLES = {
-  high: {
-    track: "bg-emerald-400/18",
-    fill: "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.28)]",
-    text: "text-emerald-100"
-  },
-  mid: {
-    track: "bg-amber-400/18",
-    fill: "bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.24)]",
-    text: "text-amber-100"
-  },
-  low: {
-    track: "bg-red-500/18",
-    fill: "bg-red-400 shadow-[0_0_18px_rgba(248,113,113,0.22)]",
-    text: "text-red-100"
-  }
-};
-function availabilityTone(ratio) {
-  if (ratio >= 0.75) return "high";
-  if (ratio >= 0.5) return "mid";
-  return "low";
-}
-function RosterTable({
+function ScheduleTable({
   days,
   players,
   slots,
   dayEventTypes,
-  selectedWeekStart,
-  weekRangeLabel,
-  canGoPreviousWeek,
   canEditSelectedWeek,
-  onWeekChange,
   onAdd,
   onEdit,
   onNoteHoverStart,
-  onNoteHoverEnd,
-  lastUpdated
+  onNoteHoverEnd
 }) {
   const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
   const slotsByCell = reactExports.useMemo(() => {
@@ -46725,167 +46900,71 @@ function RosterTable({
     });
     return grouped;
   }, [slots]);
-  const availabilityByDay = reactExports.useMemo(() => {
-    const playerIds = new Set(players.map((player) => player.id));
-    const totalPlayers = playerIds.size;
-    return days.map((day) => {
-      const availablePlayerIds = /* @__PURE__ */ new Set();
-      slots.forEach((slot) => {
-        const isAvailable = slot.slotType === "available" || slot.slotType === "full_day_available";
-        if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
-          availablePlayerIds.add(slot.playerId);
-        }
-      });
-      const availableCount = availablePlayerIds.size;
-      const ratio = totalPlayers ? availableCount / totalPlayers : 0;
-      return {
-        ...day,
-        availableCount,
-        totalPlayers,
-        ratio,
-        tone: availabilityTone(ratio)
-      };
-    });
-  }, [days, players, slots]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "glass-panel mt-4 rounded-xl p-4", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3 flex items-center justify-between gap-4 max-md:flex-col max-md:items-stretch", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 text-lg font-black uppercase text-slate-100", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { className: "text-bf-orange", size: 22 }),
-        "Расписание на неделю"
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        WeekSwitcher,
-        {
-          selectedWeekStart,
-          weekRangeLabel,
-          canGoPreviousWeek,
-          onWeekChange
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "roster-scroll overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid min-w-[1180px] grid-cols-[180px_repeat(7,minmax(134px,1fr))] overflow-visible rounded-xl border border-bf-cream/10 bg-[#182231]/75", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid min-h-[84px] content-center border-b border-r border-bf-cream/10 bg-[#151f2e]/78 px-4 py-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 font-black uppercase text-slate-100", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Users, { size: 19, className: "text-bf-orange" }),
-        "Игроки"
-      ] }) }),
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-schedule-table", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-table-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-table-header-cell sf-table-header-cell--players", children: "Players" }),
       days.map((day) => {
-        const dayEvent = dayEventMap.get(day.value);
-        const hasDayType = Boolean(dayEvent?.eventType);
-        const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
-        const Icon2 = style.icon;
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "div",
-          {
-            className: `grid min-h-[84px] place-items-center border-b border-r border-bf-cream/10 bg-[#151f2e]/78 px-2.5 pt-4 pb-3 text-center last:border-r-0 ${day.isToday ? "day-header-today" : ""}`,
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid justify-items-center gap-1.5", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: day.label }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-semibold text-bf-cream/52", children: day.date }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                "div",
-                {
-                  className: `mt-1 inline-flex max-w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-black ${hasDayType ? `${style.border} ${style.bg} ${style.text}` : "border-bf-cream/10 bg-[#202b40]/70 text-bf-cream/35"}`,
-                  title: hasDayType ? "Тип события задан админом для всего дня" : "Админ не выбрал тип события для этого дня",
-                  children: [
-                    hasDayType ? /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 12 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Clock3, { size: 12 }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: hasDayType ? dayEvent.eventLabel : "No type" })
-                  ]
-                }
-              )
-            ] })
-          },
-          day.value
-        );
-      }),
-      players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "contents", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[60px] border-b border-r border-bf-cream/10 bg-[#151f2e]/78", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerRow, { player }) }),
-        days.map((day) => {
-          const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
-          const isUnavailable = cellSlots.some((slot) => slot.slotType === "unavailable");
-          const isFullDayAvailable = cellSlots.some((slot) => slot.slotType === "full_day_available");
-          const isTentative = cellSlots.some((slot) => slot.slotType === "tentative");
-          return /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              className: `relative flex min-h-[60px] items-center border-b border-r border-bf-cream/10 p-1.5 last:border-r-0 ${isUnavailable ? "bg-[#4d202d]/78" : isFullDayAvailable ? "bg-[#17382f]/78" : isTentative ? "bg-[#3f2c22]/78" : "bg-[#151f2e]/82"}`,
-              children: cellSlots.length ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid w-full gap-1.5", children: [
-                cellSlots.map((slot) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  EventCard,
-                  {
-                    event: slot,
-                    onEdit,
-                    onNoteHoverStart,
-                    onNoteHoverEnd
-                  },
-                  slot.id
-                )),
-                player.canEdit && canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    className: "justify-self-end text-[11px] font-black text-bf-cream/45 transition hover:text-bf-orange",
-                    type: "button",
-                    onClick: () => onAdd(day.value),
-                    children: "+ запись"
-                  }
-                ) : null
-              ] }) : player.canEdit && canEditSelectedWeek ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "button",
-                {
-                  className: "grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/28 transition hover:scale-105 hover:text-bf-orange",
-                  type: "button",
-                  onClick: () => onAdd(day.value),
-                  "aria-label": `Добавить запись на ${day.label}`,
-                  children: "+"
-                }
-              ) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/18", children: "+" })
-            },
-            `${player.id}-${day.value}`
-          );
-        })
-      ] }, player.id))
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid min-w-[1180px] grid-cols-[180px_repeat(7,minmax(134px,1fr))] overflow-hidden rounded-xl border border-bf-cream/10 bg-[#121b29]/90 shadow-[0_12px_28px_rgba(0,0,0,0.18)]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid min-h-[76px] content-center border-r border-bf-cream/10 px-4 py-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase leading-tight text-slate-100", children: "Доступность игроков" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-bf-cream/42", children: "По дням недели" })
-      ] }),
-      availabilityByDay.map((day) => {
-        const toneStyle = AVAILABILITY_TONE_STYLES[day.tone];
-        const fillWidth = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : "0%";
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid min-h-[76px] content-center gap-2 border-r border-bf-cream/10 px-3 py-3 text-center last:border-r-0", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `h-4 overflow-hidden rounded-full ${toneStyle.track}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "div",
-            {
-              className: `h-full rounded-full transition-[width] duration-300 ${toneStyle.fill}`,
-              style: { width: fillWidth }
-            }
-          ) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `text-xl font-black tabular-nums leading-none ${toneStyle.text}`, children: [
-            day.availableCount,
-            "/",
-            day.totalPlayers
-          ] })
+        const label = DAY_NAMES[day.value] || day.label;
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-table-header-cell ${day.isToday ? "sf-table-header-cell--today" : ""}`, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-day-name", children: label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-day-date", children: day.date }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
         ] }, day.value);
       })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "mt-4 flex justify-end gap-4 border-t border-bf-cream/10 pt-4 text-sm text-bf-cream/35", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-      "Дата последнего обновления: ",
-      lastUpdated
-    ] }) })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-table-body", children: players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-table-row", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PlayerCell, { player }),
+      days.map((day) => {
+        const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
+        const canEditCell = player.canEdit && canEditSelectedWeek;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `sf-schedule-cell ${dayCellClass(cellSlots)}`, children: cellSlots.length ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-cell-events", children: [
+          cellSlots.map((slot) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            EventCard,
+            {
+              event: slot,
+              onEdit,
+              onNoteHoverStart,
+              onNoteHoverEnd
+            },
+            slot.id
+          )),
+          canEditCell ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-cell-add sf-cell-add--compact", type: "button", onClick: () => onAdd(day.value), children: "+" }) : null
+        ] }) : canEditCell ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-cell-add", type: "button", onClick: () => onAdd(day.value), "aria-label": `Add slot for ${day.label}`, children: "+" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-cell-add sf-cell-add--disabled", children: "+" }) }, `${player.id}-${day.value}`);
+      })
+    ] }, player.id)) })
+  ] });
+}
+function AvailabilityBar({ days, players, slots }) {
+  const availability = reactExports.useMemo(() => availabilityByDay(days, players, slots), [days, players, slots]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-availability", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-title", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "AVAILABILITY" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("small", { children: "PLAYERS" })
+    ] }),
+    availability.map((day) => {
+      const width = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : "0%";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-availability-day sf-availability-day--${day.tone}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-availability-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { width } }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-count", children: [
+          day.availableCount,
+          "/",
+          day.totalPlayers
+        ] })
+      ] }, day.value);
+    })
   ] });
 }
 function RosterPage({
+  user,
   hasPlayerProfile,
   canAdd,
   canEditSelectedWeek,
   selectedWeekStart,
-  weekRangeLabel,
   canGoPreviousWeek,
   days,
   players,
   slots,
   dayEventTypes,
-  eventTypes,
-  lastUpdated,
   onAdd,
   onEdit,
   onCopy,
@@ -46893,38 +46972,52 @@ function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+  const scale2 = useScheduleScale();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: CANVAS_WIDTH * scale2, height: CANVAS_HEIGHT * scale2 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { transform: `scale(${scale2})` }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-dot-layer" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", {})
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      HeroBanner,
+      ControlsRow,
       {
-        hasPlayerProfile,
+        selectedWeekStart,
+        canGoPreviousWeek,
         canAdd,
+        hasPlayerProfile,
         canEditSelectedWeek,
+        days,
+        slots,
+        dayEventTypes,
+        players,
+        onWeekChange,
         onAdd,
         onCopy
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      RosterTable,
+      ScheduleTable,
       {
         days,
         players,
         slots,
         dayEventTypes,
-        selectedWeekStart,
-        weekRangeLabel,
-        canGoPreviousWeek,
         canEditSelectedWeek,
-        onWeekChange,
         onAdd,
         onEdit,
         onNoteHoverStart,
-        onNoteHoverEnd,
-        lastUpdated
+        onNoteHoverEnd
       }
     ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Legend, { eventTypes })
-  ] });
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: "v2.0" })
+  ] }) });
 }
 function TeamBanner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-2 lg:max-w-[520px]", children: [
@@ -47273,6 +47366,9 @@ function App() {
   const isMainPage = pathname.startsWith("/main");
   const isUpdatesPage = pathname.startsWith("/updates");
   const isStatsPage = pathname.startsWith("/stats");
+  const isProfilePage = pathname.startsWith("/profile");
+  const isTeamPage = pathname.startsWith("/team");
+  const isSchedulePage = !isMainPage && !isProfilePage && !isTeamPage && !isUpdatesPage && !isStatsPage;
   reactExports.useEffect(() => {
     return;
   }, [isUpdatesPage]);
@@ -47349,14 +47445,74 @@ function App() {
   }
   const hasPlayerProfile = Boolean(data.user.playerId);
   const canAdd = hasPlayerProfile && data.canEditSelectedWeek;
-  const isProfilePage = pathname.startsWith("/profile");
-  const isTeamPage = pathname.startsWith("/team");
   const currentPlayer = data.players.find((player) => player.id === data.user.playerId) || null;
   const currentStaffMember = data.staffMembers.find((staffMember) => staffMember.id === data.user.staffMemberId) || null;
   const currentProfile = data.user.profileType === "staff" ? currentStaffMember : currentPlayer;
   const handleProfileSaved = data.user.profileType === "staff" ? updateStaffProfile : updatePlayerProfile;
   const selectedUpdate = selectedUpdateSlug ? updatesBySlug[selectedUpdateSlug] || null : null;
   const selectedStats = statsByMode[statsMode] || null;
+  const sharedModals = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    slotModal ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      EventModal,
+      {
+        event: slotModal.event,
+        day: slotModal.day,
+        days: data.days,
+        weekStart: data.selectedWeekStart,
+        onClose: () => setSlotModal(null),
+        onSaved: upsertSlot,
+        onDeleted: removeSlot
+      }
+    ) : null,
+    copyModalOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CopyScheduleModal,
+      {
+        sourceWeeks: data.copySourceWeeks || [],
+        targetWeeks: data.copyTargetWeeks || [],
+        selectedWeekStart: data.selectedWeekStart,
+        currentWeekStart: data.currentWeekStart,
+        canEditSelectedWeek: data.canEditSelectedWeek,
+        onClose: () => setCopyModalOpen(false),
+        onCopied: handleCopyWeekCopied
+      }
+    ) : null,
+    commentTooltip?.visible ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CommentTooltip,
+      {
+        tooltip: commentTooltip
+      },
+      `${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`
+    ) : null
+  ] });
+  if (isSchedulePage) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "schedule-page-root", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        RosterPage,
+        {
+          user: data.user,
+          hasPlayerProfile,
+          canAdd,
+          canEditSelectedWeek: data.canEditSelectedWeek,
+          selectedWeekStart: data.selectedWeekStart,
+          weekRangeLabel: data.weekRangeLabel,
+          canGoPreviousWeek: data.canGoPreviousWeek,
+          days: data.days,
+          players: data.players,
+          slots: data.slots,
+          dayEventTypes: data.dayEventTypes,
+          eventTypes: data.eventTypes,
+          lastUpdated: data.lastUpdated,
+          onAdd: (day) => setSlotModal({ day }),
+          onEdit: (event) => setSlotModal({ event }),
+          onCopy: () => setCopyModalOpen(true),
+          onWeekChange: handleWeekChange,
+          onNoteHoverStart: handleNoteHoverStart,
+          onNoteHoverEnd: handleNoteHoverEnd
+        }
+      ),
+      sharedModals
+    ] });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { pathname }),
@@ -47402,6 +47558,7 @@ function App() {
         ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           RosterPage,
           {
+            user: data.user,
             hasPlayerProfile,
             canAdd,
             canEditSelectedWeek: data.canEditSelectedWeek,
@@ -47424,37 +47581,7 @@ function App() {
         ) })
       ] })
     ] }),
-    slotModal ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-      EventModal,
-      {
-        event: slotModal.event,
-        day: slotModal.day,
-        days: data.days,
-        weekStart: data.selectedWeekStart,
-        onClose: () => setSlotModal(null),
-        onSaved: upsertSlot,
-        onDeleted: removeSlot
-      }
-    ) : null,
-    copyModalOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CopyScheduleModal,
-      {
-        sourceWeeks: data.copySourceWeeks || [],
-        targetWeeks: data.copyTargetWeeks || [],
-        selectedWeekStart: data.selectedWeekStart,
-        currentWeekStart: data.currentWeekStart,
-        canEditSelectedWeek: data.canEditSelectedWeek,
-        onClose: () => setCopyModalOpen(false),
-        onCopied: handleCopyWeekCopied
-      }
-    ) : null,
-    commentTooltip?.visible ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-      CommentTooltip,
-      {
-        tooltip: commentTooltip
-      },
-      `${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`
-    ) : null
+    sharedModals
   ] });
 }
 clientExports.createRoot(document.getElementById("root")).render(

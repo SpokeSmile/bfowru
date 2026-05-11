@@ -1,14 +1,43 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarPlus, ChevronLeft, ChevronRight, Clock3, Copy, Users } from 'lucide-react';
+import { AlertTriangle, Check, Clock3, Copy, Plus } from 'lucide-react';
 
 import { Avatar, RoleBadge } from '../common.jsx';
-import {
-  AVAILABLE_CARD_STYLE,
-  EVENT_STYLES,
-  buildDayEventMap,
-  previewNote,
-} from '../../scheduleConfig.js';
+import { EVENT_STYLES, buildDayEventMap, previewNote } from '../../scheduleConfig.js';
+
+const CANVAS_WIDTH = 1920;
+const CANVAS_HEIGHT = 1080;
+const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const NAV_ITEMS = [
+  { label: 'Schedule', href: '/', icon: 'schedule.png', active: true },
+  { label: 'Roster', href: '/team/', icon: 'roster.png' },
+  { label: 'Updates', href: '/updates/', icon: 'updates.png' },
+  { label: 'Analytics', href: '/stats/', icon: 'analytics.png' },
+  { label: 'Drafts', href: '', icon: 'drafts.png' },
+  { label: 'Management', href: '/profile/', icon: 'management.png' },
+];
+
+const STATUS_META = {
+  unavailable: {
+    label: "I CAN'T",
+    icon: AlertTriangle,
+    className: 'sf-event-card--unavailable',
+    cellClassName: 'sf-schedule-cell--unavailable',
+  },
+  full_day_available: {
+    label: 'ALL AVAILABLE',
+    icon: Check,
+    className: 'sf-event-card--available-all',
+    cellClassName: 'sf-schedule-cell--available',
+  },
+  tentative: {
+    label: 'NOT SURE',
+    icon: AlertTriangle,
+    className: 'sf-event-card--tentative',
+    cellClassName: 'sf-schedule-cell--tentative',
+  },
+};
 
 function shiftWeek(weekStart, offsetDays) {
   const [year, month, day] = weekStart.split('-').map(Number);
@@ -17,125 +46,375 @@ function shiftWeek(weekStart, offsetDays) {
   return date.toISOString().slice(0, 10);
 }
 
-function WeekSwitcher({ selectedWeekStart, weekRangeLabel, canGoPreviousWeek, onWeekChange }) {
+function dateFromWeekStart(weekStart, offset = 0) {
+  const [year, month, day] = weekStart.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  date.setUTCDate(date.getUTCDate() + offset);
+  return date;
+}
+
+function formatWeekRange(weekStart) {
+  if (!weekStart) return '';
+  const start = dateFromWeekStart(weekStart, 0);
+  const end = dateFromWeekStart(weekStart, 6);
+  return `${String(start.getUTCDate()).padStart(2, '0')} ${MONTH_NAMES[start.getUTCMonth()]} - ${String(end.getUTCDate()).padStart(2, '0')} ${MONTH_NAMES[end.getUTCMonth()]}`;
+}
+
+function formatClock(timeZone) {
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+
+  if (timeZone) {
+    options.timeZone = timeZone;
+  }
+
+  return new Intl.DateTimeFormat('ru-RU', options).format(new Date());
+}
+
+function useClocks() {
+  const [clocks, setClocks] = useState({
+    utc: '--:--',
+    local: '--:--',
+    cet: '--:--',
+  });
+
+  useEffect(() => {
+    const update = () => {
+      setClocks({
+        utc: formatClock('UTC'),
+        local: formatClock(),
+        cet: formatClock('Etc/GMT-1'),
+      });
+    };
+
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return clocks;
+}
+
+function calculateScale() {
+  if (typeof window === 'undefined') return 1;
+  return Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT, 1);
+}
+
+function useScheduleScale() {
+  const [scale, setScale] = useState(calculateScale);
+
+  useEffect(() => {
+    const update = () => setScale(calculateScale());
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  return scale;
+}
+
+function bestDaysByAvailability(days, slots, players) {
+  const playerIds = new Set(players.map((player) => player.id));
+  const rankedDays = days.map((day) => {
+    const availablePlayerIds = new Set();
+    slots.forEach((slot) => {
+      const isAvailable = slot.slotType === 'available' || slot.slotType === 'full_day_available';
+      if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
+        availablePlayerIds.add(slot.playerId);
+      }
+    });
+    return {
+      ...day,
+      score: availablePlayerIds.size,
+      label: DAY_NAMES[day.value] || day.label,
+    };
+  });
+
+  return rankedDays
+    .sort((left, right) => right.score - left.score || left.value - right.value)
+    .slice(0, 3);
+}
+
+function buildUpcoming(days, slots, dayEventTypes) {
+  const nowDay = days.find((day) => day.isToday)?.value ?? 0;
+  const dayEventMap = buildDayEventMap(dayEventTypes);
+  const candidates = days
+    .map((day) => {
+      const dayEvent = dayEventMap.get(day.value);
+      const daySlots = slots
+        .filter((slot) => slot.dayOfWeek === day.value && slot.startTime)
+        .sort((left, right) => left.startTimeMinutes - right.startTimeMinutes);
+
+      if (!dayEvent?.eventType && !daySlots.length) return null;
+
+      return {
+        day,
+        eventLabel: dayEvent?.eventLabel || 'Activity',
+        dateLabel: day.date,
+        timeLabel: daySlots[0]?.startTime || '--:--',
+        order: day.value >= nowDay ? day.value - nowDay : day.value + 7 - nowDay,
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.order - right.order);
+
+  return candidates[0] || {
+    eventLabel: 'No event',
+    dateLabel: '--',
+    timeLabel: '--:--',
+  };
+}
+
+function availabilityByDay(days, players, slots) {
+  const playerIds = new Set(players.map((player) => player.id));
+  const totalPlayers = playerIds.size;
+
+  return days.map((day) => {
+    const availablePlayerIds = new Set();
+    slots.forEach((slot) => {
+      const isAvailable = slot.slotType === 'available' || slot.slotType === 'full_day_available';
+      if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
+        availablePlayerIds.add(slot.playerId);
+      }
+    });
+
+    const availableCount = availablePlayerIds.size;
+    const ratio = totalPlayers ? availableCount / totalPlayers : 0;
+    const tone = ratio >= 0.75 ? 'high' : ratio >= 0.5 ? 'mid' : 'low';
+    return { ...day, availableCount, totalPlayers, ratio, tone };
+  });
+}
+
+function dayCellClass(slots) {
+  if (slots.some((slot) => slot.slotType === 'unavailable')) {
+    return STATUS_META.unavailable.cellClassName;
+  }
+  if (slots.some((slot) => slot.slotType === 'tentative')) {
+    return STATUS_META.tentative.cellClassName;
+  }
+  if (slots.some((slot) => slot.slotType === 'full_day_available')) {
+    return STATUS_META.full_day_available.cellClassName;
+  }
+  return '';
+}
+
+function ClockPanel() {
+  const clocks = useClocks();
+  const entries = [
+    ['UTC', clocks.utc],
+    ['YOUR', clocks.local],
+    ['CET', clocks.cet],
+  ];
+
   return (
-    <div className="inline-grid grid-cols-[44px_minmax(150px,1fr)_44px] items-center overflow-hidden rounded-xl border border-bf-cream/10 bg-[#101826]/90 shadow-[0_10px_26px_rgba(0,0,0,0.18)]">
-      <button
-        className="grid h-11 place-items-center border-r border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange disabled:cursor-not-allowed disabled:text-bf-cream/22 disabled:hover:bg-transparent"
-        type="button"
-        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, -7))}
-        disabled={!canGoPreviousWeek}
-        aria-label="Предыдущая неделя"
-      >
-        <ChevronLeft size={18} />
-      </button>
-      <div className="px-4 text-center text-sm font-black tabular-nums text-slate-100">
-        {weekRangeLabel}
-      </div>
-      <button
-        className="grid h-11 place-items-center border-l border-bf-cream/10 text-bf-cream/72 transition hover:bg-bf-orange/12 hover:text-bf-orange"
-        type="button"
-        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, 7))}
-        aria-label="Следующая неделя"
-      >
-        <ChevronRight size={18} />
-      </button>
+    <div className="sf-clock-panel">
+      {entries.map(([label, value], index) => (
+        <div className="sf-clock-card" key={label}>
+          <div className="sf-clock-time">{value}</div>
+          <div className="sf-clock-label">{label}</div>
+          {index === 1 ? <span className="sf-clock-accent" /> : null}
+        </div>
+      ))}
     </div>
   );
 }
 
-function HeroBanner({ hasPlayerProfile, canAdd, canEditSelectedWeek, onAdd, onCopy }) {
+function ScheduleSidebar({ user }) {
   return (
-    <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8">
-      <div className="relative z-10 grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="grid gap-3 lg:max-w-[440px]">
-          <div className="text-sm font-black uppercase text-bf-orange">Black Flock team</div>
-          <h1 className="text-5xl font-black uppercase leading-none text-slate-100 max-md:text-4xl">
-            Weekly roster
-          </h1>
-        </div>
-
-        <div className="relative z-10 flex flex-wrap justify-self-start gap-3 lg:justify-self-end">
-          {hasPlayerProfile ? (
-            <>
-              {canAdd ? (
-                <button
-                  className="inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#f4f7fb] px-6 font-black text-[#151b26] shadow-[0_8px_18px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_22px_rgba(0,0,0,0.18)]"
-                  type="button"
-                  onClick={() => onAdd(null)}
-                >
-                  <CalendarPlus size={20} />
-                  Добавить время
-                </button>
-              ) : !canEditSelectedWeek ? (
-                <span className="rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70">
-                  Архивная неделя
-                </span>
-              ) : null}
-              <button
-                className="inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#f4f7fb] px-6 font-black text-[#151b26] shadow-[0_8px_18px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_10px_22px_rgba(0,0,0,0.18)]"
-                type="button"
-                onClick={onCopy}
-              >
-                <Copy size={19} />
-                Скопировать расписание
-              </button>
-            </>
-          ) : (
-            <span className="rounded-full border border-bf-cream/10 bg-black/30 px-4 py-3 font-bold text-bf-cream/70">
-              Аккаунт не привязан к игроку
-            </span>
-          )}
+    <aside className="sf-sidebar">
+      <div className="sf-sidebar-top">
+        <img className="sf-sidebar-mark" src="/static/img/Logo.png" alt="" />
+        <div className="sf-sidebar-brand">
+          <span>MANAGE</span>
+          <span>YOU TEAM</span>
         </div>
       </div>
+
+      <div className="sf-team-logo-box">
+        <span>TEAM</span>
+        <span>LOGO</span>
+      </div>
+
+      <nav className="sf-nav" aria-label="Schedule navigation">
+        {NAV_ITEMS.map((item) => {
+          const content = (
+            <>
+              <img src={`/static/img/figma/schedule/icons/${item.icon}`} alt="" />
+              <span>{item.label}</span>
+            </>
+          );
+
+          if (!item.href) {
+            return (
+              <button className="sf-nav-item" type="button" disabled key={item.label}>
+                {content}
+              </button>
+            );
+          }
+
+          return (
+            <a className={`sf-nav-item ${item.active ? 'sf-nav-item--active' : ''}`} href={item.href} key={item.label}>
+              {content}
+            </a>
+          );
+        })}
+      </nav>
+
+      <a className="sf-sidebar-profile" href="/profile/" aria-label="Open profile">
+        <Avatar src={user.avatarUrl} alt={user.username} fallbackLabel={user.username} className="sf-sidebar-avatar" />
+        <div>
+          <div className="sf-sidebar-profile-name">{user.username}</div>
+          <div className="sf-sidebar-profile-subtitle">Team TWIK</div>
+        </div>
+        <span className="sf-sidebar-profile-arrow">⌃</span>
+      </a>
+    </aside>
+  );
+}
+
+function HeroPanel() {
+  return (
+    <section className="sf-hero-panel">
+      <div className="sf-hero-dot-layer" />
+      <div className="sf-hero-glow" />
+      <h1>
+        WEEKLY <span>ROSTER</span>
+      </h1>
+      <p>BLACK FLOCK</p>
     </section>
   );
 }
 
-function PlayerRow({ player }) {
+function IconBox({ className = '', children }) {
+  return <span className={`sf-icon-box ${className}`}>{children}</span>;
+}
+
+function ControlsRow({
+  selectedWeekStart,
+  canGoPreviousWeek,
+  canAdd,
+  hasPlayerProfile,
+  canEditSelectedWeek,
+  days,
+  slots,
+  dayEventTypes,
+  players,
+  onWeekChange,
+  onAdd,
+  onCopy,
+}) {
+  const weekLabel = formatWeekRange(selectedWeekStart);
+  const bestDays = bestDaysByAvailability(days, slots, players);
+  const upcoming = buildUpcoming(days, slots, dayEventTypes);
+  const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
+
   return (
-    <div className="flex h-full min-w-0 items-center gap-2.5 px-4 py-2">
-      <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="h-10 w-10 object-cover" />
-      <div className="min-w-0">
-        <div className="truncate text-sm font-black text-slate-100">{player.name}</div>
-        <div className="mt-1 flex flex-wrap gap-1.5">
-          <RoleBadge role={player.role} color={player.roleColor} className="max-w-28 truncate" />
-          {player.canEdit ? (
-            <span className="rounded-full border border-bf-orange/30 bg-bf-orange/10 px-2 py-0.5 text-xs font-bold text-bf-orange">
-              Вы
-            </span>
-          ) : null}
+    <>
+      <section className="sf-control-card sf-date-card">
+        <div className="sf-week-switcher">
+          <button
+            type="button"
+            onClick={() => onWeekChange(shiftWeek(selectedWeekStart, -7))}
+            disabled={!canGoPreviousWeek}
+            aria-label="Previous week"
+          >
+            &lt;
+          </button>
+          <span>{weekLabel}</span>
+          <button
+            type="button"
+            onClick={() => onWeekChange(shiftWeek(selectedWeekStart, 7))}
+            aria-label="Next week"
+          >
+            &gt;
+          </button>
         </div>
+        <button
+          className="sf-square-action sf-square-action--primary"
+          type="button"
+          onClick={() => onAdd(null)}
+          disabled={!canUsePlayerActions || !canAdd}
+          aria-label="Add time"
+        >
+          <Plus size={28} />
+        </button>
+        <button
+          className="sf-square-action"
+          type="button"
+          onClick={onCopy}
+          disabled={!hasPlayerProfile}
+          aria-label="Copy schedule"
+        >
+          <Copy size={28} />
+        </button>
+      </section>
+
+      <section className="sf-control-card sf-best-card">
+        <div className="sf-control-title">BEST DAY FOR GAME:</div>
+        <IconBox className="sf-control-corner-icon">
+          <img src="/static/img/figma/schedule/icons/clock.png" alt="" />
+        </IconBox>
+        <div className="sf-chip-row">
+          {bestDays.map((day) => (
+            <span className="sf-chip" key={day.value}>{day.label}</span>
+          ))}
+        </div>
+      </section>
+
+      <section className="sf-control-card sf-upcoming-card">
+        <div className="sf-control-title">UPCOMING:</div>
+        <IconBox className="sf-control-corner-icon">
+          <img src="/static/img/figma/schedule/icons/trophy.png" alt="" />
+        </IconBox>
+        <div className="sf-chip-row">
+          <span className="sf-chip">{upcoming.eventLabel}</span>
+          <span className="sf-chip">{upcoming.dateLabel}</span>
+          <span className="sf-chip">{upcoming.timeLabel}</span>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function DayTypePill({ dayEvent }) {
+  const hasDayType = Boolean(dayEvent?.eventType);
+  const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
+  const Icon = hasDayType ? style.icon : Clock3;
+
+  return (
+    <span className={`sf-day-type ${hasDayType ? 'sf-day-type--active' : ''}`}>
+      <Icon size={12} />
+      {hasDayType ? dayEvent.eventLabel : 'No type'}
+    </span>
+  );
+}
+
+function PlayerCell({ player }) {
+  return (
+    <div className="sf-player-cell">
+      <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="sf-player-avatar" />
+      <div className="sf-player-copy">
+        <div className="sf-player-name">{player.name}</div>
+        <RoleBadge role={player.role} color={player.roleColor} className="sf-player-role" />
       </div>
     </div>
   );
 }
 
 function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
+  const statusMeta = STATUS_META[event.slotType];
+  const isAllDayStatus = Boolean(statusMeta);
   const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const isUnavailable = event.slotType === 'unavailable';
-  const isFullDayAvailable = event.slotType === 'full_day_available';
-  const isTentative = event.slotType === 'tentative';
-  const isAllDayStatus = isUnavailable || isFullDayAvailable || isTentative;
-  const style = isUnavailable
-    ? EVENT_STYLES.unavailable
-    : isFullDayAvailable
-      ? EVENT_STYLES.full_day_available
-      : isTentative
-        ? EVENT_STYLES.tentative
-      : AVAILABLE_CARD_STYLE;
-  const Icon = isUnavailable
-    ? EVENT_STYLES.unavailable.icon
-    : isFullDayAvailable
-      ? EVENT_STYLES.full_day_available.icon
-      : isTentative
-        ? EVENT_STYLES.tentative.icon
-      : eventStyle.icon;
+  const Icon = statusMeta?.icon || eventStyle.icon || Clock3;
+  const className = statusMeta?.className || 'sf-event-card--time';
   const editableProps = event.canEdit
     ? {
         role: 'button',
         tabIndex: 0,
-        'aria-label': 'Редактировать событие',
+        'aria-label': 'Edit schedule slot',
         onClick: () => onEdit(event),
         onKeyDown: (keyboardEvent) => {
           if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
@@ -148,10 +427,8 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
 
   return (
     <motion.article
-      whileHover={{ scale: 1.015 }}
-      className={`group relative z-0 max-w-full rounded-xl border ${style.border} ${style.bg} ${style.glow} p-2 transition hover:z-30 ${
-        event.canEdit ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bf-orange' : ''
-      }`}
+      whileHover={{ y: -1 }}
+      className={`sf-event-card ${className} ${event.canEdit ? 'sf-event-card--editable' : ''}`}
       onMouseEnter={(mouseEvent) => {
         if (event.note) {
           onNoteHoverStart(event.note, mouseEvent.currentTarget.getBoundingClientRect());
@@ -164,107 +441,25 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
       }}
       {...editableProps}
     >
-      <div className="flex min-w-0 items-center gap-2">
-        <Icon className={`${style.text} shrink-0`} size={isAllDayStatus ? 16 : 17} />
-        <div className="min-w-0 flex-1">
-          {isAllDayStatus ? (
-            <>
-              <div className={`whitespace-normal break-words text-[11px] font-black uppercase leading-tight ${style.text}`}>
-                {isFullDayAvailable ? 'Свободен весь день' : isTentative ? 'Не уверен' : 'Не могу в этот день'}
-              </div>
-              {event.note ? (
-                <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
-                    {previewNote(event.note)}
-                  </p>
-                </div>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <div className={`text-[11px] font-black leading-tight ${style.text}`}>{event.timeRange}</div>
-              {event.note ? (
-                <div className="relative mt-1">
-                  <p className="line-clamp-1 text-[11px] font-medium leading-tight text-bf-cream/60">
-                    {previewNote(event.note)}
-                  </p>
-                </div>
-              ) : null}
-            </>
-          )}
-        </div>
-      </div>
+      <Icon size={14} />
+      <span className="sf-event-main">{isAllDayStatus ? statusMeta.label : event.timeRange}</span>
+      {event.note ? <span className="sf-event-note">{previewNote(event.note)}</span> : null}
     </motion.article>
   );
 }
 
-function Legend({ eventTypes }) {
-  return (
-    <section className="glass-panel mt-4 rounded-xl p-4">
-      <div className="mb-4 text-sm font-black uppercase text-bf-orange">Event legend</div>
-      <div className="grid grid-cols-4 gap-3 border-t border-bf-cream/10 pt-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
-      {eventTypes.map((eventType) => {
-        const style = EVENT_STYLES[eventType.value] || EVENT_STYLES.fallback;
-        const Icon = style.icon;
-        return (
-          <div key={eventType.value} className="flex items-center gap-3 border-r border-bf-cream/10 pr-3 last:border-r-0 last:pr-0 max-sm:border-r-0 max-sm:pr-0">
-            <div className={`grid h-9 w-9 place-items-center rounded-xl border ${style.border} ${style.bg}`}>
-              <Icon className={style.text} size={17} />
-            </div>
-            <div>
-              <div className={`text-xs font-black ${style.text}`}>{eventType.label}</div>
-              <div className="text-[11px] text-bf-cream/52">{eventType.description}</div>
-            </div>
-          </div>
-        );
-      })}
-      </div>
-    </section>
-  );
-}
-
-const AVAILABILITY_TONE_STYLES = {
-  high: {
-    track: 'bg-emerald-400/18',
-    fill: 'bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.28)]',
-    text: 'text-emerald-100',
-  },
-  mid: {
-    track: 'bg-amber-400/18',
-    fill: 'bg-amber-300 shadow-[0_0_18px_rgba(252,211,77,0.24)]',
-    text: 'text-amber-100',
-  },
-  low: {
-    track: 'bg-red-500/18',
-    fill: 'bg-red-400 shadow-[0_0_18px_rgba(248,113,113,0.22)]',
-    text: 'text-red-100',
-  },
-};
-
-function availabilityTone(ratio) {
-  if (ratio >= 0.75) return 'high';
-  if (ratio >= 0.5) return 'mid';
-  return 'low';
-}
-
-function RosterTable({
+function ScheduleTable({
   days,
   players,
   slots,
   dayEventTypes,
-  selectedWeekStart,
-  weekRangeLabel,
-  canGoPreviousWeek,
   canEditSelectedWeek,
-  onWeekChange,
   onAdd,
   onEdit,
   onNoteHoverStart,
   onNoteHoverEnd,
-  lastUpdated,
 }) {
   const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
-
   const slotsByCell = useMemo(() => {
     const grouped = new Map();
     slots.forEach((slot) => {
@@ -275,195 +470,100 @@ function RosterTable({
     return grouped;
   }, [slots]);
 
-  const availabilityByDay = useMemo(() => {
-    const playerIds = new Set(players.map((player) => player.id));
-    const totalPlayers = playerIds.size;
+  return (
+    <section className="sf-schedule-table">
+      <div className="sf-table-header">
+        <div className="sf-table-header-cell sf-table-header-cell--players">Players</div>
+        {days.map((day) => {
+          const label = DAY_NAMES[day.value] || day.label;
+          return (
+            <div className={`sf-table-header-cell ${day.isToday ? 'sf-table-header-cell--today' : ''}`} key={day.value}>
+              <span className="sf-day-name">{label}</span>
+              <span className="sf-day-date">{day.date}</span>
+              <DayTypePill dayEvent={dayEventMap.get(day.value)} />
+            </div>
+          );
+        })}
+      </div>
 
-    return days.map((day) => {
-      const availablePlayerIds = new Set();
-      slots.forEach((slot) => {
-        const isAvailable = slot.slotType === 'available' || slot.slotType === 'full_day_available';
-        if (slot.dayOfWeek === day.value && isAvailable && playerIds.has(slot.playerId)) {
-          availablePlayerIds.add(slot.playerId);
-        }
-      });
+      <div className="sf-table-body">
+        {players.map((player) => (
+          <div className="sf-table-row" key={player.id}>
+            <PlayerCell player={player} />
+            {days.map((day) => {
+              const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
+              const canEditCell = player.canEdit && canEditSelectedWeek;
+              return (
+                <div className={`sf-schedule-cell ${dayCellClass(cellSlots)}`} key={`${player.id}-${day.value}`}>
+                  {cellSlots.length ? (
+                    <div className="sf-cell-events">
+                      {cellSlots.map((slot) => (
+                        <EventCard
+                          key={slot.id}
+                          event={slot}
+                          onEdit={onEdit}
+                          onNoteHoverStart={onNoteHoverStart}
+                          onNoteHoverEnd={onNoteHoverEnd}
+                        />
+                      ))}
+                      {canEditCell ? (
+                        <button className="sf-cell-add sf-cell-add--compact" type="button" onClick={() => onAdd(day.value)}>
+                          +
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : canEditCell ? (
+                    <button className="sf-cell-add" type="button" onClick={() => onAdd(day.value)} aria-label={`Add slot for ${day.label}`}>
+                      +
+                    </button>
+                  ) : (
+                    <span className="sf-cell-add sf-cell-add--disabled">+</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-      const availableCount = availablePlayerIds.size;
-      const ratio = totalPlayers ? availableCount / totalPlayers : 0;
-      return {
-        ...day,
-        availableCount,
-        totalPlayers,
-        ratio,
-        tone: availabilityTone(ratio),
-      };
-    });
-  }, [days, players, slots]);
+function AvailabilityBar({ days, players, slots }) {
+  const availability = useMemo(() => availabilityByDay(days, players, slots), [days, players, slots]);
 
   return (
-    <section className="glass-panel mt-4 rounded-xl p-4">
-      <div className="mb-3 flex items-center justify-between gap-4 max-md:flex-col max-md:items-stretch">
-        <div className="flex items-center gap-3 text-lg font-black uppercase text-slate-100">
-          <Users className="text-bf-orange" size={22} />
-          Расписание на неделю
-        </div>
-        <WeekSwitcher
-          selectedWeekStart={selectedWeekStart}
-          weekRangeLabel={weekRangeLabel}
-          canGoPreviousWeek={canGoPreviousWeek}
-          onWeekChange={onWeekChange}
-        />
+    <section className="sf-availability">
+      <div className="sf-availability-title">
+        <span>AVAILABILITY</span>
+        <small>PLAYERS</small>
       </div>
-
-      <div className="roster-scroll overflow-x-auto">
-        <div className="grid min-w-[1180px] grid-cols-[180px_repeat(7,minmax(134px,1fr))] overflow-visible rounded-xl border border-bf-cream/10 bg-[#182231]/75">
-          <div className="grid min-h-[84px] content-center border-b border-r border-bf-cream/10 bg-[#151f2e]/78 px-4 py-4">
-            <div className="flex items-center gap-2 font-black uppercase text-slate-100">
-              <Users size={19} className="text-bf-orange" />
-              Игроки
+      {availability.map((day) => {
+        const width = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : '0%';
+        return (
+          <div className={`sf-availability-day sf-availability-day--${day.tone}`} key={day.value}>
+            <div className="sf-availability-track">
+              <span style={{ width }} />
             </div>
+            <div className="sf-availability-count">{day.availableCount}/{day.totalPlayers}</div>
           </div>
-          {days.map((day) => {
-            const dayEvent = dayEventMap.get(day.value);
-            const hasDayType = Boolean(dayEvent?.eventType);
-            const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
-            const Icon = style.icon;
-
-            return (
-              <div
-                key={day.value}
-                className={`grid min-h-[84px] place-items-center border-b border-r border-bf-cream/10 bg-[#151f2e]/78 px-2.5 pt-4 pb-3 text-center last:border-r-0 ${
-                  day.isToday ? 'day-header-today' : ''
-                }`}
-              >
-                <div className="grid justify-items-center gap-1.5">
-                  <div className="text-sm font-black text-slate-100">{day.label}</div>
-                  <div className="text-xs font-semibold text-bf-cream/52">{day.date}</div>
-                  <div
-                    className={`mt-1 inline-flex max-w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-black ${
-                      hasDayType
-                        ? `${style.border} ${style.bg} ${style.text}`
-                        : 'border-bf-cream/10 bg-[#202b40]/70 text-bf-cream/35'
-                    }`}
-                    title={hasDayType ? 'Тип события задан админом для всего дня' : 'Админ не выбрал тип события для этого дня'}
-                  >
-                    {hasDayType ? <Icon size={12} /> : <Clock3 size={12} />}
-                    <span className="truncate">{hasDayType ? dayEvent.eventLabel : 'No type'}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {players.map((player) => (
-            <div key={player.id} className="contents">
-              <div className="min-h-[60px] border-b border-r border-bf-cream/10 bg-[#151f2e]/78">
-                <PlayerRow player={player} />
-              </div>
-              {days.map((day) => {
-                const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
-                const isUnavailable = cellSlots.some((slot) => slot.slotType === 'unavailable');
-                const isFullDayAvailable = cellSlots.some((slot) => slot.slotType === 'full_day_available');
-                const isTentative = cellSlots.some((slot) => slot.slotType === 'tentative');
-                return (
-                  <div
-                    key={`${player.id}-${day.value}`}
-                    className={`relative flex min-h-[60px] items-center border-b border-r border-bf-cream/10 p-1.5 last:border-r-0 ${
-                      isUnavailable ? 'bg-[#4d202d]/78' : isFullDayAvailable ? 'bg-[#17382f]/78' : isTentative ? 'bg-[#3f2c22]/78' : 'bg-[#151f2e]/82'
-                    }`}
-                  >
-                    {cellSlots.length ? (
-                      <div className="grid w-full gap-1.5">
-                        {cellSlots.map((slot) => (
-                          <EventCard
-                            key={slot.id}
-                            event={slot}
-                            onEdit={onEdit}
-                            onNoteHoverStart={onNoteHoverStart}
-                            onNoteHoverEnd={onNoteHoverEnd}
-                          />
-                        ))}
-                        {player.canEdit && canEditSelectedWeek ? (
-                          <button
-                            className="justify-self-end text-[11px] font-black text-bf-cream/45 transition hover:text-bf-orange"
-                            type="button"
-                            onClick={() => onAdd(day.value)}
-                          >
-                            + запись
-                          </button>
-                        ) : null}
-                      </div>
-                    ) : player.canEdit && canEditSelectedWeek ? (
-                      <button
-                        className="grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/28 transition hover:scale-105 hover:text-bf-orange"
-                        type="button"
-                        onClick={() => onAdd(day.value)}
-                        aria-label={`Добавить запись на ${day.label}`}
-                      >
-                        +
-                      </button>
-                    ) : (
-                      <span className="grid min-h-9 w-full place-items-center text-2xl font-light text-bf-cream/18">+</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-3 overflow-x-auto">
-        <div className="grid min-w-[1180px] grid-cols-[180px_repeat(7,minmax(134px,1fr))] overflow-hidden rounded-xl border border-bf-cream/10 bg-[#121b29]/90 shadow-[0_12px_28px_rgba(0,0,0,0.18)]">
-          <div className="grid min-h-[76px] content-center border-r border-bf-cream/10 px-4 py-3">
-            <div className="text-sm font-black uppercase leading-tight text-slate-100">
-              Доступность игроков
-            </div>
-            <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-bf-cream/42">
-              По дням недели
-            </div>
-          </div>
-          {availabilityByDay.map((day) => {
-            const toneStyle = AVAILABILITY_TONE_STYLES[day.tone];
-            const fillWidth = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : '0%';
-
-            return (
-              <div key={day.value} className="grid min-h-[76px] content-center gap-2 border-r border-bf-cream/10 px-3 py-3 text-center last:border-r-0">
-                <div className={`h-4 overflow-hidden rounded-full ${toneStyle.track}`}>
-                  <div
-                    className={`h-full rounded-full transition-[width] duration-300 ${toneStyle.fill}`}
-                    style={{ width: fillWidth }}
-                  />
-                </div>
-                <div className={`text-xl font-black tabular-nums leading-none ${toneStyle.text}`}>
-                  {day.availableCount}/{day.totalPlayers}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <footer className="mt-4 flex justify-end gap-4 border-t border-bf-cream/10 pt-4 text-sm text-bf-cream/35">
-        <span>Дата последнего обновления: {lastUpdated}</span>
-      </footer>
+        );
+      })}
     </section>
   );
 }
 
 export default function RosterPage({
+  user,
   hasPlayerProfile,
   canAdd,
   canEditSelectedWeek,
   selectedWeekStart,
-  weekRangeLabel,
   canGoPreviousWeek,
   days,
   players,
   slots,
   dayEventTypes,
-  eventTypes,
-  lastUpdated,
   onAdd,
   onEdit,
   onCopy,
@@ -471,32 +571,51 @@ export default function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
+  const scale = useScheduleScale();
+
   return (
-    <>
-      <HeroBanner
-        hasPlayerProfile={hasPlayerProfile}
-        canAdd={canAdd}
-        canEditSelectedWeek={canEditSelectedWeek}
-        onAdd={onAdd}
-        onCopy={onCopy}
-      />
-      <RosterTable
-        days={days}
-        players={players}
-        slots={slots}
-        dayEventTypes={dayEventTypes}
-        selectedWeekStart={selectedWeekStart}
-        weekRangeLabel={weekRangeLabel}
-        canGoPreviousWeek={canGoPreviousWeek}
-        canEditSelectedWeek={canEditSelectedWeek}
-        onWeekChange={onWeekChange}
-        onAdd={onAdd}
-        onEdit={onEdit}
-        onNoteHoverStart={onNoteHoverStart}
-        onNoteHoverEnd={onNoteHoverEnd}
-        lastUpdated={lastUpdated}
-      />
-      <Legend eventTypes={eventTypes} />
-    </>
+    <div className="sf-viewport" style={{ width: CANVAS_WIDTH * scale, height: CANVAS_HEIGHT * scale }}>
+      <div className="sf-canvas" style={{ transform: `scale(${scale})` }}>
+        <div className="sf-bg-base" />
+        <div className="sf-bg-dot-layer" />
+        <div className="sf-bg-glow" />
+
+        <ScheduleSidebar user={user} />
+        <ClockPanel />
+        <button className="sf-notice" type="button" aria-label="Notifications">
+          <img src="/static/img/figma/schedule/icons/bell.png" alt="" />
+          <span />
+        </button>
+
+        <HeroPanel />
+        <ControlsRow
+          selectedWeekStart={selectedWeekStart}
+          canGoPreviousWeek={canGoPreviousWeek}
+          canAdd={canAdd}
+          hasPlayerProfile={hasPlayerProfile}
+          canEditSelectedWeek={canEditSelectedWeek}
+          days={days}
+          slots={slots}
+          dayEventTypes={dayEventTypes}
+          players={players}
+          onWeekChange={onWeekChange}
+          onAdd={onAdd}
+          onCopy={onCopy}
+        />
+        <ScheduleTable
+          days={days}
+          players={players}
+          slots={slots}
+          dayEventTypes={dayEventTypes}
+          canEditSelectedWeek={canEditSelectedWeek}
+          onAdd={onAdd}
+          onEdit={onEdit}
+          onNoteHoverStart={onNoteHoverStart}
+          onNoteHoverEnd={onNoteHoverEnd}
+        />
+        <AvailabilityBar days={days} players={players} slots={slots} />
+        <div className="sf-version">v2.0</div>
+      </div>
+    </div>
   );
 }
