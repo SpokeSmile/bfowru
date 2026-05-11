@@ -98,22 +98,47 @@ function useClocks() {
   return clocks;
 }
 
-function calculateScale() {
-  if (typeof window === 'undefined') return 1;
-  return Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT, 1);
+function getViewportSize() {
+  if (typeof window === 'undefined') {
+    return { width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+  }
+
+  const viewport = window.visualViewport;
+  const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
+  const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+
+  return {
+    width: Math.max(0, Math.floor(width)),
+    height: Math.max(0, Math.floor(height)),
+  };
 }
 
-function useScheduleScale() {
-  const [scale, setScale] = useState(calculateScale);
+function calculateLayout() {
+  const viewport = getViewportSize();
+  const rawScale = Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT, 1);
+  const width = Math.min(viewport.width, Math.floor(CANVAS_WIDTH * rawScale));
+  const height = Math.min(viewport.height, Math.floor(CANVAS_HEIGHT * rawScale));
+  const scale = Math.min(width / CANVAS_WIDTH, height / CANVAS_HEIGHT, 1);
+
+  return { width, height, scale };
+}
+
+function useScheduleLayout() {
+  const [layout, setLayout] = useState(calculateLayout);
 
   useEffect(() => {
-    const update = () => setScale(calculateScale());
+    const update = () => setLayout(calculateLayout());
     update();
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    window.visualViewport?.addEventListener('resize', update);
+
+    return () => {
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+    };
   }, []);
 
-  return scale;
+  return layout;
 }
 
 function bestDaysByAvailability(days, slots, players) {
@@ -571,11 +596,11 @@ export default function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
-  const scale = useScheduleScale();
+  const layout = useScheduleLayout();
 
   return (
-    <div className="sf-viewport" style={{ width: CANVAS_WIDTH * scale, height: CANVAS_HEIGHT * scale }}>
-      <div className="sf-canvas" style={{ transform: `scale(${scale})` }}>
+    <div className="sf-viewport" style={{ width: layout.width, height: layout.height }}>
+      <div className="sf-canvas" style={{ transform: `scale(${layout.scale})` }}>
         <div className="sf-bg-base" />
         <div className="sf-bg-glow" />
 

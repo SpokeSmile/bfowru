@@ -46596,19 +46596,39 @@ function useClocks() {
   }, []);
   return clocks;
 }
-function calculateScale() {
-  if (typeof window === "undefined") return 1;
-  return Math.min(window.innerWidth / CANVAS_WIDTH, window.innerHeight / CANVAS_HEIGHT, 1);
+function getViewportSize() {
+  if (typeof window === "undefined") {
+    return { width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+  }
+  const viewport = window.visualViewport;
+  const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
+  const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+  return {
+    width: Math.max(0, Math.floor(width)),
+    height: Math.max(0, Math.floor(height))
+  };
 }
-function useScheduleScale() {
-  const [scale2, setScale2] = reactExports.useState(calculateScale);
+function calculateLayout() {
+  const viewport = getViewportSize();
+  const rawScale = Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT, 1);
+  const width = Math.min(viewport.width, Math.floor(CANVAS_WIDTH * rawScale));
+  const height = Math.min(viewport.height, Math.floor(CANVAS_HEIGHT * rawScale));
+  const scale2 = Math.min(width / CANVAS_WIDTH, height / CANVAS_HEIGHT, 1);
+  return { width, height, scale: scale2 };
+}
+function useScheduleLayout() {
+  const [layout2, setLayout2] = reactExports.useState(calculateLayout);
   reactExports.useEffect(() => {
-    const update = () => setScale2(calculateScale());
+    const update = () => setLayout2(calculateLayout());
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    window.visualViewport?.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("resize", update);
+    };
   }, []);
-  return scale2;
+  return layout2;
 }
 function bestDaysByAvailability(days, slots, players) {
   const playerIds = new Set(players.map((player) => player.id));
@@ -46972,8 +46992,8 @@ function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
-  const scale2 = useScheduleScale();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: CANVAS_WIDTH * scale2, height: CANVAS_HEIGHT * scale2 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { transform: `scale(${scale2})` }, children: [
+  const layout2 = useScheduleLayout();
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { transform: `scale(${layout2.scale})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
