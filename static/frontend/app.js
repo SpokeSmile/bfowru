@@ -46687,7 +46687,10 @@ function ScheduleSidebar({ user }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/logo1.png", alt: "" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "YOU TEAM" })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          "YOU ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TEAM" })
+        ] })
       ] })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [

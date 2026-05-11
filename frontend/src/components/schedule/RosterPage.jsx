@@ -314,7 +314,9 @@ function ScheduleSidebar({ user }) {
         <img className="sf-sidebar-mark" src="/static/img/logo1.png" alt="" />
         <div className="sf-sidebar-brand">
           <span>MANAGE</span>
-          <span>YOU TEAM</span>
+          <span>
+            YOU <b>TEAM</b>
+          </span>
         </div>
       </div>
 
