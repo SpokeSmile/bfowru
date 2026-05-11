@@ -3465,7 +3465,7 @@ function requireReactDomClient_production() {
       }
       return null;
     }
-    function updateSlot2(returnFiber, oldFiber, newChild, lanes) {
+    function updateSlot(returnFiber, oldFiber, newChild, lanes) {
       var key = null !== oldFiber ? oldFiber.key : null;
       if ("string" === typeof newChild && "" !== newChild || "number" === typeof newChild || "bigint" === typeof newChild)
         return null !== key ? null : updateTextNode(returnFiber, oldFiber, "" + newChild, lanes);
@@ -3476,19 +3476,19 @@ function requireReactDomClient_production() {
           case REACT_PORTAL_TYPE:
             return newChild.key === key ? updatePortal(returnFiber, oldFiber, newChild, lanes) : null;
           case REACT_LAZY_TYPE:
-            return newChild = resolveLazy(newChild), updateSlot2(returnFiber, oldFiber, newChild, lanes);
+            return newChild = resolveLazy(newChild), updateSlot(returnFiber, oldFiber, newChild, lanes);
         }
         if (isArrayImpl(newChild) || getIteratorFn(newChild))
           return null !== key ? null : updateFragment(returnFiber, oldFiber, newChild, lanes, null);
         if ("function" === typeof newChild.then)
-          return updateSlot2(
+          return updateSlot(
             returnFiber,
             oldFiber,
             unwrapThenable(newChild),
             lanes
           );
         if (newChild.$$typeof === REACT_CONTEXT_TYPE)
-          return updateSlot2(
+          return updateSlot(
             returnFiber,
             oldFiber,
             readContextDuringReconciliation(returnFiber, newChild),
@@ -3545,7 +3545,7 @@ function requireReactDomClient_production() {
     function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren, lanes) {
       for (var resultingFirstChild = null, previousNewFiber = null, oldFiber = currentFirstChild, newIdx = currentFirstChild = 0, nextOldFiber = null; null !== oldFiber && newIdx < newChildren.length; newIdx++) {
         oldFiber.index > newIdx ? (nextOldFiber = oldFiber, oldFiber = null) : nextOldFiber = oldFiber.sibling;
-        var newFiber = updateSlot2(
+        var newFiber = updateSlot(
           returnFiber,
           oldFiber,
           newChildren[newIdx],
@@ -3597,7 +3597,7 @@ function requireReactDomClient_production() {
       if (null == newChildren) throw Error(formatProdErrorMessage2(151));
       for (var resultingFirstChild = null, previousNewFiber = null, oldFiber = currentFirstChild, newIdx = currentFirstChild = 0, nextOldFiber = null, step = newChildren.next(); null !== oldFiber && !step.done; newIdx++, step = newChildren.next()) {
         oldFiber.index > newIdx ? (nextOldFiber = oldFiber, oldFiber = null) : nextOldFiber = oldFiber.sibling;
-        var newFiber = updateSlot2(returnFiber, oldFiber, step.value, lanes);
+        var newFiber = updateSlot(returnFiber, oldFiber, step.value, lanes);
         if (null === newFiber) {
           null === oldFiber && (oldFiber = nextOldFiber);
           break;
@@ -12540,21 +12540,10 @@ function bootstrap(weekStart = "") {
 function fetchOverwatchStats(mode = "competitive") {
   return request(`/api/overwatch-stats/?mode=${encodeURIComponent(mode)}`, { method: "GET" });
 }
-function createSlot(payload) {
-  return request("/api/slots/", {
+function replaceDaySlots(payload) {
+  return request("/api/slots/day/replace/", {
     method: "POST",
     body: JSON.stringify(payload)
-  });
-}
-function updateSlot(id2, payload) {
-  return request(`/api/slots/${id2}/`, {
-    method: "PATCH",
-    body: JSON.stringify(payload)
-  });
-}
-function deleteSlot(id2) {
-  return request(`/api/slots/${id2}/delete/`, {
-    method: "DELETE"
   });
 }
 function copyWeekSchedule(payload) {
@@ -12656,7 +12645,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$k = [
+const __iconNode$q = [
   [
     "path",
     {
@@ -12667,8 +12656,8 @@ const __iconNode$k = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$k);
-const __iconNode$j = [
+const BookText = createLucideIcon("book-text", __iconNode$q);
+const __iconNode$p = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12680,32 +12669,77 @@ const __iconNode$j = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$j);
-const __iconNode$i = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$p);
+const __iconNode$o = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$i);
-const __iconNode$h = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$h);
-const __iconNode$g = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$o);
+const __iconNode$n = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$n);
+const __iconNode$m = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$m);
+const __iconNode$l = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const CircleCheck = createLucideIcon("circle-check", __iconNode$l);
+const __iconNode$k = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
+  ["path", { d: "M12 17h.01", key: "p32p05" }]
+];
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$k);
+const __iconNode$j = [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
+  ["path", { d: "m9 9 6 6", key: "z0biqf" }]
+];
+const CircleX = createLucideIcon("circle-x", __iconNode$j);
+const __iconNode$i = [
+  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
+  [
+    "path",
+    {
+      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
+      key: "116196"
+    }
+  ],
+  ["path", { d: "M12 11h4", key: "1jrz19" }],
+  ["path", { d: "M12 16h4", key: "n85exb" }],
+  ["path", { d: "M8 11h.01", key: "1dfujw" }],
+  ["path", { d: "M8 16h.01", key: "18s6g9" }]
+];
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$i);
+const __iconNode$h = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$g);
-const __iconNode$f = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$h);
+const __iconNode$g = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$f);
-const __iconNode$e = [
+const Copy = createLucideIcon("copy", __iconNode$g);
+const __iconNode$f = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$e);
+const ExternalLink = createLucideIcon("external-link", __iconNode$f);
+const __iconNode$e = [
+  [
+    "path",
+    {
+      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+      key: "1nclc0"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+];
+const Eye = createLucideIcon("eye", __iconNode$e);
 const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
 const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
 const __iconNode$c = [
@@ -21095,212 +21129,392 @@ function buildDayEventMap(dayEventTypes = []) {
   });
   return map2;
 }
-function EventModal({ event, day, days, weekStart, onClose, onSaved, onDeleted }) {
-  const isEditing = Boolean(event);
-  const [slotType, setSlotType] = reactExports.useState(event?.slotType || "available");
-  const [dayOfWeek, setDayOfWeek] = reactExports.useState(event?.dayOfWeek ?? day ?? days[0]?.value ?? 0);
-  const [startTimeMinutes, setStartTimeMinutes] = reactExports.useState(event?.startTimeMinutes ?? 1140);
-  const [endTimeMinutes, setEndTimeMinutes] = reactExports.useState(event?.endTimeMinutes ?? 1260);
-  const [note, setNote] = reactExports.useState(event?.note || "");
+const NOTE_LIMIT = 100;
+const DEFAULT_START = 1140;
+const DEFAULT_END = 1260;
+const DAY_LABELS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+const SLOT_TYPES = [
+  {
+    value: "available",
+    title: "TIME RANGE",
+    description: "set custom time",
+    icon: Clock3
+  },
+  {
+    value: "full_day_available",
+    title: "ALL AVAILABLE",
+    description: "Available all day",
+    icon: CircleCheck
+  },
+  {
+    value: "tentative",
+    title: "NOT SURE",
+    description: "Mark as uncertain",
+    icon: CircleQuestionMark
+  },
+  {
+    value: "unavailable",
+    title: "I CANT",
+    description: "Not available",
+    icon: CircleX
+  }
+];
+function formatHours$1(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
+function minutesFromSlot(slot, key, fallback) {
+  const value = slot?.[key];
+  return Number.isFinite(value) ? value : fallback;
+}
+function buildEmptyState(dayOfWeek) {
+  return {
+    dayOfWeek,
+    slotType: "available",
+    note: "",
+    timeSlots: [{ startTimeMinutes: DEFAULT_START, endTimeMinutes: DEFAULT_END }]
+  };
+}
+function stateFromDaySlots(dayOfWeek, daySlots) {
+  if (!daySlots.length) return buildEmptyState(dayOfWeek);
+  const statusSlot = daySlots.find((slot) => slot.slotType !== "available");
+  if (statusSlot) {
+    return {
+      dayOfWeek,
+      slotType: statusSlot.slotType,
+      note: statusSlot.note || "",
+      timeSlots: [{ startTimeMinutes: DEFAULT_START, endTimeMinutes: DEFAULT_END }]
+    };
+  }
+  return {
+    dayOfWeek,
+    slotType: "available",
+    note: daySlots[0]?.note || "",
+    timeSlots: daySlots.map((slot) => ({
+      startTimeMinutes: minutesFromSlot(slot, "startTimeMinutes", DEFAULT_START),
+      endTimeMinutes: minutesFromSlot(slot, "endTimeMinutes", DEFAULT_END)
+    }))
+  };
+}
+function sortSlots(slots) {
+  return [...slots].sort((left, right) => {
+    const leftStart = left.startTimeMinutes ?? -1;
+    const rightStart = right.startTimeMinutes ?? -1;
+    return leftStart - rightStart || left.id - right.id;
+  });
+}
+function DayChip({ day, isSelected, onClick }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: `edit-time-day ${isSelected ? "edit-time-day--active" : ""}`, type: "button", onClick, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: DAY_LABELS[day.value] || day.label.slice(0, 3).toUpperCase() }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: day.date.split(".")[0] })
+  ] });
+}
+function SelectBox({ value, options, onChange, ariaLabel }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "edit-time-select", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("select", { "aria-label": ariaLabel, value, onChange: (event) => onChange(Number(event.target.value)), children: options.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 16 })
+  ] });
+}
+function TimelinePreview({ slotType, timeSlots }) {
+  const visibleSlots = slotType === "available" ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-preview", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-preview-scale", children: ["00:00", "06:00", "12:00", "18:00", "00:00"].map((label) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }, label)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-preview-track", children: [
+      [0, 1, 2, 3, 4].map((tick) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "edit-time-preview-tick" }, tick)),
+      visibleSlots.map((slot, index) => {
+        const start = Math.max(0, Math.min(1440, slot.startTimeMinutes));
+        const end = Math.max(start + 60, Math.min(1440, slot.endTimeMinutes));
+        const left = start / 1440 * 100;
+        const width = Math.min(100 - left, Math.max(8, (end - start) / 1440 * 100));
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "edit-time-preview-bar",
+            style: {
+              left: `${left}%`,
+              top: `${index % 2 === 0 ? 22 : 102}px`,
+              width: `${width}%`
+            }
+          },
+          `${slot.startTimeMinutes}-${slot.endTimeMinutes}-${index}`
+        );
+      })
+    ] })
+  ] });
+}
+function Summary({ slotType, timeSlots }) {
+  const totalMinutes = slotType === "available" ? timeSlots.reduce((sum, slot) => sum + Math.max(0, slot.endTimeMinutes - slot.startTimeMinutes), 0) : 1440;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-summary-values", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: slotType === "available" ? timeSlots.length : 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TIME SLOTS" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: formatHours$1(totalMinutes) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TOTAL HOURS" })
+    ] })
+  ] });
+}
+function EventModal({
+  event,
+  day,
+  days,
+  slots = [],
+  currentPlayerId,
+  weekStart,
+  onClose,
+  onSaved
+}) {
+  const startChoices = reactExports.useMemo(() => timeChoices(0, 23), []);
+  const endChoices = reactExports.useMemo(() => timeChoices(1, 24), []);
+  const selectedInitialDay = event?.dayOfWeek ?? day ?? days[0]?.value ?? 0;
+  const slotsByDay = reactExports.useMemo(() => {
+    const grouped = /* @__PURE__ */ new Map();
+    slots.filter((slot) => slot.playerId === currentPlayerId).forEach((slot) => {
+      if (!grouped.has(slot.dayOfWeek)) grouped.set(slot.dayOfWeek, []);
+      grouped.get(slot.dayOfWeek).push(slot);
+    });
+    grouped.forEach((daySlots, dayKey) => grouped.set(dayKey, sortSlots(daySlots)));
+    return grouped;
+  }, [currentPlayerId, slots]);
+  const [formState, setFormState] = reactExports.useState(() => stateFromDaySlots(
+    selectedInitialDay,
+    slotsByDay.get(selectedInitialDay) || []
+  ));
   const [errors, setErrors] = reactExports.useState({});
   const [isSaving, setIsSaving] = reactExports.useState(false);
-  async function handleSubmit(submitEvent) {
+  function loadDay(dayOfWeek) {
+    setErrors({});
+    setFormState(stateFromDaySlots(dayOfWeek, slotsByDay.get(dayOfWeek) || []));
+  }
+  function setSlotType(slotType) {
+    setErrors({});
+    setFormState((current2) => ({
+      ...current2,
+      slotType,
+      timeSlots: current2.timeSlots.length ? current2.timeSlots : [{ startTimeMinutes: DEFAULT_START, endTimeMinutes: DEFAULT_END }]
+    }));
+  }
+  function updateTimeSlot(index, key, value) {
+    setFormState((current2) => ({
+      ...current2,
+      timeSlots: current2.timeSlots.map((slot, slotIndex) => {
+        if (slotIndex !== index) return slot;
+        const nextSlot = { ...slot, [key]: value };
+        if (key === "startTimeMinutes" && nextSlot.endTimeMinutes <= value) {
+          nextSlot.endTimeMinutes = Math.min(1440, value + 60);
+        }
+        if (key === "endTimeMinutes" && value <= nextSlot.startTimeMinutes) {
+          nextSlot.startTimeMinutes = Math.max(0, value - 60);
+        }
+        return nextSlot;
+      })
+    }));
+  }
+  function addTimeSlot() {
+    setFormState((current2) => {
+      const lastSlot = current2.timeSlots[current2.timeSlots.length - 1] || { endTimeMinutes: DEFAULT_START };
+      const startTimeMinutes = Math.min(1380, lastSlot.endTimeMinutes);
+      const endTimeMinutes = Math.min(1440, startTimeMinutes + 120);
+      return {
+        ...current2,
+        slotType: "available",
+        timeSlots: [...current2.timeSlots, { startTimeMinutes, endTimeMinutes }]
+      };
+    });
+  }
+  function removeTimeSlot(index) {
+    setFormState((current2) => ({
+      ...current2,
+      timeSlots: current2.timeSlots.filter((_slot, slotIndex) => slotIndex !== index)
+    }));
+  }
+  function updateNote(value) {
+    setFormState((current2) => ({
+      ...current2,
+      note: Array.from(value).slice(0, NOTE_LIMIT).join("")
+    }));
+  }
+  async function submitReplacement(submitEvent) {
     submitEvent.preventDefault();
     setIsSaving(true);
     setErrors({});
-    const payload = {
-      weekStart: event?.weekStart || weekStart,
-      slotType,
-      dayOfWeek,
-      startTimeMinutes,
-      endTimeMinutes,
-      note
-    };
-    if (slotType === "unavailable" || slotType === "full_day_available" || slotType === "tentative") {
-      payload.startTimeMinutes = null;
-      payload.endTimeMinutes = null;
-    }
     try {
-      const response = isEditing ? await updateSlot(event.id, payload) : await createSlot(payload);
-      onSaved(response.slot);
+      const response = await replaceDaySlots({
+        weekStart: event?.weekStart || weekStart,
+        dayOfWeek: formState.dayOfWeek,
+        slotType: formState.slotType,
+        note: formState.note,
+        timeSlots: formState.slotType === "available" ? formState.timeSlots : []
+      });
+      onSaved(response);
     } catch (saveError) {
       setErrors(saveError.payload?.errors || { __all__: [saveError.message] });
     } finally {
       setIsSaving(false);
     }
   }
-  async function handleDelete() {
-    if (!isEditing) return;
+  async function removeDay() {
     setIsSaving(true);
+    setErrors({});
     try {
-      await deleteSlot(event.id);
-      onDeleted(event.id);
+      const response = await replaceDaySlots({
+        weekStart: event?.weekStart || weekStart,
+        dayOfWeek: formState.dayOfWeek,
+        clear: true,
+        note: "",
+        timeSlots: []
+      });
+      onSaved(response);
     } catch (deleteError) {
       setErrors(deleteError.payload?.errors || { __all__: [deleteError.message] });
     } finally {
       setIsSaving(false);
     }
   }
-  const startChoices = timeChoices(0, 23);
-  const endChoices = timeChoices(1, 24);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+  const noteLength = Array.from(formState.note).length;
+  const hasExistingDaySlots = Boolean((slotsByDay.get(formState.dayOfWeek) || []).length);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     motion.form,
     {
       initial: { opacity: 0, y: 24, scale: 0.98 },
       animate: { opacity: 1, y: 0, scale: 1 },
-      className: "max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
-      onSubmit: handleSubmit,
+      className: "edit-time-modal",
+      onSubmit: submitReplacement,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Availability editor" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-2xl font-black uppercase text-slate-100", children: isEditing ? "Редактировать время" : "Добавить время" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "edit-time-title", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "EDIT" }),
+          " TIME"
+        ] }),
+        errors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-error", children: errors.__all__.join(", ") }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-types", children: SLOT_TYPES.map((type) => {
+          const Icon2 = type.icon;
+          const isActive = formState.slotType === type.value;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
-              className: "rounded-xl border border-bf-cream/10 p-2 text-bf-cream/60 transition hover:border-bf-orange/40 hover:text-bf-orange",
+              className: `edit-time-type ${isActive ? "edit-time-type--active" : ""}`,
               type: "button",
-              onClick: onClose,
-              "aria-label": "Закрыть",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 })
+              onClick: () => setSlotType(type.value),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 38, strokeWidth: 1.8 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: type.title }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: type.description })
+              ]
+            },
+            type.value
+          );
+        }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-main-grid", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "edit-time-left-panel", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(CalendarDays, { size: 17 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "SELECT DAY" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-days", children: days.map((dayOption) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              DayChip,
+              {
+                day: dayOption,
+                isSelected: formState.dayOfWeek === dayOption.value,
+                onClick: () => loadDay(dayOption.value)
+              },
+              dayOption.value
+            )) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label edit-time-section-label--slots", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Clock3, { size: 16 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TIME SLOTS" })
+            ] }),
+            formState.slotType === "available" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-slots", children: [
+              formState.timeSlots.map((timeSlot, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-slot-row", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  SelectBox,
+                  {
+                    ariaLabel: `Start time slot ${index + 1}`,
+                    options: startChoices,
+                    value: timeSlot.startTimeMinutes,
+                    onChange: (value) => updateTimeSlot(index, "startTimeMinutes", value)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "edit-time-slot-dash", children: "-" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  SelectBox,
+                  {
+                    ariaLabel: `End time slot ${index + 1}`,
+                    options: endChoices,
+                    value: timeSlot.endTimeMinutes,
+                    onChange: (value) => updateTimeSlot(index, "endTimeMinutes", value)
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    className: "edit-time-slot-remove",
+                    type: "button",
+                    disabled: formState.timeSlots.length === 1,
+                    onClick: () => removeTimeSlot(index),
+                    "aria-label": "Remove time slot",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 18 })
+                  }
+                )
+              ] }, index)),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "edit-time-add-slot", type: "button", onClick: addTimeSlot, children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16 }),
+                "ADD TIME SLOT"
+              ] })
+            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `edit-time-status-preview edit-time-status-preview--${formState.slotType}`, children: SLOT_TYPES.find((type) => type.value === formState.slotType)?.title }),
+            errors.time_slots ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error", children: errors.time_slots.join(", ") }) : null,
+            errors.start_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error", children: errors.start_time_minutes.join(", ") }) : null,
+            errors.end_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error", children: errors.end_time_minutes.join(", ") }) : null
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "edit-time-right-panel", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { size: 25 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "VISUAL PREVIEW" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(TimelinePreview, { slotType: formState.slotType, timeSlots: formState.timeSlots }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label edit-time-section-label--summary", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ClipboardList, { size: 25 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "SUMMARY" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Summary, { slotType: formState.slotType, timeSlots: formState.timeSlots })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "edit-time-comment", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Comment (optional)" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("strong", { children: [
+            noteLength,
+            "/",
+            NOTE_LIMIT
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              maxLength: NOTE_LIMIT,
+              placeholder: "Additional information",
+              value: formState.note,
+              onChange: (event2) => updateNote(event2.target.value)
             }
           )
         ] }),
-        errors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: errors.__all__.join(", ") }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 grid gap-5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-md:grid-cols-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "available" ? "border-bf-orange bg-bf-orange/15 text-bf-orange" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("available"),
-                children: "Диапазон времени"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "full_day_available" ? "border-emerald-300/50 bg-emerald-500/15 text-emerald-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("full_day_available"),
-                children: "Свободен весь день"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "tentative" ? "border-orange-300/50 bg-orange-500/15 text-orange-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("tentative"),
-                children: "Не уверен"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: `rounded-xl border px-4 py-3 font-black transition ${slotType === "unavailable" ? "border-red-300/50 bg-red-500/15 text-red-100" : "border-bf-cream/10 bg-black/20 text-bf-cream/62"}`,
-                type: "button",
-                onClick: () => setSlotType("unavailable"),
-                children: "Не могу в этот день"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "День",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "select",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                value: dayOfWeek,
-                onChange: (inputEvent) => setDayOfWeek(Number(inputEvent.target.value)),
-                children: days.map((dayOption) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: dayOption.value, children: [
-                  dayOption.label,
-                  " - ",
-                  dayOption.date
-                ] }, dayOption.value))
-              }
-            ),
-            errors.day_of_week ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.day_of_week.join(", ") }) : null
-          ] }),
-          slotType === "available" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4 max-sm:grid-cols-1", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-              "С",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                  value: startTimeMinutes,
-                  onChange: (inputEvent) => setStartTimeMinutes(Number(inputEvent.target.value)),
-                  children: startChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
-                }
-              ),
-              errors.start_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.start_time_minutes.join(", ") }) : null
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-              "До",
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "select",
-                {
-                  className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none focus:border-bf-orange/50",
-                  value: endTimeMinutes,
-                  onChange: (inputEvent) => setEndTimeMinutes(Number(inputEvent.target.value)),
-                  children: endChoices.map((choice) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: choice.value, children: choice.label }, choice.value))
-                }
-              ),
-              errors.end_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-200", children: errors.end_time_minutes.join(", ") }) : null
-            ] })
-          ] }) : null,
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "grid gap-2 text-sm font-black text-bf-cream/70", children: [
-            "Комментарий",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "input",
-              {
-                className: "h-12 rounded-xl border border-bf-cream/10 bg-black/30 px-4 text-slate-100 outline-none placeholder:text-bf-cream/35 focus:border-bf-orange/50",
-                value: note,
-                onChange: (inputEvent) => setNote(inputEvent.target.value),
-                placeholder: "Дополнительная информация"
-              }
-            )
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex flex-wrap justify-between gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: isEditing ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        errors.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error edit-time-field-error--comment", children: errors.note.join(", ") }) : null,
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-actions", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
-              className: "inline-flex min-h-11 items-center gap-2 rounded-xl border border-red-300/30 px-4 font-black text-red-100 transition hover:bg-red-500/10",
+              className: "edit-time-remove",
               type: "button",
-              disabled: isSaving,
-              onClick: handleDelete,
+              disabled: isSaving || !hasExistingDaySlots,
+              onClick: removeDay,
               children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 18 }),
-                "Удалить"
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 25 }),
+                "Remove"
               ]
             }
-          ) : null }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                className: "min-h-11 rounded-xl border border-bf-cream/10 px-4 font-black text-bf-cream/70 transition hover:border-bf-orange/40",
-                type: "button",
-                onClick: onClose,
-                children: "Отмена"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                className: "inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-b from-orange-400 to-bf-orange px-5 font-black text-black transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0",
-                type: "submit",
-                disabled: isSaving,
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(Save, { size: 18 }),
-                  "Сохранить"
-                ]
-              }
-            )
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-action-pair", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "edit-time-cancel", type: "button", disabled: isSaving, onClick: onClose, children: "Cancel" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "edit-time-save", type: "submit", disabled: isSaving, children: "Save" })
           ] })
         ] })
       ]
@@ -47808,23 +48022,19 @@ function App() {
   function handleNoteHoverEnd() {
     setCommentTooltip(null);
   }
-  function upsertSlot(slot) {
+  function replaceDaySlots2({ slots = [], deletedIds = [] }) {
     setData((current2) => {
-      if (slot.weekStart !== current2.selectedWeekStart) {
-        return current2;
-      }
+      const visibleSlots = slots.filter((slot) => slot.weekStart === current2.selectedWeekStart);
+      const deleted = new Set(deletedIds);
+      const incoming = new Set(visibleSlots.map((slot) => slot.id));
       return {
         ...current2,
-        slots: current2.slots.some((existing) => existing.id === slot.id) ? current2.slots.map((existing) => existing.id === slot.id ? slot : existing) : [...current2.slots, slot]
+        slots: [
+          ...current2.slots.filter((slot) => !deleted.has(slot.id) && !incoming.has(slot.id)),
+          ...visibleSlots
+        ]
       };
     });
-    setSlotModal(null);
-  }
-  function removeSlot(id2) {
-    setData((current2) => ({
-      ...current2,
-      slots: current2.slots.filter((slot) => slot.id !== id2)
-    }));
     setSlotModal(null);
   }
   async function handleWeekChange(weekStart) {
@@ -47876,10 +48086,11 @@ function App() {
         event: slotModal.event,
         day: slotModal.day,
         days: data.days,
+        slots: data.slots,
+        currentPlayerId: data.user.playerId,
         weekStart: data.selectedWeekStart,
         onClose: () => setSlotModal(null),
-        onSaved: upsertSlot,
-        onDeleted: removeSlot
+        onSaved: replaceDaySlots2
       }
     ) : null,
     copyModalOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(

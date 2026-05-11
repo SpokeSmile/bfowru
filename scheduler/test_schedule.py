@@ -89,6 +89,18 @@ class ScheduleFormTests(TestCase):
         self.assertIsNone(form.cleaned_data['start_time_minutes'])
         self.assertIsNone(form.cleaned_data['end_time_minutes'])
 
+    def test_rejects_note_longer_than_100_characters(self):
+        form = ScheduleSlotForm(data={
+            'slot_type': ScheduleSlot.AVAILABLE,
+            'day_of_week': ScheduleSlot.TUESDAY,
+            'start_time_minutes': 1080,
+            'end_time_minutes': 1200,
+            'note': 'x' * 101,
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('note', form.errors)
+
 
 class ScheduleSlotModelTests(TestCase):
     def setUp(self):
@@ -553,6 +565,157 @@ class ScheduleApiTests(TestCase):
 
         self.assertEqual(response.status_code, 403)
         self.assertFalse(ScheduleSlot.objects.filter(week_start=date(2026, 4, 20)).exists())
+
+    def test_api_replaces_day_with_multiple_time_slots(self):
+        current_week = date(2026, 4, 27)
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': current_week})
+        existing = ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=current_week,
+            slot_type=ScheduleSlot.TENTATIVE,
+            day_of_week=ScheduleSlot.MONDAY,
+            note='replace me',
+        )
+        other_player_slot = ScheduleSlot.objects.create(
+            player=self.player_two,
+            week_start=current_week,
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+            note='keep other',
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_replace_day', {
+                'weekStart': '2026-04-27',
+                'dayOfWeek': ScheduleSlot.MONDAY,
+                'slotType': ScheduleSlot.AVAILABLE,
+                'note': 'new day',
+                'timeSlots': [
+                    {'startTimeMinutes': 600, 'endTimeMinutes': 720},
+                    {'startTimeMinutes': 1200, 'endTimeMinutes': 1380},
+                ],
+            })
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['deletedIds'], [existing.id])
+        self.assertEqual(len(data['slots']), 2)
+        self.assertFalse(ScheduleSlot.objects.filter(pk=existing.pk).exists())
+        self.assertTrue(ScheduleSlot.objects.filter(pk=other_player_slot.pk).exists())
+        created_slots = list(ScheduleSlot.objects.filter(player=self.player_one, week_start=current_week, day_of_week=ScheduleSlot.MONDAY))
+        self.assertEqual(len(created_slots), 2)
+        self.assertTrue(all(slot.note == 'new day' for slot in created_slots))
+
+    def test_api_replaces_day_with_all_day_status(self):
+        current_week = date(2026, 4, 27)
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': current_week})
+        ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=current_week,
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.THURSDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_replace_day', {
+                'weekStart': '2026-04-27',
+                'dayOfWeek': ScheduleSlot.THURSDAY,
+                'slotType': ScheduleSlot.UNAVAILABLE,
+                'note': 'busy',
+                'timeSlots': [
+                    {'startTimeMinutes': 600, 'endTimeMinutes': 720},
+                ],
+            })
+
+        self.assertEqual(response.status_code, 200)
+        slots = ScheduleSlot.objects.filter(player=self.player_one, week_start=current_week, day_of_week=ScheduleSlot.THURSDAY)
+        self.assertEqual(slots.count(), 1)
+        slot = slots.get()
+        self.assertEqual(slot.slot_type, ScheduleSlot.UNAVAILABLE)
+        self.assertIsNone(slot.start_time_minutes)
+        self.assertEqual(response.json()['slots'][0]['slotType'], ScheduleSlot.UNAVAILABLE)
+
+    def test_api_replace_day_can_clear_day(self):
+        current_week = date(2026, 4, 27)
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': current_week})
+        slot = ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=current_week,
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_replace_day', {
+                'weekStart': '2026-04-27',
+                'dayOfWeek': ScheduleSlot.MONDAY,
+                'clear': True,
+            })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['deletedIds'], [slot.id])
+        self.assertEqual(response.json()['slots'], [])
+        self.assertFalse(ScheduleSlot.objects.filter(pk=slot.pk).exists())
+
+    def test_api_replace_day_rejects_past_week(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        ScheduleSlot.objects.create(
+            player=self.player_one,
+            week_start=date(2026, 4, 20),
+            slot_type=ScheduleSlot.AVAILABLE,
+            day_of_week=ScheduleSlot.MONDAY,
+            start_time_minutes=600,
+            end_time_minutes=720,
+        )
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_replace_day', {
+                'weekStart': '2026-04-20',
+                'dayOfWeek': ScheduleSlot.MONDAY,
+                'slotType': ScheduleSlot.AVAILABLE,
+                'timeSlots': [{'startTimeMinutes': 720, 'endTimeMinutes': 840}],
+            })
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_api_replace_day_requires_player_profile(self):
+        user = User.objects.create_user(username='viewer', password='secret-pass')
+        self.client.login(username='viewer', password='secret-pass')
+
+        response = self.post_json('api_slot_replace_day', {
+            'weekStart': '2026-04-27',
+            'dayOfWeek': ScheduleSlot.MONDAY,
+            'slotType': ScheduleSlot.AVAILABLE,
+            'timeSlots': [{'startTimeMinutes': 720, 'endTimeMinutes': 840}],
+        })
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_api_replace_day_rejects_note_longer_than_100_characters(self):
+        RosterState.objects.update_or_create(pk=1, defaults={'current_week_start': date(2026, 4, 27)})
+        self.client.login(username='player1', password='secret-pass')
+
+        with patch('scheduler.roster.timezone.localdate', return_value=date(2026, 4, 30)):
+            response = self.post_json('api_slot_replace_day', {
+                'weekStart': '2026-04-27',
+                'dayOfWeek': ScheduleSlot.MONDAY,
+                'slotType': ScheduleSlot.AVAILABLE,
+                'note': 'x' * 101,
+                'timeSlots': [{'startTimeMinutes': 720, 'endTimeMinutes': 840}],
+            })
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('note', response.json()['errors'])
 
     def test_api_copies_own_week_and_replaces_target_slots(self):
         current_week = date(2026, 4, 27)

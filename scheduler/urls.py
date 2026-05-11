@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/game-updates/<slug:slug>/', api.game_update_detail, name='api_game_update_detail'),
     path('api/overwatch-stats/', api.overwatch_stats, name='api_overwatch_stats'),
     path('api/slots/', api.slot_create, name='api_slot_create'),
+    path('api/slots/day/replace/', api.slot_replace_day, name='api_slot_replace_day'),
     path('api/slots/copy-week/', api.slot_copy_week, name='api_slot_copy_week'),
     path('api/slots/<int:pk>/', api.slot_update, name='api_slot_update'),
     path('api/slots/<int:pk>/delete/', api.slot_delete, name='api_slot_delete'),

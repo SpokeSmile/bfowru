@@ -54,6 +54,13 @@ export function createSlot(payload) {
   });
 }
 
+export function replaceDaySlots(payload) {
+  return request('/api/slots/day/replace/', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function updateSlot(id, payload) {
   return request(`/api/slots/${id}/`, {
     method: 'PATCH',

@@ -277,7 +277,7 @@ class ScheduleSlot(models.Model):
     day_of_week = models.PositiveSmallIntegerField('день недели', choices=DAY_CHOICES)
     start_time_minutes = models.PositiveSmallIntegerField('начало', blank=True, null=True)
     end_time_minutes = models.PositiveSmallIntegerField('конец', blank=True, null=True)
-    note = models.CharField('комментарий', max_length=160, blank=True)
+    note = models.CharField('комментарий', max_length=100, blank=True)
     created_at = models.DateTimeField('создано', auto_now_add=True)
     updated_at = models.DateTimeField('обновлено', auto_now=True)
 

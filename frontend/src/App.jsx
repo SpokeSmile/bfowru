@@ -246,26 +246,19 @@ export default function App() {
     setCommentTooltip(null);
   }
 
-  function upsertSlot(slot) {
+  function replaceDaySlots({ slots = [], deletedIds = [] }) {
     setData((current) => {
-      if (slot.weekStart !== current.selectedWeekStart) {
-        return current;
-      }
+      const visibleSlots = slots.filter((slot) => slot.weekStart === current.selectedWeekStart);
+      const deleted = new Set(deletedIds);
+      const incoming = new Set(visibleSlots.map((slot) => slot.id));
       return {
         ...current,
-        slots: current.slots.some((existing) => existing.id === slot.id)
-          ? current.slots.map((existing) => (existing.id === slot.id ? slot : existing))
-          : [...current.slots, slot],
+        slots: [
+          ...current.slots.filter((slot) => !deleted.has(slot.id) && !incoming.has(slot.id)),
+          ...visibleSlots,
+        ],
       };
     });
-    setSlotModal(null);
-  }
-
-  function removeSlot(id) {
-    setData((current) => ({
-      ...current,
-      slots: current.slots.filter((slot) => slot.id !== id),
-    }));
     setSlotModal(null);
   }
 
@@ -324,10 +317,11 @@ export default function App() {
           event={slotModal.event}
           day={slotModal.day}
           days={data.days}
+          slots={data.slots}
+          currentPlayerId={data.user.playerId}
           weekStart={data.selectedWeekStart}
           onClose={() => setSlotModal(null)}
-          onSaved={upsertSlot}
-          onDeleted={removeSlot}
+          onSaved={replaceDaySlots}
         />
       ) : null}
       {copyModalOpen ? (
