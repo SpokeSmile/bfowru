@@ -46693,6 +46693,7 @@ function ClockPanel() {
 }
 function ScheduleSidebar({ user }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-tile-mask", "aria-hidden": "true" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
@@ -46726,7 +46727,6 @@ function ScheduleSidebar({ user }) {
 }
 function HeroPanel() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-hero-panel", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-dot-layer" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-glow" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
       "WEEKLY ",
@@ -46975,7 +46975,6 @@ function RosterPage({
   const scale2 = useScheduleScale();
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: CANVAS_WIDTH * scale2, height: CANVAS_HEIGHT * scale2 }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { transform: `scale(${scale2})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-dot-layer" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),

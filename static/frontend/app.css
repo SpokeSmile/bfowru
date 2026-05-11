@@ -2348,9 +2348,7 @@ textarea {
 }
 
 .sf-bg-base,
-.sf-bg-dot-layer,
 .sf-bg-glow,
-.sf-hero-dot-layer,
 .sf-hero-glow {
   pointer-events: none;
   position: absolute;
@@ -2359,15 +2357,6 @@ textarea {
 .sf-bg-base {
   inset: 0;
   background: #0b0d14;
-}
-
-.sf-bg-dot-layer {
-  left: -16px;
-  top: -6px;
-  width: 1968px;
-  height: 1131px;
-  background: url("/static/img/figma/schedule/layers/bg-dot-layer.png") 0 0 / 100% 100% no-repeat;
-  opacity: 0.72;
 }
 
 .sf-bg-glow {
@@ -2392,6 +2381,23 @@ textarea {
     #0c0f17;
   border-right: 1px solid #1b1e28;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.sf-sidebar-tile-mask {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  z-index: 0;
+  width: 235px;
+  height: 1080px;
+  pointer-events: none;
+  background-image: url("/static/img/tile/Dot_tile.png");
+  background-repeat: repeat;
+  background-position: 0 -1px;
+  background-size: 60px 60px;
+  mix-blend-mode: screen;
+  opacity: 0.32;
 }
 
 .sf-sidebar::after {
@@ -2404,6 +2410,13 @@ textarea {
   background: radial-gradient(circle at 50% 100%, rgba(13, 242, 158, 0.13), transparent 64%);
   opacity: 0.75;
   pointer-events: none;
+}
+
+.sf-sidebar-top,
+.sf-team-logo-box,
+.sf-nav,
+.sf-sidebar-profile {
+  z-index: 2;
 }
 
 .sf-sidebar-top {
@@ -2669,15 +2682,6 @@ textarea {
   border: 1px solid #1d212b;
   border-radius: 20px;
   pointer-events: none;
-}
-
-.sf-hero-dot-layer {
-  left: -16px;
-  top: -6px;
-  width: 1428px;
-  height: 167px;
-  background: url("/static/img/figma/schedule/layers/hero-dot-layer.png") 0 0 / 100% 100% no-repeat;
-  opacity: 0.5;
 }
 
 .sf-hero-glow {

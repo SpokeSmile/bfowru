@@ -225,6 +225,7 @@ function ClockPanel() {
 function ScheduleSidebar({ user }) {
   return (
     <aside className="sf-sidebar">
+      <div className="sf-sidebar-tile-mask" aria-hidden="true" />
       <div className="sf-sidebar-top">
         <img className="sf-sidebar-mark" src="/static/img/Logo.png" alt="" />
         <div className="sf-sidebar-brand">
@@ -278,7 +279,6 @@ function ScheduleSidebar({ user }) {
 function HeroPanel() {
   return (
     <section className="sf-hero-panel">
-      <div className="sf-hero-dot-layer" />
       <div className="sf-hero-glow" />
       <h1>
         WEEKLY <span>ROSTER</span>
@@ -577,7 +577,6 @@ export default function RosterPage({
     <div className="sf-viewport" style={{ width: CANVAS_WIDTH * scale, height: CANVAS_HEIGHT * scale }}>
       <div className="sf-canvas" style={{ transform: `scale(${scale})` }}>
         <div className="sf-bg-base" />
-        <div className="sf-bg-dot-layer" />
         <div className="sf-bg-glow" />
 
         <ScheduleSidebar user={user} />
