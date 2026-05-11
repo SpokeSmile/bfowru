@@ -2346,7 +2346,7 @@ textarea {
 .sf-canvas {
   position: absolute;
   inset: 0 auto auto 0;
-  width: 1920px;
+  width: var(--sf-canvas-width, 1920px);
   height: 1080px;
   overflow: hidden;
   transform-origin: top left;
@@ -2604,7 +2604,7 @@ textarea {
 
 .sf-clock-panel {
   position: absolute;
-  left: 865px;
+  left: var(--sf-clock-left, 865px);
   top: 21px;
   z-index: 4;
   display: grid;
@@ -2656,7 +2656,7 @@ textarea {
 
 .sf-notice {
   position: absolute;
-  left: 1706px;
+  left: var(--sf-notice-left, 1706px);
   top: 21px;
   z-index: 4;
   width: 60px;
@@ -2686,10 +2686,10 @@ textarea {
 
 .sf-hero-panel {
   position: absolute;
-  left: 366px;
+  left: var(--sf-main-left, 366px);
   top: 103px;
   z-index: 2;
-  width: 1400px;
+  width: var(--sf-main-width, 1400px);
   height: 130px;
   overflow: hidden;
   border-radius: 20px;
@@ -2718,8 +2718,9 @@ textarea {
 
 .sf-hero-panel h1 {
   position: absolute;
-  left: 469px;
+  left: 50%;
   top: 25px;
+  transform: translateX(-50%);
   margin: 0;
   color: #fff;
   font-size: 55px;
@@ -2734,8 +2735,9 @@ textarea {
 
 .sf-hero-panel p {
   position: absolute;
-  left: 620px;
+  left: 50%;
   top: 84px;
+  transform: translateX(-50%);
   margin: 0;
   color: #fff;
   font-size: 20px;
@@ -2754,21 +2756,21 @@ textarea {
 }
 
 .sf-date-card {
-  left: 366px;
+  left: var(--sf-main-left, 366px);
   top: 266px;
-  width: 540px;
+  width: var(--sf-date-width, 540px);
 }
 
 .sf-best-card {
-  left: 938px;
+  left: var(--sf-best-left, 938px);
   top: 266px;
-  width: 392px;
+  width: var(--sf-best-width, 392px);
 }
 
 .sf-upcoming-card {
-  left: 1362px;
+  left: var(--sf-upcoming-left, 1362px);
   top: 266px;
-  width: 404px;
+  width: var(--sf-upcoming-width, 404px);
 }
 
 .sf-week-switcher {
@@ -2892,10 +2894,10 @@ textarea {
 
 .sf-schedule-table {
   position: absolute;
-  left: 366px;
+  left: var(--sf-main-left, 366px);
   top: 382px;
   z-index: 2;
-  width: 1400px;
+  width: var(--sf-main-width, 1400px);
   height: 600px;
   overflow: hidden;
   border: 1px solid #212530;
@@ -2910,7 +2912,7 @@ textarea {
   left: 0;
   top: 0;
   z-index: 1;
-  width: 1400px;
+  width: var(--sf-main-width, 1400px);
   height: 84px;
   border-bottom: 1px solid #212530;
   border-radius: 20px 20px 0 0;
@@ -2924,7 +2926,7 @@ textarea {
   z-index: 2;
   display: grid;
   height: 84px;
-  grid-template-columns: 175px repeat(7, 175px);
+  grid-template-columns: 175px repeat(7, minmax(0, 1fr));
 }
 
 .sf-table-header-cell {
@@ -3021,7 +3023,7 @@ textarea {
 .sf-table-row {
   display: grid;
   min-height: 86px;
-  grid-template-columns: 175px repeat(7, 175px);
+  grid-template-columns: 175px repeat(7, minmax(0, 1fr));
 }
 
 .sf-player-cell,
@@ -3096,7 +3098,7 @@ textarea {
 
 .sf-event-card {
   position: relative;
-  width: 149px;
+  width: min(149px, 100%);
   min-height: 32px;
   display: grid;
   grid-template-columns: 14px minmax(0, 1fr);
@@ -3189,13 +3191,13 @@ textarea {
 
 .sf-availability {
   position: absolute;
-  left: 366px;
+  left: var(--sf-main-left, 366px);
   top: 997px;
   z-index: 2;
-  width: 1400px;
+  width: var(--sf-main-width, 1400px);
   height: 69px;
   display: grid;
-  grid-template-columns: 175px repeat(7, 175px);
+  grid-template-columns: 175px repeat(7, minmax(0, 1fr));
   align-items: center;
   border: 1px solid #212530;
   border-radius: 20px;
@@ -3276,7 +3278,7 @@ textarea {
 
 .sf-version {
   position: absolute;
-  left: 1826px;
+  left: var(--sf-version-left, 1826px);
   top: 1042px;
   color: rgba(255, 255, 255, 0.2);
   font-size: 20px;

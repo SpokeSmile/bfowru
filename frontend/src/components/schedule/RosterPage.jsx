@@ -7,6 +7,14 @@ import { EVENT_STYLES, buildDayEventMap, previewNote } from '../../scheduleConfi
 
 const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
+const MAIN_LEFT = 366;
+const MAIN_RIGHT = 154;
+const MAIN_WIDTH = 1400;
+const CONTROL_GAP = 32;
+const DATE_CARD_WIDTH = 540;
+const BEST_CARD_WIDTH = 392;
+const UPCOMING_CARD_WIDTH = 404;
+const CONTROL_CONTENT_WIDTH = DATE_CARD_WIDTH + BEST_CARD_WIDTH + UPCOMING_CARD_WIDTH;
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const NAV_ITEMS = [
@@ -115,12 +123,34 @@ function getViewportSize() {
 
 function calculateLayout() {
   const viewport = getViewportSize();
-  const rawScale = Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT, 1);
-  const width = Math.min(viewport.width, Math.floor(CANVAS_WIDTH * rawScale));
-  const height = Math.min(viewport.height, Math.floor(CANVAS_HEIGHT * rawScale));
-  const scale = Math.min(width / CANVAS_WIDTH, height / CANVAS_HEIGHT, 1);
+  const scale = Math.max(0.01, Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT));
+  const canvasWidth = Math.max(CANVAS_WIDTH, viewport.width / scale);
+  const extraWidth = canvasWidth - CANVAS_WIDTH;
+  const mainWidth = MAIN_WIDTH + extraWidth;
+  const controlWidth = mainWidth - CONTROL_GAP * 2;
+  const dateWidth = controlWidth * (DATE_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
+  const bestWidth = controlWidth * (BEST_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
+  const upcomingWidth = controlWidth * (UPCOMING_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
 
-  return { width, height, scale };
+  return {
+    width: viewport.width,
+    height: Math.min(viewport.height, CANVAS_HEIGHT * scale),
+    scale,
+    style: {
+      '--sf-canvas-width': `${canvasWidth}px`,
+      '--sf-main-left': `${MAIN_LEFT}px`,
+      '--sf-main-right': `${MAIN_RIGHT}px`,
+      '--sf-main-width': `${mainWidth}px`,
+      '--sf-date-width': `${dateWidth}px`,
+      '--sf-best-width': `${bestWidth}px`,
+      '--sf-upcoming-width': `${upcomingWidth}px`,
+      '--sf-best-left': `${MAIN_LEFT + dateWidth + CONTROL_GAP}px`,
+      '--sf-upcoming-left': `${MAIN_LEFT + dateWidth + CONTROL_GAP + bestWidth + CONTROL_GAP}px`,
+      '--sf-clock-left': `${MAIN_LEFT + (mainWidth - 380) / 2}px`,
+      '--sf-notice-left': `${MAIN_LEFT + mainWidth - 60}px`,
+      '--sf-version-left': `${canvasWidth - 94}px`,
+    },
+  };
 }
 
 function useScheduleLayout() {
@@ -601,7 +631,7 @@ export default function RosterPage({
 
   return (
     <div className="sf-viewport" style={{ width: layout.width, height: layout.height }}>
-      <div className="sf-canvas" style={{ transform: `scale(${layout.scale})` }}>
+      <div className="sf-canvas" style={{ ...layout.style, transform: `scale(${layout.scale})` }}>
         <div className="sf-bg-base" />
         <div className="sf-bg-glow" />
 
