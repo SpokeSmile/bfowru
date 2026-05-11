@@ -12656,7 +12656,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$n = [
+const __iconNode$k = [
   [
     "path",
     {
@@ -12667,8 +12667,8 @@ const __iconNode$n = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$n);
-const __iconNode$m = [
+const BookText = createLucideIcon("book-text", __iconNode$k);
+const __iconNode$j = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12680,80 +12680,59 @@ const __iconNode$m = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$m);
-const __iconNode$l = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$j);
+const __iconNode$i = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$l);
-const __iconNode$k = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$k);
-const __iconNode$j = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$i);
+const __iconNode$h = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$h);
+const __iconNode$g = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$j);
-const __iconNode$i = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$g);
+const __iconNode$f = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$i);
-const __iconNode$h = [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
-  ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
-  ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
-  ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
-];
-const Crosshair = createLucideIcon("crosshair", __iconNode$h);
-const __iconNode$g = [
+const Copy = createLucideIcon("copy", __iconNode$f);
+const __iconNode$e = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$g);
-const __iconNode$f = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$f);
-const __iconNode$e = [
+const ExternalLink = createLucideIcon("external-link", __iconNode$e);
+const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
+const __iconNode$c = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
   ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$e);
-const __iconNode$d = [
+const LogOut = createLucideIcon("log-out", __iconNode$c);
+const __iconNode$b = [
   ["path", { d: "M4 5h16", key: "1tepv9" }],
   ["path", { d: "M4 12h16", key: "1lakjw" }],
   ["path", { d: "M4 19h16", key: "1djgab" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$d);
-const __iconNode$c = [
-  [
-    "path",
-    {
-      d: "M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z",
-      key: "vbtd3f"
-    }
-  ],
-  ["path", { d: "M12 17v4", key: "1riwvh" }],
-  ["path", { d: "M8 21h8", key: "1ev6f3" }],
-  ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2", key: "x3v2xh" }]
-];
-const MonitorPlay = createLucideIcon("monitor-play", __iconNode$c);
-const __iconNode$b = [
+const Menu = createLucideIcon("menu", __iconNode$b);
+const __iconNode$a = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const Plus = createLucideIcon("plus", __iconNode$b);
-const __iconNode$a = [
+const Plus = createLucideIcon("plus", __iconNode$a);
+const __iconNode$9 = [
   ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
   ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
   ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
   ["path", { d: "M8 16H3v5", key: "1cv678" }]
 ];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$a);
-const __iconNode$9 = [
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$9);
+const __iconNode$8 = [
   [
     "path",
     {
@@ -12764,8 +12743,8 @@ const __iconNode$9 = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$9);
-const __iconNode$8 = [
+const Save = createLucideIcon("save", __iconNode$8);
+const __iconNode$7 = [
   [
     "path",
     {
@@ -12775,8 +12754,8 @@ const __iconNode$8 = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$8);
-const __iconNode$7 = [
+const Settings = createLucideIcon("settings", __iconNode$7);
+const __iconNode$6 = [
   [
     "path",
     {
@@ -12786,18 +12765,7 @@ const __iconNode$7 = [
   ],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$7);
-const __iconNode$6 = [
-  ["polyline", { points: "14.5 17.5 3 6 3 3 6 3 17.5 14.5", key: "1hfsw2" }],
-  ["line", { x1: "13", x2: "19", y1: "19", y2: "13", key: "1vrmhu" }],
-  ["line", { x1: "16", x2: "20", y1: "16", y2: "20", key: "1bron3" }],
-  ["line", { x1: "19", x2: "21", y1: "21", y2: "19", key: "13pww6" }],
-  ["polyline", { points: "14.5 6.5 18 3 21 3 21 6 17.5 9.5", key: "hbey2j" }],
-  ["line", { x1: "5", x2: "9", y1: "14", y2: "18", key: "1hf58s" }],
-  ["line", { x1: "7", x2: "4", y1: "17", y2: "20", key: "pidxm4" }],
-  ["line", { x1: "3", x2: "5", y1: "19", y2: "21", key: "1pehsh" }]
-];
-const Swords = createLucideIcon("swords", __iconNode$6);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$6);
 const __iconNode$5 = [
   ["path", { d: "M10 11v6", key: "nco0om" }],
   ["path", { d: "M14 11v6", key: "outv1u" }],
@@ -21081,64 +21049,6 @@ function CopyScheduleModal({
     }
   ) });
 }
-const EVENT_STYLES = {
-  scrim: {
-    icon: Swords,
-    border: "border-[#56688f]/55",
-    bg: "bg-[#22314d]/80",
-    text: "text-[#b8c7ec]",
-    glow: "shadow-[0_0_12px_rgba(72,88,126,0.14)]"
-  },
-  competitive: {
-    icon: Crosshair,
-    border: "border-[#8a6b4d]/50",
-    bg: "bg-[#3a3028]/80",
-    text: "text-[#e2c19d]",
-    glow: "shadow-[0_0_12px_rgba(138,107,77,0.12)]"
-  },
-  review: {
-    icon: MonitorPlay,
-    border: "border-[#6b5a91]/50",
-    bg: "bg-[#342b4c]/80",
-    text: "text-[#c8b6f2]",
-    glow: "shadow-[0_0_12px_rgba(107,90,145,0.12)]"
-  },
-  tournament: {
-    icon: Trophy,
-    border: "border-[#8d4c45]/50",
-    bg: "bg-[#492a2c]/80",
-    text: "text-[#f0b3a8]",
-    glow: "shadow-[0_0_12px_rgba(141,76,69,0.12)]"
-  },
-  unavailable: {
-    icon: TriangleAlert,
-    border: "border-[#9a4651]/55",
-    bg: "bg-[#612633]/80",
-    text: "text-[#ffc7ce]",
-    glow: "shadow-[0_0_14px_rgba(154,70,81,0.16)]"
-  },
-  full_day_available: {
-    icon: Check,
-    border: "border-[#3f8067]/55",
-    bg: "bg-[#1f513f]/80",
-    text: "text-[#bdebd5]",
-    glow: "shadow-[0_0_12px_rgba(63,128,103,0.14)]"
-  },
-  tentative: {
-    icon: TriangleAlert,
-    border: "border-[#9a6a39]/55",
-    bg: "bg-[#4c3425]/80",
-    text: "text-[#f5c993]",
-    glow: "shadow-[0_0_14px_rgba(154,106,57,0.16)]"
-  },
-  fallback: {
-    icon: Clock3,
-    border: "border-[#556076]/35",
-    bg: "bg-[#202b40]/80",
-    text: "text-[#d7deea]",
-    glow: "shadow-[0_0_10px_rgba(62,73,98,0.12)]"
-  }
-};
 function timeChoices(startHour, endHour) {
   return Array.from({ length: endHour - startHour + 1 }, (_, index) => {
     const hour = startHour + index;
@@ -46546,19 +46456,16 @@ const NAV_ITEMS = [
 const STATUS_META = {
   unavailable: {
     label: "I CAN'T",
-    icon: TriangleAlert,
     className: "sf-event-card--unavailable",
     cellClassName: "sf-schedule-cell--unavailable"
   },
   full_day_available: {
     label: "ALL AVAILABLE",
-    icon: Check,
     className: "sf-event-card--available-all",
     cellClassName: "sf-schedule-cell--available"
   },
   tentative: {
     label: "NOT SURE",
-    icon: TriangleAlert,
     className: "sf-event-card--tentative",
     cellClassName: "sf-schedule-cell--tentative"
   }
@@ -46777,7 +46684,7 @@ function ClockPanel() {
 function ScheduleSidebar({ user }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/logo1.png", alt: "" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "YOU TEAM" })
@@ -46803,7 +46710,7 @@ function ScheduleSidebar({ user }) {
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: "⌃" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: ">" })
     ] })
   ] });
 }
@@ -46881,7 +46788,7 @@ function ControlsRow({
           onClick: onCopy,
           disabled: !hasPlayerProfile,
           "aria-label": "Copy schedule",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 28 })
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "sf-copy-icon", size: 28 })
         }
       )
     ] }),
@@ -46901,15 +46808,6 @@ function ControlsRow({
     ] })
   ] });
 }
-function DayTypePill({ dayEvent }) {
-  const hasDayType = Boolean(dayEvent?.eventType);
-  const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
-  const Icon2 = hasDayType ? style.icon : Clock3;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `sf-day-type ${hasDayType ? "sf-day-type--active" : ""}`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 12 }),
-    hasDayType ? dayEvent.eventLabel : "No type"
-  ] });
-}
 function PlayerCell({ player }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-cell", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sf-player-avatar" }),
@@ -46922,8 +46820,6 @@ function PlayerCell({ player }) {
 function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
   const statusMeta = STATUS_META[event.slotType];
   const isAllDayStatus = Boolean(statusMeta);
-  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const Icon2 = statusMeta?.icon || eventStyle.icon || Clock3;
   const className = statusMeta?.className || "sf-event-card--time";
   const editableProps = event.canEdit ? {
     role: "button",
@@ -46954,7 +46850,6 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
       },
       ...editableProps,
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 14 }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-event-main", children: isAllDayStatus ? statusMeta.label : event.timeRange }),
         event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-event-note", children: previewNote(event.note) }) : null
       ]
@@ -46965,14 +46860,12 @@ function ScheduleTable({
   days,
   players,
   slots,
-  dayEventTypes,
   canEditSelectedWeek,
   onAdd,
   onEdit,
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
-  const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
   const slotsByCell = reactExports.useMemo(() => {
     const grouped = /* @__PURE__ */ new Map();
     slots.forEach((slot) => {
@@ -46989,8 +46882,7 @@ function ScheduleTable({
         const label = DAY_NAMES[day.value] || day.label;
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-table-header-cell ${day.isToday ? "sf-table-header-cell--today" : ""}`, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-day-name", children: label }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-day-date", children: day.date }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-day-date", children: day.date })
         ] }, day.value);
       })
     ] }),
@@ -47110,7 +47002,8 @@ function ResponsiveClockStrip() {
   ];
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-clocks", "aria-label": "World clocks", children: entries.map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock ${label === "YOUR" ? "sfr-clock--active" : ""}`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: value })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: value }),
+    label === "YOUR" ? /* @__PURE__ */ jsxRuntimeExports.jsx("i", { className: "sfr-clock-accent", "aria-hidden": "true" }) : null
   ] }, label)) });
 }
 function ResponsiveTopBar({ user, onMenuOpen }) {
@@ -47181,7 +47074,7 @@ function ResponsiveActions({ canAdd, hasPlayerProfile, canEditSelectedWeek, onAd
         onClick: onCopy,
         disabled: !hasPlayerProfile,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 20 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "sfr-copy-icon", size: 20 }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Copy schedule" })
         ]
       }
@@ -47226,22 +47119,19 @@ function ResponsiveScheduleTable({
   days,
   players,
   slots,
-  dayEventTypes,
   canEditSelectedWeek,
   onAdd,
   onEdit,
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
-  const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
   const slotsByCell = useSlotsByCell(slots);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-table-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-table-scroll", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table-head sfr-table-row", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-table-head-cell sfr-table-head-cell--players", children: "Players" }),
       days.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-table-head-cell ${day.isToday ? "sfr-table-head-cell--today" : ""}`, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: DAY_NAMES[day.value] || day.label }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date })
       ] }, day.value))
     ] }),
     players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table-row", children: [
@@ -47266,8 +47156,7 @@ function ResponsiveScheduleTable({
     ] }, player.id))
   ] }) }) });
 }
-function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
-  const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
+function ScheduleDayTabs({ days, activeDay, onChange }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-day-tabs", role: "tablist", "aria-label": "Week days", children: days.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "button",
     {
@@ -47278,8 +47167,7 @@ function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
       "aria-selected": activeDay === day.value,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: DAY_NAMES[day.value]?.slice(0, 3) || day.label }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date })
       ]
     },
     day.value
@@ -47288,11 +47176,8 @@ function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
 function MobileEventCard({ event, onEdit }) {
   const statusMeta = STATUS_META[event.slotType];
   const isAllDayStatus = Boolean(statusMeta);
-  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const Icon2 = statusMeta?.icon || eventStyle.icon || Clock3;
   const className = statusMeta?.className || "sf-event-card--time";
   const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 17 }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-mobile-event-main", children: isAllDayStatus ? statusMeta.label : event.timeRange }),
     event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-mobile-event-note", children: event.note }) : null
   ] });
@@ -47321,7 +47206,6 @@ function ScheduleMobileView({
   days,
   players,
   slots,
-  dayEventTypes,
   onAdd,
   onEdit,
   onCopy,
@@ -47366,7 +47250,6 @@ function ScheduleMobileView({
       {
         days,
         activeDay,
-        dayEventTypes,
         onChange: setActiveDay
       }
     ),
@@ -47434,7 +47317,6 @@ function ScheduleCompactView({
         days,
         players,
         slots,
-        dayEventTypes,
         canEditSelectedWeek,
         onAdd,
         onEdit,
@@ -47478,7 +47360,6 @@ function RosterPage({
         days,
         players,
         slots,
-        dayEventTypes,
         onAdd,
         onEdit,
         onCopy,
@@ -47516,7 +47397,7 @@ function RosterPage({
     /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", {})
+      null
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47542,7 +47423,6 @@ function RosterPage({
         days,
         players,
         slots,
-        dayEventTypes,
         canEditSelectedWeek,
         onAdd,
         onEdit,

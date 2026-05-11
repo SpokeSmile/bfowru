@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Check, Clock3, Copy, Menu, Plus, X } from 'lucide-react';
+import { Clock3, Copy, Menu, Plus, X } from 'lucide-react';
 
 import { Avatar, RoleBadge } from '../common.jsx';
-import { EVENT_STYLES, buildDayEventMap, previewNote } from '../../scheduleConfig.js';
+import { buildDayEventMap, previewNote } from '../../scheduleConfig.js';
 
 const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
@@ -31,19 +31,16 @@ const NAV_ITEMS = [
 const STATUS_META = {
   unavailable: {
     label: "I CAN'T",
-    icon: AlertTriangle,
     className: 'sf-event-card--unavailable',
     cellClassName: 'sf-schedule-cell--unavailable',
   },
   full_day_available: {
     label: 'ALL AVAILABLE',
-    icon: Check,
     className: 'sf-event-card--available-all',
     cellClassName: 'sf-schedule-cell--available',
   },
   tentative: {
     label: 'NOT SURE',
-    icon: AlertTriangle,
     className: 'sf-event-card--tentative',
     cellClassName: 'sf-schedule-cell--tentative',
   },
@@ -314,7 +311,7 @@ function ScheduleSidebar({ user }) {
   return (
     <aside className="sf-sidebar">
       <div className="sf-sidebar-top">
-        <img className="sf-sidebar-mark" src="/static/img/Logo.png" alt="" />
+        <img className="sf-sidebar-mark" src="/static/img/logo1.png" alt="" />
         <div className="sf-sidebar-brand">
           <span>MANAGE</span>
           <span>YOU TEAM</span>
@@ -357,7 +354,7 @@ function ScheduleSidebar({ user }) {
           <div className="sf-sidebar-profile-name">{user.username}</div>
           <div className="sf-sidebar-profile-subtitle">Team TWIK</div>
         </div>
-        <span className="sf-sidebar-profile-arrow">⌃</span>
+        <span className="sf-sidebar-profile-arrow">&gt;</span>
       </a>
     </aside>
   );
@@ -435,7 +432,7 @@ function ControlsRow({
           disabled={!hasPlayerProfile}
           aria-label="Copy schedule"
         >
-          <Copy size={28} />
+          <Copy className="sf-copy-icon" size={28} />
         </button>
       </section>
 
@@ -466,19 +463,6 @@ function ControlsRow({
   );
 }
 
-function DayTypePill({ dayEvent }) {
-  const hasDayType = Boolean(dayEvent?.eventType);
-  const style = EVENT_STYLES[dayEvent?.eventType] || EVENT_STYLES.fallback;
-  const Icon = hasDayType ? style.icon : Clock3;
-
-  return (
-    <span className={`sf-day-type ${hasDayType ? 'sf-day-type--active' : ''}`}>
-      <Icon size={12} />
-      {hasDayType ? dayEvent.eventLabel : 'No type'}
-    </span>
-  );
-}
-
 function PlayerCell({ player }) {
   return (
     <div className="sf-player-cell">
@@ -494,8 +478,6 @@ function PlayerCell({ player }) {
 function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
   const statusMeta = STATUS_META[event.slotType];
   const isAllDayStatus = Boolean(statusMeta);
-  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const Icon = statusMeta?.icon || eventStyle.icon || Clock3;
   const className = statusMeta?.className || 'sf-event-card--time';
   const editableProps = event.canEdit
     ? {
@@ -528,7 +510,6 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
       }}
       {...editableProps}
     >
-      <Icon size={14} />
       <span className="sf-event-main">{isAllDayStatus ? statusMeta.label : event.timeRange}</span>
       {event.note ? <span className="sf-event-note">{previewNote(event.note)}</span> : null}
     </motion.article>
@@ -539,14 +520,12 @@ function ScheduleTable({
   days,
   players,
   slots,
-  dayEventTypes,
   canEditSelectedWeek,
   onAdd,
   onEdit,
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
-  const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
   const slotsByCell = useMemo(() => {
     const grouped = new Map();
     slots.forEach((slot) => {
@@ -567,7 +546,6 @@ function ScheduleTable({
             <div className={`sf-table-header-cell ${day.isToday ? 'sf-table-header-cell--today' : ''}`} key={day.value}>
               <span className="sf-day-name">{label}</span>
               <span className="sf-day-date">{day.date}</span>
-              <DayTypePill dayEvent={dayEventMap.get(day.value)} />
             </div>
           );
         })}
@@ -740,6 +718,7 @@ function ResponsiveClockStrip() {
         <div className={`sfr-clock ${label === 'YOUR' ? 'sfr-clock--active' : ''}`} key={label}>
           <span>{label}</span>
           <strong>{value}</strong>
+          {label === 'YOUR' ? <i className="sfr-clock-accent" aria-hidden="true" /> : null}
         </div>
       ))}
     </div>
@@ -819,7 +798,7 @@ function ResponsiveActions({ canAdd, hasPlayerProfile, canEditSelectedWeek, onAd
         onClick={onCopy}
         disabled={!hasPlayerProfile}
       >
-        <Copy size={20} />
+        <Copy className="sfr-copy-icon" size={20} />
         <span>Copy schedule</span>
       </button>
     </div>
@@ -867,14 +846,12 @@ function ResponsiveScheduleTable({
   days,
   players,
   slots,
-  dayEventTypes,
   canEditSelectedWeek,
   onAdd,
   onEdit,
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
-  const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
   const slotsByCell = useSlotsByCell(slots);
 
   return (
@@ -887,7 +864,6 @@ function ResponsiveScheduleTable({
               <div className={`sfr-table-head-cell ${day.isToday ? 'sfr-table-head-cell--today' : ''}`} key={day.value}>
                 <strong>{DAY_NAMES[day.value] || day.label}</strong>
                 <span>{day.date}</span>
-                <DayTypePill dayEvent={dayEventMap.get(day.value)} />
               </div>
             ))}
           </div>
@@ -937,9 +913,7 @@ function ResponsiveScheduleTable({
   );
 }
 
-function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
-  const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
-
+function ScheduleDayTabs({ days, activeDay, onChange }) {
   return (
     <div className="sfr-day-tabs" role="tablist" aria-label="Week days">
       {days.map((day) => (
@@ -953,7 +927,6 @@ function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
         >
           <strong>{DAY_NAMES[day.value]?.slice(0, 3) || day.label}</strong>
           <span>{day.date}</span>
-          <DayTypePill dayEvent={dayEventMap.get(day.value)} />
         </button>
       ))}
     </div>
@@ -963,13 +936,10 @@ function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
 function MobileEventCard({ event, onEdit }) {
   const statusMeta = STATUS_META[event.slotType];
   const isAllDayStatus = Boolean(statusMeta);
-  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
-  const Icon = statusMeta?.icon || eventStyle.icon || Clock3;
   const className = statusMeta?.className || 'sf-event-card--time';
 
   const content = (
     <>
-      <Icon size={17} />
       <span className="sfr-mobile-event-main">{isAllDayStatus ? statusMeta.label : event.timeRange}</span>
       {event.note ? <span className="sfr-mobile-event-note">{event.note}</span> : null}
     </>
@@ -1025,7 +995,6 @@ function ScheduleMobileView({
   days,
   players,
   slots,
-  dayEventTypes,
   onAdd,
   onEdit,
   onCopy,
@@ -1068,7 +1037,6 @@ function ScheduleMobileView({
       <ScheduleDayTabs
         days={days}
         activeDay={activeDay}
-        dayEventTypes={dayEventTypes}
         onChange={setActiveDay}
       />
       <section className="sfr-mobile-list" aria-label={activeDayData?.label || 'Selected day'}>
@@ -1132,7 +1100,6 @@ function ScheduleCompactView({
         days={days}
         players={players}
         slots={slots}
-        dayEventTypes={dayEventTypes}
         canEditSelectedWeek={canEditSelectedWeek}
         onAdd={onAdd}
         onEdit={onEdit}
@@ -1164,6 +1131,7 @@ export default function RosterPage({
 }) {
   const viewport = useScheduleViewport();
   const layout = useScheduleLayout();
+  const hasNotifications = false;
 
   if (viewport.mode === 'mobile') {
     return (
@@ -1177,7 +1145,6 @@ export default function RosterPage({
         days={days}
         players={players}
         slots={slots}
-        dayEventTypes={dayEventTypes}
         onAdd={onAdd}
         onEdit={onEdit}
         onCopy={onCopy}
@@ -1219,7 +1186,7 @@ export default function RosterPage({
         <ClockPanel />
         <button className="sf-notice" type="button" aria-label="Notifications">
           <img src="/static/img/figma/schedule/icons/bell.png" alt="" />
-          <span />
+          {hasNotifications ? <span className="sf-notice-dot" /> : null}
         </button>
 
         <HeroPanel />
@@ -1241,7 +1208,6 @@ export default function RosterPage({
           days={days}
           players={players}
           slots={slots}
-          dayEventTypes={dayEventTypes}
           canEditSelectedWeek={canEditSelectedWeek}
           onAdd={onAdd}
           onEdit={onEdit}
