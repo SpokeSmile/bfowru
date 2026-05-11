@@ -601,20 +601,34 @@ textarea {
   overflow: hidden;
 }
 
-.sf-sidebar-tile-mask {
+.sf-sidebar-tile-ellipse {
   position: absolute;
-  left: 0;
-  top: -1px;
   z-index: 0;
-  width: 235px;
-  height: 1080px;
+  width: 700px;
+  height: 700px;
   pointer-events: none;
-  background-image: url("/static/img/tile/Dot_tile.png");
-  background-repeat: repeat;
-  background-position: 0 -1px;
-  background-size: 60px 60px;
+  border-radius: 999px;
+  background: rgba(13, 242, 158, 0.9);
   mix-blend-mode: screen;
-  opacity: 0.32;
+  opacity: 0.42;
+  -webkit-mask-image: url("/static/img/tile/Dot_tile.png");
+  mask-image: url("/static/img/tile/Dot_tile.png");
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 60px 60px;
+  mask-size: 60px 60px;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+}
+
+.sf-sidebar-tile-ellipse--top-left {
+  left: -520px;
+  top: -250px;
+}
+
+.sf-sidebar-tile-ellipse--bottom-right {
+  right: -520px;
+  bottom: -250px;
 }
 
 .sf-sidebar::after {

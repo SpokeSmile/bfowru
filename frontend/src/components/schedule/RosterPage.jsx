@@ -250,7 +250,8 @@ function ClockPanel() {
 function ScheduleSidebar({ user }) {
   return (
     <aside className="sf-sidebar">
-      <div className="sf-sidebar-tile-mask" aria-hidden="true" />
+      <div className="sf-sidebar-tile-ellipse sf-sidebar-tile-ellipse--top-left" aria-hidden="true" />
+      <div className="sf-sidebar-tile-ellipse sf-sidebar-tile-ellipse--bottom-right" aria-hidden="true" />
       <div className="sf-sidebar-top">
         <img className="sf-sidebar-mark" src="/static/img/Logo.png" alt="" />
         <div className="sf-sidebar-brand">
