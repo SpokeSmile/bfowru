@@ -65,7 +65,7 @@ export default function EventModal({ event, day, days, weekStart, onClose, onSav
       <motion.form
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="w-full max-w-2xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel"
+        className="max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel"
         onSubmit={handleSubmit}
       >
         <div className="flex items-start justify-between gap-4">

@@ -5,7 +5,7 @@ function TeamBanner() {
     <section className="glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8">
       <div className="relative z-10 grid gap-2 lg:max-w-[520px]">
         <div className="text-sm font-black uppercase text-bf-orange">Black Flock team</div>
-        <h1 className="whitespace-nowrap text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl">
+        <h1 className="break-words text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl">
           Состав команды
         </h1>
       </div>
@@ -24,7 +24,7 @@ function StaffDirectory({ staffMembers }) {
       {staffMembers.length ? (
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
           {staffMembers.map((staffMember) => (
-            <article key={staffMember.id} className="rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
+            <article key={staffMember.id} className="min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
               <div className="flex items-start gap-3">
                 <Avatar src={staffMember.avatarUrl} alt={staffMember.name} fallbackLabel={staffMember.name} className="h-12 w-12 object-cover" />
                 <div className="min-w-0 flex-1">
@@ -68,7 +68,7 @@ function PlayerProfiles({ players, showHeading = true }) {
 
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {players.map((player) => (
-          <article key={player.id} className="rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
+          <article key={player.id} className="min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="h-12 w-12 object-cover" />
@@ -94,7 +94,7 @@ function PlayerProfiles({ players, showHeading = true }) {
                     {player.battleTags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100"
+                        className="max-w-full break-all rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100"
                       >
                         {tag}
                       </span>

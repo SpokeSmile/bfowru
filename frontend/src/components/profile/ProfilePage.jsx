@@ -107,7 +107,7 @@ export default function ProfilePage({ user, profile, profileType, onSaved }) {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <form className="rounded-xl border border-bf-cream/10 bg-black/24 p-5" onSubmit={handleProfileSubmit}>
+        <form className="min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-5" onSubmit={handleProfileSubmit}>
           <div className="text-sm font-black uppercase text-bf-orange">
             {isStaffProfile ? 'Контактные данные' : 'Игровые данные'}
           </div>
@@ -165,10 +165,10 @@ export default function ProfilePage({ user, profile, profileType, onSaved }) {
               <div className="text-sm font-black uppercase text-bf-orange">Discord</div>
               {profile.discordConnected ? (
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
                     <Avatar src={profile.avatarUrl} alt={profile.discordDisplayTag} fallbackLabel={profile.name || profile.discordDisplayTag} className="h-12 w-12 object-cover" />
-                    <div>
-                      <div className="text-sm font-black text-slate-100">{profile.discordDisplayTag || '@unknown'}</div>
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-black text-slate-100">{profile.discordDisplayTag || '@unknown'}</div>
                       <div className="mt-1 text-xs text-bf-cream/50">
                         {profile.discordGlobalName || 'Подключенный аккаунт Discord'}
                       </div>
@@ -185,7 +185,7 @@ export default function ProfilePage({ user, profile, profileType, onSaved }) {
                 </div>
               ) : (
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-sm font-semibold text-slate-100">Не подключен</div>
                     <div className="mt-1 text-xs text-bf-cream/50">Аватар и Discord handle подтянутся автоматически после подключения.</div>
                   </div>
@@ -214,7 +214,7 @@ export default function ProfilePage({ user, profile, profileType, onSaved }) {
           </div>
         </form>
 
-        <form className="rounded-xl border border-bf-cream/10 bg-black/24 p-5" onSubmit={handlePasswordSubmit}>
+        <form className="min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-5" onSubmit={handlePasswordSubmit}>
           <div className="text-sm font-black uppercase text-bf-orange">Безопасность</div>
           {passwordErrors.__all__ ? (
             <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100">

@@ -12874,7 +12874,7 @@ function RoleBadge({ role, color: color2, className = "" }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "span",
     {
-      className: `rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
+      className: `inline-flex max-w-full items-center overflow-hidden truncate whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`,
       style: roleBadgeStyle(color2),
       children: role
     }
@@ -12884,7 +12884,7 @@ function DiscordClouds({ displayTag }) {
   if (!displayTag) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-bf-cream/42", children: "Не подключен" });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "max-w-full break-all rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100", children: displayTag }) });
 }
 function formatClock$1(timeZone) {
   const options = {
@@ -13045,20 +13045,20 @@ function HubButton({ as = "button", href = "", icon: Icon2, label, caption, vari
     ] })
   ] });
   if (as === "a") {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: `inline-flex min-h-14 items-center gap-3 rounded-xl border px-4 transition ${className}`, href, children: content });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: `inline-flex min-h-14 w-full min-w-0 items-center gap-3 rounded-xl border px-4 transition ${className}`, href, children: content });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `inline-flex min-h-14 items-center gap-3 rounded-xl border px-4 transition ${className}`, type: "button", onClick, children: content });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `inline-flex min-h-14 w-full min-w-0 items-center gap-3 rounded-xl border px-4 transition ${className}`, type: "button", onClick, children: content });
 }
 function SummaryTile({ icon: Icon2, label, value, caption }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/22 p-4", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid h-10 w-10 place-items-center rounded-xl border border-bf-orange/20 bg-bf-orange/10 text-bf-orange", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 19 }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-black uppercase tracking-wide text-bf-cream/42", children: label }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-2xl font-black text-slate-100", children: value })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 truncate text-2xl font-black text-slate-100", children: value })
       ] })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 text-xs font-semibold text-bf-cream/44", children: caption })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 break-words text-xs font-semibold text-bf-cream/44", children: caption })
   ] });
 }
 function QuickCard({ href, icon: Icon2, label, caption }) {
@@ -20985,7 +20985,7 @@ function CopyScheduleModal({
     {
       initial: { opacity: 0, y: 24, scale: 0.98 },
       animate: { opacity: 1, y: 0, scale: 1 },
-      className: "w-full max-w-xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
+      className: "max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
       onSubmit: handleSubmit,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
@@ -21232,7 +21232,7 @@ function EventModal({ event, day, days, weekStart, onClose, onSaved, onDeleted }
     {
       initial: { opacity: 0, y: 24, scale: 0.98 },
       animate: { opacity: 1, y: 0, scale: 1 },
-      className: "w-full max-w-2xl rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
+      className: "max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-xl border border-bf-cream/12 bg-[#0d1420] p-6 shadow-panel",
       onSubmit: handleSubmit,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start justify-between gap-4", children: [
@@ -45940,7 +45940,7 @@ function LoadingPercentBar() {
   const value = useRollingNumber(0, 100, 9e3, 1);
   const syncedValue = Math.min(Math.max(value, 0), 100);
   const width = `${syncedValue}%`;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[110px]", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full min-w-0 max-w-[110px]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 transition-colors duration-300", children: formatPercent(syncedValue) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
@@ -45956,7 +45956,7 @@ function AnimatedPercentBar({ value, seed: seed2 }) {
   const animatedValue = useAnimatedNumber(value, startValue, 3e3, 1);
   const syncedValue = Math.min(Math.max(animatedValue || 0, 0), 100);
   const width = `${syncedValue}%`;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-[118px]", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full min-w-0 max-w-[118px]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100 tabular-nums transition-colors duration-300", children: formatPercent(syncedValue) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
@@ -46062,58 +46062,58 @@ function LoadingCharts() {
   ] });
 }
 function PlayerStatsTable({ players, isLoading }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 overflow-x-auto rounded-xl border border-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[1350px] w-full table-fixed border-collapse bg-[#111925]/86 text-left tabular-nums", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 max-w-full overflow-x-auto rounded-xl border border-bf-cream/10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full min-w-[1080px] table-fixed border-collapse bg-[#111925]/86 text-left tabular-nums xl:min-w-0", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("colgroup", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[250px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[150px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[195px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[145px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[105px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[125px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[90px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[145px]" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[145px]" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[22%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[11%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[16%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[11%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[7%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[9%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[6%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[9%]" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("col", { className: "w-[9%]" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Игрок" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Ранг" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Основной герой" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Winrate" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Матчей" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "W / L" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "K/D" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Сред. убийств" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-4 py-3", children: "Средняя смерть" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Игрок" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Ранг" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Основной герой" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Winrate" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Матчей" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "W / L" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "K/D" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Сред. убийств" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-3 py-3 2xl:px-4", children: "Средняя смерть" })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: players.map((player) => {
       const isReady = !isLoading && player.status === "ready";
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-bf-cream/10 bg-black/10 transition-colors duration-300 last:border-b-0 hover:bg-bf-steel/10", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-10 w-10 object-cover" }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-sm font-black text-slate-100", children: player.name }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 flex flex-wrap items-center gap-1.5", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor }),
-              player.battleTag ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[11px] font-semibold text-bf-cream/42", children: player.battleTag }) : null
+              player.battleTag ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "break-all text-[11px] font-semibold text-bf-cream/42", children: player.battleTag }) : null
             ] }),
             !isLoading && !isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs font-semibold text-amber-100/75", children: player.error || "Данные недоступны" }) : null
           ] })
         ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingRankCell, {}) : isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingRankCell, {}) : isReady && player.rank ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-2", children: [
           player.rank.rankIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "h-5 w-5", src: player.rank.rankIcon, alt: "" }) : null,
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: player.rank.label })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: player.rank.label })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingHeroCell, {}) : isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingHeroCell, {}) : isReady && player.mainHero ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(HeroIcon, { hero: player.mainHero }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate font-black", children: player.mainHero.heroLabel }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-xs text-bf-cream/42", children: formatHours(player.mainHero.timePlayed) })
           ] })
         ] }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingPercentBar, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedPercentBar, { value: player.winrate, seed: `${player.id}-winrate` }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.matches, seed: `${player.id}-matches` }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingWinLossCell, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedWinLossCell, { wins: player.wins, losses: player.losses, seed: player.id }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-black text-emerald-300", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { className: "text-sm font-black text-emerald-300" }) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingPercentBar, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedPercentBar, { value: player.winrate, seed: `${player.id}-winrate` }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.matches, seed: `${player.id}-matches` }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-black", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingWinLossCell, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedWinLossCell, { wins: player.wins, losses: player.losses, seed: player.id }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-black text-emerald-300", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, { className: "text-sm font-black text-emerald-300" }) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(
           AnimatedMetric,
           {
             value: player.kd,
@@ -46122,8 +46122,8 @@ function PlayerStatsTable({ players, isLoading }) {
             className: "text-sm font-black text-emerald-300"
           }
         ) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.avgEliminations, seed: `${player.id}-avg-elims`, precision: 1 }) : "—" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-4 py-3 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.avgDeaths, seed: `${player.id}-avg-deaths`, precision: 1 }) : "—" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.avgEliminations, seed: `${player.id}-avg-elims`, precision: 1 }) : "—" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100", children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingMetric, {}) : isReady ? /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatedMetric, { value: player.avgDeaths, seed: `${player.id}-avg-deaths`, precision: 1 }) : "—" })
       ] }, player.id);
     }) })
   ] }) });
@@ -46295,7 +46295,7 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-1 text-3xl font-black uppercase text-slate-100", children: isStaffProfile ? "Профиль организатора" : "Профиль игрока" })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handleProfileSubmit, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handleProfileSubmit, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: isStaffProfile ? "Контактные данные" : "Игровые данные" }),
         profileErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: profileErrors.__all__.join(", ") }) : null,
         profileSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: profileSuccess }) : null,
@@ -46345,10 +46345,10 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "rounded-xl border border-bf-cream/10 bg-black/28 px-4 py-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Discord" }),
             profile.discordConnected ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-3", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: profile.avatarUrl, alt: profile.discordDisplayTag, fallbackLabel: profile.name || profile.discordDisplayTag, className: "h-12 w-12 object-cover" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black text-slate-100", children: profile.discordDisplayTag || "@unknown" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "truncate text-sm font-black text-slate-100", children: profile.discordDisplayTag || "@unknown" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: profile.discordGlobalName || "Подключенный аккаунт Discord" })
                 ] })
               ] }),
@@ -46363,7 +46363,7 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
                 }
               )
             ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 flex flex-wrap items-center justify-between gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-semibold text-slate-100", children: "Не подключен" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 text-xs text-bf-cream/50", children: "Аватар и Discord handle подтянутся автоматически после подключения." })
               ] }),
@@ -46394,7 +46394,7 @@ function ProfilePage({ user, profile, profileType, onSaved }) {
           }
         ) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handlePasswordSubmit, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-5", onSubmit: handlePasswordSubmit, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Безопасность" }),
         passwordErrors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100", children: passwordErrors.__all__.join(", ") }) : null,
         passwordSuccess ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-3 text-sm text-emerald-100", children: passwordSuccess }) : null,
@@ -47070,7 +47070,7 @@ function RosterPage({
 function TeamBanner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-2 lg:max-w-[520px]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Black Flock team" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "whitespace-nowrap text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl", children: "Состав команды" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "break-words text-4xl font-black uppercase leading-none text-slate-100 max-md:text-3xl", children: "Состав команды" })
   ] }) });
 }
 function StaffDirectory({ staffMembers }) {
@@ -47079,7 +47079,7 @@ function StaffDirectory({ staffMembers }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Operations" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-xl font-black uppercase text-slate-100", children: "Организаторский состав" })
     ] }),
-    staffMembers.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4 lg:grid-cols-2 xl:grid-cols-3", children: staffMembers.map((staffMember) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]", children: [
+    staffMembers.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4 lg:grid-cols-2 xl:grid-cols-3", children: staffMembers.map((staffMember) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: staffMember.avatarUrl, alt: staffMember.name, fallbackLabel: staffMember.name, className: "h-12 w-12 object-cover" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0 flex-1", children: [
@@ -47103,7 +47103,7 @@ function PlayerProfiles({ players, showHeading = true }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm font-black uppercase text-bf-orange", children: "Player profiles" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-1 text-xl font-black uppercase text-slate-100", children: "Актуальные игровые профили" })
     ] }) : null,
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4 lg:grid-cols-2 xl:grid-cols-3", children: players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid gap-4 lg:grid-cols-2 xl:grid-cols-3", children: players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "min-w-0 rounded-xl border border-bf-cream/10 bg-black/24 p-4 shadow-[0_10px_24px_rgba(0,0,0,0.16)]", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-start justify-between gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex min-w-0 items-center gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "h-12 w-12 object-cover" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
@@ -47120,7 +47120,7 @@ function PlayerProfiles({ players, showHeading = true }) {
           player.battleTags.length ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-2 flex flex-wrap gap-2", children: player.battleTags.map((tag) => /* @__PURE__ */ jsxRuntimeExports.jsx(
             "span",
             {
-              className: "rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100",
+              className: "max-w-full break-all rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100",
               children: tag
             },
             tag
@@ -47561,7 +47561,7 @@ function App() {
       sharedModals
     ] });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "app-main mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { pathname }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [

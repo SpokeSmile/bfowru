@@ -38,7 +38,7 @@ export function RoleBadge({ role, color, className = '' }) {
 
   return (
     <span
-      className={`rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`}
+      className={`inline-flex max-w-full items-center overflow-hidden truncate whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-bold ${className}`}
       style={roleBadgeStyle(color)}
     >
       {role}
@@ -53,7 +53,7 @@ export function DiscordClouds({ displayTag }) {
 
   return (
     <div className="mt-2 flex flex-wrap gap-2">
-      <span className="rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100">
+      <span className="max-w-full break-all rounded-full border border-bf-cream/10 bg-bf-steel/18 px-3 py-1 text-sm font-semibold text-slate-100">
         {displayTag}
       </span>
     </div>

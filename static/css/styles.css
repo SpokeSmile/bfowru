@@ -20,9 +20,14 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     min-width: 320px;
     margin: 0;
+    overflow-x: hidden;
     color: var(--ink);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background:
@@ -954,6 +959,56 @@ select option {
 
     .auth-login-hero {
         min-height: 260px;
+    }
+}
+
+@media (min-width: 1101px) {
+    .page-shell {
+        --page-gutter: clamp(20px, 2vw, 40px);
+        width: min(calc(100% - (var(--page-gutter) * 2)), 1840px);
+    }
+
+    .topbar {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: clamp(12px, 1.2vw, 18px);
+    }
+
+    .brand,
+    .topbar-actions {
+        min-width: 0;
+    }
+
+    .brand span,
+    .user-chip {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .user-chip {
+        max-width: 220px;
+    }
+
+    .hero-strip,
+    .roster-board,
+    .auth-login-shell {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .roster-board {
+        overflow-x: hidden;
+    }
+
+    .roster-grid {
+        grid-template-columns: minmax(170px, 194px) repeat(7, minmax(0, 1fr));
+        min-width: 0;
+    }
+
+    .auth-login-shell {
+        width: min(100%, 1180px);
+        grid-template-columns: minmax(0, 1.12fr) minmax(360px, 440px);
     }
 }
 

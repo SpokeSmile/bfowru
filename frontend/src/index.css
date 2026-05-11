@@ -15,6 +15,10 @@ body,
   min-height: 100%;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -51,6 +55,7 @@ textarea {
 }
 
 .glass-panel {
+  min-width: 0;
   border: 1px solid rgba(232, 237, 245, 0.08);
   background:
     linear-gradient(145deg, rgba(74, 87, 112, 0.14), transparent 42%),
@@ -418,12 +423,69 @@ textarea {
 }
 
 @media (min-width: 1280px) {
+  .app-main {
+    --app-gutter: clamp(20px, 2vw, 40px);
+    width: min(calc(100% - (var(--app-gutter) * 2)), 1840px);
+    padding-block: clamp(14px, 1.2vh, 22px) 30px;
+  }
+
   .app-shell {
-    grid-template-columns: 98px minmax(0, 1fr);
+    grid-template-columns: clamp(98px, 5.8vw, 112px) minmax(0, 1fr);
+    align-items: start;
   }
 
   .app-sidebar {
-    width: 98px;
+    width: 100%;
+    min-height: calc(100vh - clamp(28px, 2.4vh, 48px));
+  }
+
+  .top-header {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(12px, 1.2vw, 18px);
+  }
+
+  .top-header-brand,
+  .top-header-actions,
+  .top-header-user {
+    min-width: 0;
+  }
+
+  .top-header-brand span,
+  .top-header-user span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .top-header-actions {
+    flex-wrap: nowrap;
+  }
+
+  .top-header-user {
+    max-width: min(220px, 48%);
+  }
+
+  .top-header-logout {
+    padding-inline: clamp(16px, 1.35vw, 24px);
+    white-space: nowrap;
+  }
+
+  .hero-banner {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .top-header-clocks {
+    grid-template-columns: repeat(3, 76px);
+  }
+
+  .top-header-clock {
+    padding-inline: 12px;
+  }
+
+  .top-header-user {
+    max-width: 150px;
   }
 }
 

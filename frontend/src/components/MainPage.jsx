@@ -29,14 +29,14 @@ function HubButton({ as = 'button', href = '', icon: Icon, label, caption, varia
 
   if (as === 'a') {
     return (
-      <a className={`inline-flex min-h-14 items-center gap-3 rounded-xl border px-4 transition ${className}`} href={href}>
+      <a className={`inline-flex min-h-14 w-full min-w-0 items-center gap-3 rounded-xl border px-4 transition ${className}`} href={href}>
         {content}
       </a>
     );
   }
 
   return (
-    <button className={`inline-flex min-h-14 items-center gap-3 rounded-xl border px-4 transition ${className}`} type="button" onClick={onClick}>
+    <button className={`inline-flex min-h-14 w-full min-w-0 items-center gap-3 rounded-xl border px-4 transition ${className}`} type="button" onClick={onClick}>
       {content}
     </button>
   );
@@ -49,12 +49,12 @@ function SummaryTile({ icon: Icon, label, value, caption }) {
         <div className="grid h-10 w-10 place-items-center rounded-xl border border-bf-orange/20 bg-bf-orange/10 text-bf-orange">
           <Icon size={19} />
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-[11px] font-black uppercase tracking-wide text-bf-cream/42">{label}</div>
-          <div className="mt-1 text-2xl font-black text-slate-100">{value}</div>
+          <div className="mt-1 truncate text-2xl font-black text-slate-100">{value}</div>
         </div>
       </div>
-      <div className="mt-2 text-xs font-semibold text-bf-cream/44">{caption}</div>
+      <div className="mt-2 break-words text-xs font-semibold text-bf-cream/44">{caption}</div>
     </div>
   );
 }

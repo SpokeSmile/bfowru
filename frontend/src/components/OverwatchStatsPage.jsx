@@ -286,7 +286,7 @@ function LoadingPercentBar() {
   const width = `${syncedValue}%`;
 
   return (
-    <div className="min-w-[110px]">
+    <div className="w-full min-w-0 max-w-[110px]">
       <div className="text-sm font-black text-slate-100 transition-colors duration-300">{formatPercent(syncedValue)}</div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bf-cream/10">
         <div
@@ -305,7 +305,7 @@ function AnimatedPercentBar({ value, seed }) {
   const width = `${syncedValue}%`;
 
   return (
-    <div className="min-w-[118px]">
+    <div className="w-full min-w-0 max-w-[118px]">
       <div className="text-sm font-black text-slate-100 tabular-nums transition-colors duration-300">
         {formatPercent(syncedValue)}
       </div>
@@ -430,30 +430,30 @@ function LoadingCharts() {
 
 function PlayerStatsTable({ players, isLoading }) {
   return (
-    <div className="mt-4 overflow-x-auto rounded-xl border border-bf-cream/10">
-      <table className="min-w-[1350px] w-full table-fixed border-collapse bg-[#111925]/86 text-left tabular-nums">
+    <div className="mt-4 max-w-full overflow-x-auto rounded-xl border border-bf-cream/10">
+      <table className="w-full min-w-[1080px] table-fixed border-collapse bg-[#111925]/86 text-left tabular-nums xl:min-w-0">
         <colgroup>
-          <col className="w-[250px]" />
-          <col className="w-[150px]" />
-          <col className="w-[195px]" />
-          <col className="w-[145px]" />
-          <col className="w-[105px]" />
-          <col className="w-[125px]" />
-          <col className="w-[90px]" />
-          <col className="w-[145px]" />
-          <col className="w-[145px]" />
+          <col className="w-[22%]" />
+          <col className="w-[11%]" />
+          <col className="w-[16%]" />
+          <col className="w-[11%]" />
+          <col className="w-[7%]" />
+          <col className="w-[9%]" />
+          <col className="w-[6%]" />
+          <col className="w-[9%]" />
+          <col className="w-[9%]" />
         </colgroup>
         <thead>
           <tr className="border-b border-bf-cream/10 bg-[#121d2b] text-[11px] font-black uppercase tracking-wide text-bf-cream/42">
-            <th className="px-4 py-3">Игрок</th>
-            <th className="px-4 py-3">Ранг</th>
-            <th className="px-4 py-3">Основной герой</th>
-            <th className="px-4 py-3">Winrate</th>
-            <th className="px-4 py-3">Матчей</th>
-            <th className="px-4 py-3">W / L</th>
-            <th className="px-4 py-3">K/D</th>
-            <th className="px-4 py-3">Сред. убийств</th>
-            <th className="px-4 py-3">Средняя смерть</th>
+            <th className="px-3 py-3 2xl:px-4">Игрок</th>
+            <th className="px-3 py-3 2xl:px-4">Ранг</th>
+            <th className="px-3 py-3 2xl:px-4">Основной герой</th>
+            <th className="px-3 py-3 2xl:px-4">Winrate</th>
+            <th className="px-3 py-3 2xl:px-4">Матчей</th>
+            <th className="px-3 py-3 2xl:px-4">W / L</th>
+            <th className="px-3 py-3 2xl:px-4">K/D</th>
+            <th className="px-3 py-3 2xl:px-4">Сред. убийств</th>
+            <th className="px-3 py-3 2xl:px-4">Средняя смерть</th>
           </tr>
         </thead>
         <tbody>
@@ -461,7 +461,7 @@ function PlayerStatsTable({ players, isLoading }) {
             const isReady = !isLoading && player.status === 'ready';
             return (
               <tr key={player.id} className="border-b border-bf-cream/10 bg-black/10 transition-colors duration-300 last:border-b-0 hover:bg-bf-steel/10">
-                <td className="px-4 py-3">
+                <td className="px-3 py-3 2xl:px-4">
                   <div className="flex items-center gap-3">
                     <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="h-10 w-10 object-cover" />
                     <div className="min-w-0">
@@ -469,7 +469,7 @@ function PlayerStatsTable({ players, isLoading }) {
                       <div className="mt-1 flex flex-wrap items-center gap-1.5">
                         <RoleBadge role={player.role} color={player.roleColor} />
                         {player.battleTag ? (
-                          <span className="text-[11px] font-semibold text-bf-cream/42">{player.battleTag}</span>
+                          <span className="break-all text-[11px] font-semibold text-bf-cream/42">{player.battleTag}</span>
                         ) : null}
                       </div>
                       {!isLoading && !isReady ? (
@@ -478,23 +478,23 @@ function PlayerStatsTable({ players, isLoading }) {
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-100">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100">
                   {isLoading ? (
                     <LoadingRankCell />
                   ) : isReady && player.rank ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                       {player.rank.rankIcon ? (
                         <img className="h-5 w-5" src={player.rank.rankIcon} alt="" />
                       ) : null}
-                      <span>{player.rank.label}</span>
+                      <span className="truncate">{player.rank.label}</span>
                     </div>
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-100">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100">
                   {isLoading ? (
                     <LoadingHeroCell />
                   ) : isReady && player.mainHero ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                       <HeroIcon hero={player.mainHero} />
                       <div className="min-w-0">
                         <div className="truncate font-black">{player.mainHero.heroLabel}</div>
@@ -503,26 +503,26 @@ function PlayerStatsTable({ players, isLoading }) {
                     </div>
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-3 py-3 2xl:px-4">
                   {isLoading ? (
                     <LoadingPercentBar />
                   ) : isReady ? (
                     <AnimatedPercentBar value={player.winrate} seed={`${player.id}-winrate`} />
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-100">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100">
                   {isLoading ? <LoadingMetric /> : isReady ? (
                     <AnimatedMetric value={player.matches} seed={`${player.id}-matches`} />
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-black">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-black">
                   {isLoading ? (
                     <LoadingWinLossCell />
                   ) : isReady ? (
                     <AnimatedWinLossCell wins={player.wins} losses={player.losses} seed={player.id} />
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-black text-emerald-300">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-black text-emerald-300">
                   {isLoading ? <LoadingMetric className="text-sm font-black text-emerald-300" /> : isReady ? (
                     <AnimatedMetric
                       value={player.kd}
@@ -532,12 +532,12 @@ function PlayerStatsTable({ players, isLoading }) {
                     />
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-100">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100">
                   {isLoading ? <LoadingMetric /> : isReady ? (
                     <AnimatedMetric value={player.avgEliminations} seed={`${player.id}-avg-elims`} precision={1} />
                   ) : '—'}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-slate-100">
+                <td className="px-3 py-3 2xl:px-4 text-sm font-semibold text-slate-100">
                   {isLoading ? <LoadingMetric /> : isReady ? (
                     <AnimatedMetric value={player.avgDeaths} seed={`${player.id}-avg-deaths`} precision={1} />
                   ) : '—'}
