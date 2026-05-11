@@ -2445,25 +2445,27 @@ textarea {
 }
 
 .sf-bg-glow {
-  left: 570px;
-  top: -95px;
-  width: 820px;
-  height: 300px;
+  left: 50%;
+  top: -118px;
+  width: 760px;
+  height: 250px;
   border-radius: 50%;
-  background: rgba(13, 242, 158, 0.34);
-  filter: blur(260px);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.36), rgba(13, 242, 158, 0.12) 44%, transparent 74%);
+  filter: blur(120px);
+  transform: translateX(-50%);
 }
 
 .sf-bg-base::after {
   content: "";
   position: absolute;
-  left: 560px;
-  bottom: -150px;
-  width: 960px;
-  height: 280px;
+  left: 50%;
+  bottom: -140px;
+  width: 900px;
+  height: 250px;
   border-radius: 50%;
-  background: rgba(13, 242, 158, 0.26);
-  filter: blur(260px);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.24), rgba(13, 242, 158, 0.08) 46%, transparent 76%);
+  filter: blur(120px);
+  transform: translateX(-50%);
   pointer-events: none;
 }
 
@@ -2489,11 +2491,13 @@ textarea {
 .sf-sidebar::after {
   content: "";
   position: absolute;
-  right: -60px;
-  bottom: 0;
-  width: 234px;
-  height: 442px;
-  background: radial-gradient(circle at 100% 100%, rgba(13, 242, 158, 0.16), transparent 64%);
+  right: -132px;
+  bottom: -138px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 42%, transparent 72%);
+  filter: blur(72px);
   opacity: 0.75;
   pointer-events: none;
 }
@@ -2506,8 +2510,8 @@ textarea {
   width: 230px;
   height: 230px;
   border-radius: 50%;
-  background: rgba(13, 242, 158, 0.16);
-  filter: blur(90px);
+  background: radial-gradient(circle, rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 44%, transparent 74%);
+  filter: blur(68px);
   pointer-events: none;
 }
 
@@ -2581,6 +2585,7 @@ textarea {
 
 .sf-nav-item {
   position: relative;
+  z-index: 0;
   display: grid;
   width: 204px;
   height: 42px;
@@ -2623,9 +2628,10 @@ textarea {
 .sf-nav-item--active::after {
   content: "";
   position: absolute;
-  right: -2px;
+  right: -4px;
   top: 8px;
-  width: 4px;
+  z-index: -1;
+  width: 8px;
   height: 26px;
   border-radius: 20px;
   background: #0df29e;
@@ -2701,6 +2707,7 @@ textarea {
 
 .sf-clock-card {
   position: relative;
+  z-index: 0;
   display: grid;
   place-items: center;
   align-content: center;
@@ -2730,9 +2737,10 @@ textarea {
 
 .sf-clock-accent {
   position: absolute;
-  right: -2px;
+  right: -5px;
   top: 18px;
-  width: 5px;
+  z-index: -1;
+  width: 10px;
   height: 24px;
   border-radius: 20px;
   background: #0df29e;
@@ -2848,20 +2856,20 @@ textarea {
 
 .sf-date-card {
   left: var(--sf-main-left, 366px);
-  top: 266px;
+  top: 968px;
   width: var(--sf-date-width, 540px);
   --sf-date-controls-left: calc((var(--sf-date-width, 540px) - 464px) / 2);
 }
 
 .sf-best-card {
   left: var(--sf-best-left, 938px);
-  top: 266px;
+  top: 968px;
   width: var(--sf-best-width, 392px);
 }
 
 .sf-upcoming-card {
   left: var(--sf-upcoming-left, 1362px);
-  top: 266px;
+  top: 968px;
   width: var(--sf-upcoming-width, 404px);
 }
 
@@ -2992,11 +3000,11 @@ textarea {
 .sf-schedule-table {
   position: absolute;
   left: var(--sf-main-left, 366px);
-  top: 382px;
+  top: 266px;
   z-index: 2;
   width: var(--sf-main-width, 1400px);
   height: 600px;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid #212530;
   border-radius: 20px;
   background: #11141d;
@@ -3006,10 +3014,10 @@ textarea {
 .sf-schedule-table::after {
   content: "";
   position: absolute;
-  right: -2px;
+  right: -5px;
   top: 230px;
-  z-index: 4;
-  width: 5px;
+  z-index: 1;
+  width: 10px;
   height: 224px;
   border-radius: 20px;
   background: #0df29e;
@@ -3096,6 +3104,7 @@ textarea {
   position: relative;
   z-index: 2;
   height: 516px;
+  border-radius: 0 0 20px 20px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -3294,7 +3303,7 @@ textarea {
 .sf-availability {
   position: absolute;
   left: var(--sf-main-left, 366px);
-  top: 997px;
+  top: 882px;
   z-index: 2;
   width: var(--sf-main-width, 1400px);
   height: 69px;
@@ -3508,6 +3517,7 @@ textarea {
 
 .sfr-clock {
   position: relative;
+  z-index: 0;
   display: grid;
   min-height: 54px;
   align-content: center;
@@ -3548,9 +3558,10 @@ textarea {
 
 .sfr-clock-accent {
   position: absolute;
-  right: -2px;
+  right: -5px;
   top: 50%;
-  width: 5px;
+  z-index: -1;
+  width: 10px;
   height: 22px;
   border-radius: 20px;
   background: #0df29e;
