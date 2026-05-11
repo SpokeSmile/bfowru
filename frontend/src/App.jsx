@@ -361,6 +361,7 @@ export default function App() {
           dayEventTypes={data.dayEventTypes}
           eventTypes={data.eventTypes}
           lastUpdated={data.lastUpdated}
+          appVersion={data.appVersion}
           onAdd={(day) => setSlotModal({ day })}
           onEdit={(event) => setSlotModal({ event })}
           onCopy={() => setCopyModalOpen(true)}
@@ -430,6 +431,7 @@ export default function App() {
                 dayEventTypes={data.dayEventTypes}
                 eventTypes={data.eventTypes}
                 lastUpdated={data.lastUpdated}
+                appVersion={data.appVersion}
                 onAdd={(day) => setSlotModal({ day })}
                 onEdit={(event) => setSlotModal({ event })}
                 onCopy={() => setCopyModalOpen(true)}

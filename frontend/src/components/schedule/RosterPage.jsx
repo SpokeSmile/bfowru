@@ -1130,6 +1130,7 @@ export default function RosterPage({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  appVersion,
 }) {
   const viewport = useScheduleViewport();
   const layout = useScheduleLayout();
@@ -1217,7 +1218,7 @@ export default function RosterPage({
           onNoteHoverEnd={onNoteHoverEnd}
         />
         <AvailabilityBar days={days} players={players} slots={slots} />
-        <div className="sf-version">v2.0</div>
+        <div className="sf-version">{appVersion || 'v0.0.0'}</div>
       </div>
     </div>
   );

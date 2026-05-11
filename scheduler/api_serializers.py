@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from django.utils import timezone
 
@@ -21,6 +22,14 @@ BUILD_TIMESTAMP = resolve_build_timestamp()
 
 def build_timestamp_label():
     return timezone.localtime(BUILD_TIMESTAMP).strftime('%d.%m.%Y %H:%M')
+
+
+def app_version_label():
+    version_file = Path(__file__).resolve().parent.parent / 'VERSION'
+    try:
+        return version_file.read_text(encoding='utf-8').strip() or 'v0.0.0'
+    except FileNotFoundError:
+        return 'v0.0.0'
 
 
 def get_discord_connection_for_user(user):

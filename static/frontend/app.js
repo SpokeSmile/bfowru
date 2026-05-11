@@ -47560,7 +47560,8 @@ function RosterPage({
   onCopy,
   onWeekChange,
   onNoteHoverStart,
-  onNoteHoverEnd
+  onNoteHoverEnd,
+  appVersion
 }) {
   const viewport = useScheduleViewport();
   const layout2 = useScheduleLayout();
@@ -47648,7 +47649,7 @@ function RosterPage({
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: "v2.0" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
   ] }) });
 }
 function TeamBanner() {
@@ -48131,6 +48132,7 @@ function App() {
           dayEventTypes: data.dayEventTypes,
           eventTypes: data.eventTypes,
           lastUpdated: data.lastUpdated,
+          appVersion: data.appVersion,
           onAdd: (day) => setSlotModal({ day }),
           onEdit: (event) => setSlotModal({ event }),
           onCopy: () => setCopyModalOpen(true),
@@ -48200,6 +48202,7 @@ function App() {
             dayEventTypes: data.dayEventTypes,
             eventTypes: data.eventTypes,
             lastUpdated: data.lastUpdated,
+            appVersion: data.appVersion,
             onAdd: (day) => setSlotModal({ day }),
             onEdit: (event) => setSlotModal({ event }),
             onCopy: () => setCopyModalOpen(true),
