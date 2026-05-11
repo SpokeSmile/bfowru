@@ -311,10 +311,18 @@
   place-items: center;
   align-content: center;
   gap: 3px;
+}
+
+.sf-clock-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   border: 1px solid #1b1e28;
   border-radius: 20px;
   background: #11141d;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
 .sf-clock-time {
