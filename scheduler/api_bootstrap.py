@@ -7,6 +7,7 @@ from django.middleware.csrf import get_token
 from django.views.decorators.http import require_GET
 
 from .api_serializers import (
+    app_version_label,
     build_days,
     build_timestamp_label,
     discord_payload,
@@ -119,4 +120,5 @@ def bootstrap(request):
         'dayEventTypes': [serialize_day_event(day_event) for day_event in day_events],
         'eventTypes': ScheduleSlot.event_types_payload(),
         'lastUpdated': build_timestamp_label(),
+        'appVersion': app_version_label(),
     })

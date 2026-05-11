@@ -1,9 +1,14 @@
 import os
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from django.utils import timezone
 
 from .models import DiscordConnection, ScheduleSlot
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+APP_VERSION_FALLBACK = 'v0.0.0'
 
 
 def resolve_build_timestamp():
@@ -21,6 +26,14 @@ BUILD_TIMESTAMP = resolve_build_timestamp()
 
 def build_timestamp_label():
     return timezone.localtime(BUILD_TIMESTAMP).strftime('%d.%m.%Y %H:%M')
+
+
+def app_version_label():
+    try:
+        version = (PROJECT_ROOT / 'VERSION').read_text(encoding='utf-8').strip()
+    except FileNotFoundError:
+        return APP_VERSION_FALLBACK
+    return version or APP_VERSION_FALLBACK
 
 
 def get_discord_connection_for_user(user):

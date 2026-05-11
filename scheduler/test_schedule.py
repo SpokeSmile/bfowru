@@ -310,6 +310,7 @@ class ScheduleApiTests(TestCase):
         self.assertTrue(data['canEditSelectedWeek'])
         self.assertIn('earliestFilledWeekStart', data)
         self.assertIn('canGoPreviousWeek', data)
+        self.assertRegex(data['appVersion'], r'^v\d+\.\d+\.\d+')
         self.assertIn('copySourceWeeks', data)
         self.assertIn('copyTargetWeeks', data)
 

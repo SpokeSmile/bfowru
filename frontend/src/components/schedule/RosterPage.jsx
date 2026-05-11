@@ -1069,6 +1069,7 @@ function ScheduleCompactView({
   players,
   slots,
   dayEventTypes,
+  appVersion,
   onAdd,
   onEdit,
   onCopy,
@@ -1217,7 +1218,7 @@ export default function RosterPage({
           onNoteHoverEnd={onNoteHoverEnd}
         />
         <AvailabilityBar days={days} players={players} slots={slots} />
-        <div className="sf-version">v2.0</div>
+        <div className="sf-version">{appVersion || 'v0.0.0'}</div>
       </div>
     </div>
   );
