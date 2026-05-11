@@ -741,22 +741,23 @@ textarea {
   left: 15px;
   top: 265px;
   display: grid;
-  gap: 22px;
+  gap: 18px;
 }
 
 .sf-nav-item {
   position: relative;
   display: grid;
   width: 204px;
-  height: 32px;
-  grid-template-columns: 22px 1fr;
+  height: 42px;
+  grid-template-columns: 28px 1fr;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 16px;
   background: transparent;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 16px;
+  padding: 0 14px;
+  font-size: 18px;
   font-weight: 400;
   text-align: left;
   text-decoration: none;
@@ -768,30 +769,31 @@ textarea {
 }
 
 .sf-nav-item img {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   opacity: 0.5;
 }
 
 .sf-nav-item--active {
   border: 1px solid #1b1e28;
-  background: #11141d;
+  background: rgba(17, 20, 29, 0.94);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .sf-nav-item--active::after {
   content: "";
   position: absolute;
-  right: 0;
-  top: 9px;
-  width: 3px;
-  height: 15px;
-  border-radius: 1px;
+  right: -4px;
+  top: 8px;
+  width: 4px;
+  height: 26px;
+  border-radius: 20px;
   background: #0df29e;
-  filter: blur(0.4px);
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  box-shadow: 0 0 10px rgba(13, 242, 158, 0.9);
 }
 
 .sf-nav-item--active img {
@@ -891,9 +893,9 @@ textarea {
 
 .sf-clock-accent {
   position: absolute;
-  right: 8px;
+  right: -5px;
   top: 18px;
-  width: 3px;
+  width: 5px;
   height: 24px;
   border-radius: 20px;
   background: #0df29e;
@@ -1265,8 +1267,10 @@ textarea {
 
 .sf-player-cell,
 .sf-schedule-cell {
+  position: relative;
   min-width: 0;
   min-height: 86px;
+  overflow: hidden;
   border-right: 1px solid #212530;
   border-bottom: 1px solid #212530;
 }
@@ -1311,34 +1315,78 @@ textarea {
 .sf-schedule-cell {
   display: grid;
   place-items: center;
-  padding: 6px 12px;
+  padding: 6px 10px;
+}
+
+.sf-schedule-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.055), transparent 52%),
+    radial-gradient(circle at 50% 100%, rgba(13, 242, 158, 0.04), transparent 62%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.sf-player-cell > *,
+.sf-schedule-cell > * {
+  position: relative;
+  z-index: 1;
 }
 
 .sf-schedule-cell--available {
-  background: rgba(13, 242, 158, 0.025);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(13, 242, 158, 0.07), transparent 58%),
+    rgba(13, 242, 158, 0.025);
+}
+
+.sf-schedule-cell--available::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(13, 242, 158, 0.14), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(13, 242, 158, 0.08), transparent 64%);
 }
 
 .sf-schedule-cell--tentative {
-  background: rgba(242, 128, 13, 0.03);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 128, 13, 0.07), transparent 58%),
+    rgba(242, 128, 13, 0.03);
+}
+
+.sf-schedule-cell--tentative::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 128, 13, 0.13), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(242, 128, 13, 0.08), transparent 64%);
 }
 
 .sf-schedule-cell--unavailable {
-  background: rgba(242, 13, 17, 0.04);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 13, 17, 0.08), transparent 58%),
+    rgba(242, 13, 17, 0.04);
+}
+
+.sf-schedule-cell--unavailable::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 13, 17, 0.13), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(242, 13, 17, 0.08), transparent 64%);
 }
 
 .sf-cell-events {
   display: grid;
   width: 100%;
   gap: 4px;
+  justify-items: stretch;
 }
 
 .sf-event-card {
   position: relative;
-  width: min(149px, 100%);
+  width: 100%;
   min-height: 32px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   place-items: center;
+  align-content: center;
+  justify-self: stretch;
   row-gap: 1px;
   border: 1px solid;
   border-radius: 20px;
@@ -1679,9 +1727,9 @@ textarea {
 
 .sfr-clock-accent {
   position: absolute;
-  right: 8px;
+  right: -5px;
   top: 50%;
-  width: 3px;
+  width: 5px;
   height: 22px;
   border-radius: 20px;
   background: #0df29e;
@@ -2120,9 +2168,45 @@ textarea {
 }
 
 .sfr-table-cell {
+  position: relative;
   display: grid;
   place-items: center;
+  overflow: hidden;
   padding: 7px;
+}
+
+.sfr-table-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.055), transparent 52%),
+    radial-gradient(circle at 50% 100%, rgba(13, 242, 158, 0.04), transparent 62%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.sfr-table-cell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sfr-table-cell.sf-schedule-cell--available::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(13, 242, 158, 0.14), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(13, 242, 158, 0.08), transparent 64%);
+}
+
+.sfr-table-cell.sf-schedule-cell--tentative::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 128, 13, 0.13), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(242, 128, 13, 0.08), transparent 64%);
+}
+
+.sfr-table-cell.sf-schedule-cell--unavailable::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(242, 13, 17, 0.13), transparent 58%),
+    radial-gradient(circle at 50% 100%, rgba(242, 13, 17, 0.08), transparent 64%);
 }
 
 .sfr-cell-events {
