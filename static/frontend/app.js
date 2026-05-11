@@ -12656,7 +12656,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$m = [
+const __iconNode$n = [
   [
     "path",
     {
@@ -12667,8 +12667,8 @@ const __iconNode$m = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$m);
-const __iconNode$l = [
+const BookText = createLucideIcon("book-text", __iconNode$n);
+const __iconNode$m = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12680,48 +12680,54 @@ const __iconNode$l = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$l);
-const __iconNode$k = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$m);
+const __iconNode$l = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$k);
-const __iconNode$j = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$j);
-const __iconNode$i = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$l);
+const __iconNode$k = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$k);
+const __iconNode$j = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$i);
-const __iconNode$h = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$j);
+const __iconNode$i = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$h);
-const __iconNode$g = [
+const Copy = createLucideIcon("copy", __iconNode$i);
+const __iconNode$h = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
   ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
   ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
   ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
 ];
-const Crosshair = createLucideIcon("crosshair", __iconNode$g);
-const __iconNode$f = [
+const Crosshair = createLucideIcon("crosshair", __iconNode$h);
+const __iconNode$g = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$f);
-const __iconNode$e = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$e);
-const __iconNode$d = [
+const ExternalLink = createLucideIcon("external-link", __iconNode$g);
+const __iconNode$f = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$f);
+const __iconNode$e = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
   ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$d);
+const LogOut = createLucideIcon("log-out", __iconNode$e);
+const __iconNode$d = [
+  ["path", { d: "M4 5h16", key: "1tepv9" }],
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 19h16", key: "1djgab" }]
+];
+const Menu = createLucideIcon("menu", __iconNode$d);
 const __iconNode$c = [
   [
     "path",
@@ -46527,6 +46533,8 @@ const UPCOMING_CARD_WIDTH = 404;
 const CONTROL_CONTENT_WIDTH = DATE_CARD_WIDTH + BEST_CARD_WIDTH + UPCOMING_CARD_WIDTH;
 const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+const DESKTOP_CANVAS_MIN_WIDTH = 1440;
+const MOBILE_MAX_WIDTH = 767;
 const NAV_ITEMS = [
   { label: "Schedule", href: "/", icon: "schedule.png", active: true },
   { label: "Roster", href: "/team/", icon: "roster.png" },
@@ -46659,6 +46667,31 @@ function useScheduleLayout() {
     };
   }, []);
   return layout2;
+}
+function viewportMode(width) {
+  if (width >= DESKTOP_CANVAS_MIN_WIDTH) return "desktopCanvas";
+  if (width <= MOBILE_MAX_WIDTH) return "mobile";
+  return "compact";
+}
+function useScheduleViewport() {
+  const [viewport, setViewport] = reactExports.useState(() => {
+    const size = getViewportSize();
+    return { ...size, mode: viewportMode(size.width) };
+  });
+  reactExports.useEffect(() => {
+    const update = () => {
+      const size = getViewportSize();
+      setViewport({ ...size, mode: viewportMode(size.width) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.visualViewport?.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("resize", update);
+    };
+  }, []);
+  return viewport;
 }
 function bestDaysByAvailability(days, slots, players) {
   const playerIds = new Set(players.map((player) => player.id));
@@ -47003,6 +47036,415 @@ function AvailabilityBar({ days, players, slots }) {
     })
   ] });
 }
+function useSlotsByCell(slots) {
+  return reactExports.useMemo(() => {
+    const grouped = /* @__PURE__ */ new Map();
+    slots.forEach((slot) => {
+      const key = `${slot.playerId}:${slot.dayOfWeek}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(slot);
+    });
+    grouped.forEach((cellSlots) => {
+      cellSlots.sort((left, right) => (left.startTimeMinutes ?? -1) - (right.startTimeMinutes ?? -1));
+    });
+    return grouped;
+  }, [slots]);
+}
+function ScheduleDrawer({ user, isOpen, onClose }) {
+  reactExports.useEffect(() => {
+    if (!isOpen) return void 0;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-drawer-layer ${isOpen ? "sfr-drawer-layer--open" : ""}`, "aria-hidden": !isOpen, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-backdrop", type: "button", onClick: onClose, "aria-label": "Close navigation" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sfr-drawer", "aria-label": "Schedule navigation", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-drawer-head", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "BLACK FLOCK" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM HUB" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: onClose, "aria-label": "Close navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sfr-drawer-nav", children: NAV_ITEMS.map((item) => {
+        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+        ] });
+        if (!item.href) {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-nav-item", type: "button", disabled: true, children: content }, item.label);
+        }
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "a",
+          {
+            className: `sfr-drawer-nav-item ${item.active ? "sfr-drawer-nav-item--active" : ""}`,
+            href: item.href,
+            onClick: onClose,
+            children: content
+          },
+          item.label
+        );
+      }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-drawer-profile", href: "/profile/", onClick: onClose, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-drawer-avatar" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: user.username }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Open profile" })
+        ] })
+      ] })
+    ] })
+  ] });
+}
+function ResponsiveClockStrip() {
+  const clocks = useClocks();
+  const entries = [
+    ["UTC", clocks.utc],
+    ["YOUR", clocks.local],
+    ["CET", clocks.cet]
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-clocks", "aria-label": "World clocks", children: entries.map(([label, value]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock ${label === "YOUR" ? "sfr-clock--active" : ""}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: value })
+  ] }, label)) });
+}
+function ResponsiveTopBar({ user, onMenuOpen }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "sfr-topbar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-menu-button", type: "button", onClick: onMenuOpen, "aria-label": "Open navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { size: 22 }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-brand", href: "/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveClockStrip, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-user", href: "/profile/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-user-avatar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
+    ] })
+  ] });
+}
+function ResponsiveHero() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-hero", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "WEEKLY ROSTER" })
+  ] }) });
+}
+function ResponsiveWeekSwitcher({ selectedWeekStart, canGoPreviousWeek, onWeekChange }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-week-switcher", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        type: "button",
+        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, -7)),
+        disabled: !canGoPreviousWeek,
+        "aria-label": "Previous week",
+        children: "<"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: formatWeekRange(selectedWeekStart) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        type: "button",
+        onClick: () => onWeekChange(shiftWeek(selectedWeekStart, 7)),
+        "aria-label": "Next week",
+        children: ">"
+      }
+    )
+  ] });
+}
+function ResponsiveActions({ canAdd, hasPlayerProfile, canEditSelectedWeek, onAdd, onCopy, selectedDay = null }) {
+  const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-actions", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: "sfr-action sfr-action--primary",
+        type: "button",
+        onClick: () => onAdd(selectedDay),
+        disabled: !canUsePlayerActions || !canAdd,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 20 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Add time" })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: "sfr-action",
+        type: "button",
+        onClick: onCopy,
+        disabled: !hasPlayerProfile,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { size: 20 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Copy schedule" })
+        ]
+      }
+    )
+  ] });
+}
+function ResponsiveInfoCards({ days, players, slots, dayEventTypes }) {
+  const bestDays = bestDaysByAvailability(days, slots, players);
+  const upcoming = buildUpcoming(days, slots, dayEventTypes);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-info-grid", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "sfr-info-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BEST DAY FOR GAME" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: bestDays.map((day) => day.label).join(" / ") || "—" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Clock3, { size: 22 })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: "sfr-info-card", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "UPCOMING" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: upcoming.eventLabel }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("small", { children: [
+          upcoming.dateLabel,
+          " · ",
+          upcoming.timeLabel
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/trophy.png", alt: "" })
+    ] })
+  ] });
+}
+function ResponsivePlayerInline({ player }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-player-inline", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sfr-player-avatar" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: player.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor, className: "sfr-player-role" })
+    ] })
+  ] });
+}
+function ResponsiveScheduleTable({
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  canEditSelectedWeek,
+  onAdd,
+  onEdit,
+  onNoteHoverStart,
+  onNoteHoverEnd
+}) {
+  const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
+  const slotsByCell = useSlotsByCell(slots);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-table-card", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-table-scroll", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table-head sfr-table-row", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-table-head-cell sfr-table-head-cell--players", children: "Players" }),
+      days.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-table-head-cell ${day.isToday ? "sfr-table-head-cell--today" : ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: DAY_NAMES[day.value] || day.label }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
+      ] }, day.value))
+    ] }),
+    players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-table-row", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-table-player-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsivePlayerInline, { player }) }),
+      days.map((day) => {
+        const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
+        const canEditCell = player.canEdit && canEditSelectedWeek;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `sfr-table-cell ${dayCellClass(cellSlots)}`, children: cellSlots.length ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-cell-events", children: [
+          cellSlots.map((slot) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            EventCard,
+            {
+              event: slot,
+              onEdit,
+              onNoteHoverStart,
+              onNoteHoverEnd
+            },
+            slot.id
+          )),
+          canEditCell ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-add-compact", type: "button", onClick: () => onAdd(day.value), children: "+" }) : null
+        ] }) : canEditCell ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-add-empty", type: "button", onClick: () => onAdd(day.value), "aria-label": `Add slot for ${day.label}`, children: "+" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-add-empty sfr-add-empty--disabled", children: "+" }) }, `${player.id}-${day.value}`);
+      })
+    ] }, player.id))
+  ] }) }) });
+}
+function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
+  const dayEventMap = reactExports.useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-day-tabs", role: "tablist", "aria-label": "Week days", children: days.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      className: `sfr-day-tab ${activeDay === day.value ? "sfr-day-tab--active" : ""} ${day.isToday ? "sfr-day-tab--today" : ""}`,
+      type: "button",
+      onClick: () => onChange(day.value),
+      role: "tab",
+      "aria-selected": activeDay === day.value,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: DAY_NAMES[day.value]?.slice(0, 3) || day.label }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: day.date }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DayTypePill, { dayEvent: dayEventMap.get(day.value) })
+      ]
+    },
+    day.value
+  )) });
+}
+function MobileEventCard({ event, onEdit }) {
+  const statusMeta = STATUS_META[event.slotType];
+  const isAllDayStatus = Boolean(statusMeta);
+  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
+  const Icon2 = statusMeta?.icon || eventStyle.icon || Clock3;
+  const className = statusMeta?.className || "sf-event-card--time";
+  const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 17 }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-mobile-event-main", children: isAllDayStatus ? statusMeta.label : event.timeRange }),
+    event.note ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-mobile-event-note", children: event.note }) : null
+  ] });
+  if (!event.canEdit) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("article", { className: `sfr-mobile-event ${className}`, children: content });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: `sfr-mobile-event ${className}`, type: "button", onClick: () => onEdit(event), children: content });
+}
+function SchedulePlayerCard({ player, day, slots, canEditSelectedWeek, onAdd, onEdit }) {
+  const canEditCell = player.canEdit && canEditSelectedWeek;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("article", { className: `sfr-player-card ${dayCellClass(slots)}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-player-card-head", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsivePlayerInline, { player }),
+      canEditCell ? /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-player-card-add", type: "button", onClick: () => onAdd(day.value), "aria-label": `Add slot for ${player.name}`, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 18 }) }) : null
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-player-card-events", children: slots.length ? slots.map((slot) => /* @__PURE__ */ jsxRuntimeExports.jsx(MobileEventCard, { event: slot, onEdit }, slot.id)) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-player-card-empty", children: canEditCell ? "Tap + to add time" : "No time selected" }) })
+  ] });
+}
+function ScheduleMobileView({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange
+}) {
+  const initialDay = days.find((day) => day.isToday)?.value ?? days[0]?.value ?? 0;
+  const [activeDay, setActiveDay] = reactExports.useState(initialDay);
+  const slotsByCell = useSlotsByCell(slots);
+  const activeDayData = days.find((day) => day.value === activeDay) || days[0];
+  const [isDrawerOpen, setIsDrawerOpen] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    const nextDay = days.find((day) => day.value === activeDay)?.value ?? days.find((day) => day.isToday)?.value ?? days[0]?.value ?? 0;
+    setActiveDay(nextDay);
+  }, [activeDay, days]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--mobile", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveWeekSwitcher,
+        {
+          selectedWeekStart,
+          canGoPreviousWeek,
+          onWeekChange
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveActions,
+        {
+          canAdd,
+          hasPlayerProfile,
+          canEditSelectedWeek,
+          selectedDay: activeDay,
+          onAdd,
+          onCopy
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScheduleDayTabs,
+      {
+        days,
+        activeDay,
+        dayEventTypes,
+        onChange: setActiveDay
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-mobile-list", "aria-label": activeDayData?.label || "Selected day", children: players.map((player) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      SchedulePlayerCard,
+      {
+        player,
+        day: activeDayData,
+        slots: slotsByCell.get(`${player.id}:${activeDay}`) || [],
+        canEditSelectedWeek,
+        onAdd,
+        onEdit
+      },
+      player.id
+    )) })
+  ] });
+}
+function ScheduleCompactView({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange,
+  onNoteHoverStart,
+  onNoteHoverEnd
+}) {
+  const [isDrawerOpen, setIsDrawerOpen] = reactExports.useState(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--compact", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveWeekSwitcher,
+        {
+          selectedWeekStart,
+          canGoPreviousWeek,
+          onWeekChange
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveActions,
+        {
+          canAdd,
+          hasPlayerProfile,
+          canEditSelectedWeek,
+          onAdd,
+          onCopy
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveInfoCards, { days, players, slots, dayEventTypes }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ResponsiveScheduleTable,
+      {
+        days,
+        players,
+        slots,
+        dayEventTypes,
+        canEditSelectedWeek,
+        onAdd,
+        onEdit,
+        onNoteHoverStart,
+        onNoteHoverEnd
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
+  ] });
+}
 function RosterPage({
   user,
   hasPlayerProfile,
@@ -47021,7 +47463,52 @@ function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd
 }) {
+  const viewport = useScheduleViewport();
   const layout2 = useScheduleLayout();
+  if (viewport.mode === "mobile") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScheduleMobileView,
+      {
+        user,
+        hasPlayerProfile,
+        canAdd,
+        canEditSelectedWeek,
+        selectedWeekStart,
+        canGoPreviousWeek,
+        days,
+        players,
+        slots,
+        dayEventTypes,
+        onAdd,
+        onEdit,
+        onCopy,
+        onWeekChange
+      }
+    );
+  }
+  if (viewport.mode === "compact") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScheduleCompactView,
+      {
+        user,
+        hasPlayerProfile,
+        canAdd,
+        canEditSelectedWeek,
+        selectedWeekStart,
+        canGoPreviousWeek,
+        days,
+        players,
+        slots,
+        dayEventTypes,
+        onAdd,
+        onEdit,
+        onCopy,
+        onWeekChange,
+        onNoteHoverStart,
+        onNoteHoverEnd
+      }
+    );
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),

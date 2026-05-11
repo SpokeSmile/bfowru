@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Check, Clock3, Copy, Plus } from 'lucide-react';
+import { AlertTriangle, Check, Clock3, Copy, Menu, Plus, X } from 'lucide-react';
 
 import { Avatar, RoleBadge } from '../common.jsx';
 import { EVENT_STYLES, buildDayEventMap, previewNote } from '../../scheduleConfig.js';
@@ -17,6 +17,8 @@ const UPCOMING_CARD_WIDTH = 404;
 const CONTROL_CONTENT_WIDTH = DATE_CARD_WIDTH + BEST_CARD_WIDTH + UPCOMING_CARD_WIDTH;
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const DESKTOP_CANVAS_MIN_WIDTH = 1440;
+const MOBILE_MAX_WIDTH = 767;
 const NAV_ITEMS = [
   { label: 'Schedule', href: '/', icon: 'schedule.png', active: true },
   { label: 'Roster', href: '/team/', icon: 'roster.png' },
@@ -169,6 +171,37 @@ function useScheduleLayout() {
   }, []);
 
   return layout;
+}
+
+function viewportMode(width) {
+  if (width >= DESKTOP_CANVAS_MIN_WIDTH) return 'desktopCanvas';
+  if (width <= MOBILE_MAX_WIDTH) return 'mobile';
+  return 'compact';
+}
+
+function useScheduleViewport() {
+  const [viewport, setViewport] = useState(() => {
+    const size = getViewportSize();
+    return { ...size, mode: viewportMode(size.width) };
+  });
+
+  useEffect(() => {
+    const update = () => {
+      const size = getViewportSize();
+      setViewport({ ...size, mode: viewportMode(size.width) });
+    };
+
+    update();
+    window.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('resize', update);
+
+    return () => {
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+    };
+  }, []);
+
+  return viewport;
 }
 
 function bestDaysByAvailability(days, slots, players) {
@@ -607,6 +640,510 @@ function AvailabilityBar({ days, players, slots }) {
   );
 }
 
+function useSlotsByCell(slots) {
+  return useMemo(() => {
+    const grouped = new Map();
+    slots.forEach((slot) => {
+      const key = `${slot.playerId}:${slot.dayOfWeek}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(slot);
+    });
+    grouped.forEach((cellSlots) => {
+      cellSlots.sort((left, right) => (left.startTimeMinutes ?? -1) - (right.startTimeMinutes ?? -1));
+    });
+    return grouped;
+  }, [slots]);
+}
+
+function ScheduleDrawer({ user, isOpen, onClose }) {
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  return (
+    <div className={`sfr-drawer-layer ${isOpen ? 'sfr-drawer-layer--open' : ''}`} aria-hidden={!isOpen}>
+      <button className="sfr-drawer-backdrop" type="button" onClick={onClose} aria-label="Close navigation" />
+      <aside className="sfr-drawer" aria-label="Schedule navigation">
+        <div className="sfr-drawer-head">
+          <img src="/static/img/Logo.png" alt="" />
+          <div>
+            <strong>BLACK FLOCK</strong>
+            <span>TEAM HUB</span>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Close navigation">
+            <X size={20} />
+          </button>
+        </div>
+
+        <nav className="sfr-drawer-nav">
+          {NAV_ITEMS.map((item) => {
+            const content = (
+              <>
+                <img src={`/static/img/figma/schedule/icons/${item.icon}`} alt="" />
+                <span>{item.label}</span>
+              </>
+            );
+
+            if (!item.href) {
+              return (
+                <button className="sfr-drawer-nav-item" type="button" disabled key={item.label}>
+                  {content}
+                </button>
+              );
+            }
+
+            return (
+              <a
+                className={`sfr-drawer-nav-item ${item.active ? 'sfr-drawer-nav-item--active' : ''}`}
+                href={item.href}
+                key={item.label}
+                onClick={onClose}
+              >
+                {content}
+              </a>
+            );
+          })}
+        </nav>
+
+        <a className="sfr-drawer-profile" href="/profile/" onClick={onClose}>
+          <Avatar src={user.avatarUrl} alt={user.username} fallbackLabel={user.username} className="sfr-drawer-avatar" />
+          <div>
+            <strong>{user.username}</strong>
+            <span>Open profile</span>
+          </div>
+        </a>
+      </aside>
+    </div>
+  );
+}
+
+function ResponsiveClockStrip() {
+  const clocks = useClocks();
+  const entries = [
+    ['UTC', clocks.utc],
+    ['YOUR', clocks.local],
+    ['CET', clocks.cet],
+  ];
+
+  return (
+    <div className="sfr-clocks" aria-label="World clocks">
+      {entries.map(([label, value]) => (
+        <div className={`sfr-clock ${label === 'YOUR' ? 'sfr-clock--active' : ''}`} key={label}>
+          <span>{label}</span>
+          <strong>{value}</strong>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ResponsiveTopBar({ user, onMenuOpen }) {
+  return (
+    <header className="sfr-topbar">
+      <button className="sfr-menu-button" type="button" onClick={onMenuOpen} aria-label="Open navigation">
+        <Menu size={22} />
+      </button>
+      <a className="sfr-brand" href="/">
+        <img src="/static/img/Logo.png" alt="" />
+        <span>BLACK FLOCK</span>
+      </a>
+      <ResponsiveClockStrip />
+      <a className="sfr-user" href="/profile/">
+        <Avatar src={user.avatarUrl} alt={user.username} fallbackLabel={user.username} className="sfr-user-avatar" />
+        <span>{user.username}</span>
+      </a>
+    </header>
+  );
+}
+
+function ResponsiveHero() {
+  return (
+    <section className="sfr-hero">
+      <div>
+        <span>BLACK FLOCK</span>
+        <h1>WEEKLY ROSTER</h1>
+      </div>
+    </section>
+  );
+}
+
+function ResponsiveWeekSwitcher({ selectedWeekStart, canGoPreviousWeek, onWeekChange }) {
+  return (
+    <div className="sfr-week-switcher">
+      <button
+        type="button"
+        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, -7))}
+        disabled={!canGoPreviousWeek}
+        aria-label="Previous week"
+      >
+        &lt;
+      </button>
+      <span>{formatWeekRange(selectedWeekStart)}</span>
+      <button
+        type="button"
+        onClick={() => onWeekChange(shiftWeek(selectedWeekStart, 7))}
+        aria-label="Next week"
+      >
+        &gt;
+      </button>
+    </div>
+  );
+}
+
+function ResponsiveActions({ canAdd, hasPlayerProfile, canEditSelectedWeek, onAdd, onCopy, selectedDay = null }) {
+  const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
+
+  return (
+    <div className="sfr-actions">
+      <button
+        className="sfr-action sfr-action--primary"
+        type="button"
+        onClick={() => onAdd(selectedDay)}
+        disabled={!canUsePlayerActions || !canAdd}
+      >
+        <Plus size={20} />
+        <span>Add time</span>
+      </button>
+      <button
+        className="sfr-action"
+        type="button"
+        onClick={onCopy}
+        disabled={!hasPlayerProfile}
+      >
+        <Copy size={20} />
+        <span>Copy schedule</span>
+      </button>
+    </div>
+  );
+}
+
+function ResponsiveInfoCards({ days, players, slots, dayEventTypes }) {
+  const bestDays = bestDaysByAvailability(days, slots, players);
+  const upcoming = buildUpcoming(days, slots, dayEventTypes);
+
+  return (
+    <section className="sfr-info-grid">
+      <article className="sfr-info-card">
+        <div>
+          <span>BEST DAY FOR GAME</span>
+          <strong>{bestDays.map((day) => day.label).join(' / ') || '—'}</strong>
+        </div>
+        <Clock3 size={22} />
+      </article>
+      <article className="sfr-info-card">
+        <div>
+          <span>UPCOMING</span>
+          <strong>{upcoming.eventLabel}</strong>
+          <small>{upcoming.dateLabel} · {upcoming.timeLabel}</small>
+        </div>
+        <img src="/static/img/figma/schedule/icons/trophy.png" alt="" />
+      </article>
+    </section>
+  );
+}
+
+function ResponsivePlayerInline({ player }) {
+  return (
+    <div className="sfr-player-inline">
+      <Avatar src={player.avatarUrl} alt={player.name} fallbackLabel={player.name} className="sfr-player-avatar" />
+      <div>
+        <strong>{player.name}</strong>
+        <RoleBadge role={player.role} color={player.roleColor} className="sfr-player-role" />
+      </div>
+    </div>
+  );
+}
+
+function ResponsiveScheduleTable({
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  canEditSelectedWeek,
+  onAdd,
+  onEdit,
+  onNoteHoverStart,
+  onNoteHoverEnd,
+}) {
+  const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
+  const slotsByCell = useSlotsByCell(slots);
+
+  return (
+    <section className="sfr-table-card">
+      <div className="sfr-table-scroll">
+        <div className="sfr-table">
+          <div className="sfr-table-head sfr-table-row">
+            <div className="sfr-table-head-cell sfr-table-head-cell--players">Players</div>
+            {days.map((day) => (
+              <div className={`sfr-table-head-cell ${day.isToday ? 'sfr-table-head-cell--today' : ''}`} key={day.value}>
+                <strong>{DAY_NAMES[day.value] || day.label}</strong>
+                <span>{day.date}</span>
+                <DayTypePill dayEvent={dayEventMap.get(day.value)} />
+              </div>
+            ))}
+          </div>
+
+          {players.map((player) => (
+            <div className="sfr-table-row" key={player.id}>
+              <div className="sfr-table-player-cell">
+                <ResponsivePlayerInline player={player} />
+              </div>
+              {days.map((day) => {
+                const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
+                const canEditCell = player.canEdit && canEditSelectedWeek;
+                return (
+                  <div className={`sfr-table-cell ${dayCellClass(cellSlots)}`} key={`${player.id}-${day.value}`}>
+                    {cellSlots.length ? (
+                      <div className="sfr-cell-events">
+                        {cellSlots.map((slot) => (
+                          <EventCard
+                            key={slot.id}
+                            event={slot}
+                            onEdit={onEdit}
+                            onNoteHoverStart={onNoteHoverStart}
+                            onNoteHoverEnd={onNoteHoverEnd}
+                          />
+                        ))}
+                        {canEditCell ? (
+                          <button className="sfr-add-compact" type="button" onClick={() => onAdd(day.value)}>
+                            +
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : canEditCell ? (
+                      <button className="sfr-add-empty" type="button" onClick={() => onAdd(day.value)} aria-label={`Add slot for ${day.label}`}>
+                        +
+                      </button>
+                    ) : (
+                      <span className="sfr-add-empty sfr-add-empty--disabled">+</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ScheduleDayTabs({ days, activeDay, dayEventTypes, onChange }) {
+  const dayEventMap = useMemo(() => buildDayEventMap(dayEventTypes), [dayEventTypes]);
+
+  return (
+    <div className="sfr-day-tabs" role="tablist" aria-label="Week days">
+      {days.map((day) => (
+        <button
+          className={`sfr-day-tab ${activeDay === day.value ? 'sfr-day-tab--active' : ''} ${day.isToday ? 'sfr-day-tab--today' : ''}`}
+          type="button"
+          key={day.value}
+          onClick={() => onChange(day.value)}
+          role="tab"
+          aria-selected={activeDay === day.value}
+        >
+          <strong>{DAY_NAMES[day.value]?.slice(0, 3) || day.label}</strong>
+          <span>{day.date}</span>
+          <DayTypePill dayEvent={dayEventMap.get(day.value)} />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function MobileEventCard({ event, onEdit }) {
+  const statusMeta = STATUS_META[event.slotType];
+  const isAllDayStatus = Boolean(statusMeta);
+  const eventStyle = EVENT_STYLES[event.eventType] || EVENT_STYLES.fallback;
+  const Icon = statusMeta?.icon || eventStyle.icon || Clock3;
+  const className = statusMeta?.className || 'sf-event-card--time';
+
+  const content = (
+    <>
+      <Icon size={17} />
+      <span className="sfr-mobile-event-main">{isAllDayStatus ? statusMeta.label : event.timeRange}</span>
+      {event.note ? <span className="sfr-mobile-event-note">{event.note}</span> : null}
+    </>
+  );
+
+  if (!event.canEdit) {
+    return <article className={`sfr-mobile-event ${className}`}>{content}</article>;
+  }
+
+  return (
+    <button className={`sfr-mobile-event ${className}`} type="button" onClick={() => onEdit(event)}>
+      {content}
+    </button>
+  );
+}
+
+function SchedulePlayerCard({ player, day, slots, canEditSelectedWeek, onAdd, onEdit }) {
+  const canEditCell = player.canEdit && canEditSelectedWeek;
+
+  return (
+    <article className={`sfr-player-card ${dayCellClass(slots)}`}>
+      <div className="sfr-player-card-head">
+        <ResponsivePlayerInline player={player} />
+        {canEditCell ? (
+          <button className="sfr-player-card-add" type="button" onClick={() => onAdd(day.value)} aria-label={`Add slot for ${player.name}`}>
+            <Plus size={18} />
+          </button>
+        ) : null}
+      </div>
+
+      <div className="sfr-player-card-events">
+        {slots.length ? (
+          slots.map((slot) => (
+            <MobileEventCard key={slot.id} event={slot} onEdit={onEdit} />
+          ))
+        ) : (
+          <div className="sfr-player-card-empty">
+            {canEditCell ? 'Tap + to add time' : 'No time selected'}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function ScheduleMobileView({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange,
+}) {
+  const initialDay = days.find((day) => day.isToday)?.value ?? days[0]?.value ?? 0;
+  const [activeDay, setActiveDay] = useState(initialDay);
+  const slotsByCell = useSlotsByCell(slots);
+  const activeDayData = days.find((day) => day.value === activeDay) || days[0];
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    const nextDay = days.find((day) => day.value === activeDay)?.value
+      ?? days.find((day) => day.isToday)?.value
+      ?? days[0]?.value
+      ?? 0;
+    setActiveDay(nextDay);
+  }, [activeDay, days]);
+
+  return (
+    <div className="sfr-page sfr-page--mobile">
+      <ResponsiveTopBar user={user} onMenuOpen={() => setIsDrawerOpen(true)} />
+      <ScheduleDrawer user={user} isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <ResponsiveHero />
+      <section className="sfr-controls">
+        <ResponsiveWeekSwitcher
+          selectedWeekStart={selectedWeekStart}
+          canGoPreviousWeek={canGoPreviousWeek}
+          onWeekChange={onWeekChange}
+        />
+        <ResponsiveActions
+          canAdd={canAdd}
+          hasPlayerProfile={hasPlayerProfile}
+          canEditSelectedWeek={canEditSelectedWeek}
+          selectedDay={activeDay}
+          onAdd={onAdd}
+          onCopy={onCopy}
+        />
+      </section>
+      <ScheduleDayTabs
+        days={days}
+        activeDay={activeDay}
+        dayEventTypes={dayEventTypes}
+        onChange={setActiveDay}
+      />
+      <section className="sfr-mobile-list" aria-label={activeDayData?.label || 'Selected day'}>
+        {players.map((player) => (
+          <SchedulePlayerCard
+            key={player.id}
+            player={player}
+            day={activeDayData}
+            slots={slotsByCell.get(`${player.id}:${activeDay}`) || []}
+            canEditSelectedWeek={canEditSelectedWeek}
+            onAdd={onAdd}
+            onEdit={onEdit}
+          />
+        ))}
+      </section>
+    </div>
+  );
+}
+
+function ScheduleCompactView({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange,
+  onNoteHoverStart,
+  onNoteHoverEnd,
+}) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  return (
+    <div className="sfr-page sfr-page--compact">
+      <ResponsiveTopBar user={user} onMenuOpen={() => setIsDrawerOpen(true)} />
+      <ScheduleDrawer user={user} isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <ResponsiveHero />
+      <section className="sfr-controls">
+        <ResponsiveWeekSwitcher
+          selectedWeekStart={selectedWeekStart}
+          canGoPreviousWeek={canGoPreviousWeek}
+          onWeekChange={onWeekChange}
+        />
+        <ResponsiveActions
+          canAdd={canAdd}
+          hasPlayerProfile={hasPlayerProfile}
+          canEditSelectedWeek={canEditSelectedWeek}
+          onAdd={onAdd}
+          onCopy={onCopy}
+        />
+      </section>
+      <ResponsiveInfoCards days={days} players={players} slots={slots} dayEventTypes={dayEventTypes} />
+      <ResponsiveScheduleTable
+        days={days}
+        players={players}
+        slots={slots}
+        dayEventTypes={dayEventTypes}
+        canEditSelectedWeek={canEditSelectedWeek}
+        onAdd={onAdd}
+        onEdit={onEdit}
+        onNoteHoverStart={onNoteHoverStart}
+        onNoteHoverEnd={onNoteHoverEnd}
+      />
+      <AvailabilityBar days={days} players={players} slots={slots} />
+    </div>
+  );
+}
+
 export default function RosterPage({
   user,
   hasPlayerProfile,
@@ -625,7 +1162,52 @@ export default function RosterPage({
   onNoteHoverStart,
   onNoteHoverEnd,
 }) {
+  const viewport = useScheduleViewport();
   const layout = useScheduleLayout();
+
+  if (viewport.mode === 'mobile') {
+    return (
+      <ScheduleMobileView
+        user={user}
+        hasPlayerProfile={hasPlayerProfile}
+        canAdd={canAdd}
+        canEditSelectedWeek={canEditSelectedWeek}
+        selectedWeekStart={selectedWeekStart}
+        canGoPreviousWeek={canGoPreviousWeek}
+        days={days}
+        players={players}
+        slots={slots}
+        dayEventTypes={dayEventTypes}
+        onAdd={onAdd}
+        onEdit={onEdit}
+        onCopy={onCopy}
+        onWeekChange={onWeekChange}
+      />
+    );
+  }
+
+  if (viewport.mode === 'compact') {
+    return (
+      <ScheduleCompactView
+        user={user}
+        hasPlayerProfile={hasPlayerProfile}
+        canAdd={canAdd}
+        canEditSelectedWeek={canEditSelectedWeek}
+        selectedWeekStart={selectedWeekStart}
+        canGoPreviousWeek={canGoPreviousWeek}
+        days={days}
+        players={players}
+        slots={slots}
+        dayEventTypes={dayEventTypes}
+        onAdd={onAdd}
+        onEdit={onEdit}
+        onCopy={onCopy}
+        onWeekChange={onWeekChange}
+        onNoteHoverStart={onNoteHoverStart}
+        onNoteHoverEnd={onNoteHoverEnd}
+      />
+    );
+  }
 
   return (
     <div className="sf-viewport" style={{ width: layout.width, height: layout.height }}>
