@@ -1218,7 +1218,7 @@ export default function RosterPage({
           onNoteHoverEnd={onNoteHoverEnd}
         />
         <AvailabilityBar days={days} players={players} slots={slots} />
-        <div className="sf-version">{appVersion || 'v0.0.0'}</div>
+        <div className="sf-version">V{__APP_VERSION__ || '0.0.0'}</div>
       </div>
     </div>
   );
