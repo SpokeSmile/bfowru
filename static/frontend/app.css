@@ -2856,20 +2856,20 @@ textarea {
 
 .sf-date-card {
   left: var(--sf-main-left, 366px);
-  top: 968px;
+  top: 266px;
   width: var(--sf-date-width, 540px);
   --sf-date-controls-left: calc((var(--sf-date-width, 540px) - 464px) / 2);
 }
 
 .sf-best-card {
   left: var(--sf-best-left, 938px);
-  top: 968px;
+  top: 266px;
   width: var(--sf-best-width, 392px);
 }
 
 .sf-upcoming-card {
   left: var(--sf-upcoming-left, 1362px);
-  top: 968px;
+  top: 266px;
   width: var(--sf-upcoming-width, 404px);
 }
 
@@ -3000,7 +3000,7 @@ textarea {
 .sf-schedule-table {
   position: absolute;
   left: var(--sf-main-left, 366px);
-  top: 266px;
+  top: 382px;
   z-index: 2;
   width: var(--sf-main-width, 1400px);
   height: 600px;
@@ -3303,7 +3303,7 @@ textarea {
 .sf-availability {
   position: absolute;
   left: var(--sf-main-left, 366px);
-  top: 882px;
+  top: 997px;
   z-index: 2;
   width: var(--sf-main-width, 1400px);
   height: 69px;
