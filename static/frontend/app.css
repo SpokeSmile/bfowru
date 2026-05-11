@@ -2364,7 +2364,11 @@ textarea {
 
 .sf-bg-base {
   inset: 0;
-  background: #0b0d14;
+  background-color: #0b0d14;
+  background-image: url("/static/img/tile/TILE_BG.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .sf-bg-glow {
@@ -2384,42 +2388,16 @@ textarea {
   z-index: 5;
   width: 234px;
   height: 1080px;
-  background:
-    linear-gradient(180deg, rgba(15, 19, 29, 0.96), rgba(10, 13, 20, 0.98)),
-    #0c0f17;
+  background-color: #0c0f17;
+  background-image:
+    url("/static/img/tile/TILE_SIDEBAR.png"),
+    linear-gradient(180deg, rgba(15, 19, 29, 0.96), rgba(10, 13, 20, 0.98));
+  background-position: 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 235px 1080px, 100% 100%;
   border-right: 1px solid #1b1e28;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   overflow: hidden;
-}
-
-.sf-sidebar-tile-ellipse {
-  position: absolute;
-  z-index: 0;
-  width: 700px;
-  height: 700px;
-  pointer-events: none;
-  border-radius: 999px;
-  background: rgba(13, 242, 158, 0.9);
-  mix-blend-mode: screen;
-  opacity: 0.42;
-  -webkit-mask-image: url("/static/img/tile/Dot_tile.png");
-  mask-image: url("/static/img/tile/Dot_tile.png");
-  -webkit-mask-repeat: repeat;
-  mask-repeat: repeat;
-  -webkit-mask-size: 60px 60px;
-  mask-size: 60px 60px;
-  -webkit-mask-position: 0 0;
-  mask-position: 0 0;
-}
-
-.sf-sidebar-tile-ellipse--top-left {
-  left: -520px;
-  top: -250px;
-}
-
-.sf-sidebar-tile-ellipse--bottom-right {
-  right: -520px;
-  bottom: -250px;
 }
 
 .sf-sidebar::after {
@@ -2693,7 +2671,11 @@ textarea {
   height: 130px;
   overflow: hidden;
   border-radius: 20px;
-  background: #11141d;
+  background-color: #11141d;
+  background-image: url("/static/img/tile/TILE_HERO.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
