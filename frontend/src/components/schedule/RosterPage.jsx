@@ -296,13 +296,14 @@ function ClockPanel() {
 
   return (
     <div className="sf-clock-panel">
-      {entries.map(([label, value], index) => (
+      {entries.map(([label, value]) => (
         <div className="sf-clock-card" key={label}>
           <div className="sf-clock-time">{value}</div>
           <div className="sf-clock-label">{label}</div>
-          {index === 1 ? <span className="sf-clock-accent" /> : null}
         </div>
       ))}
+
+      <span className="sf-clock-accent" />
     </div>
   );
 }
