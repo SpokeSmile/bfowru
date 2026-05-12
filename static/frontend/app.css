@@ -1423,27 +1423,36 @@ textarea {
 
 .sf-nav-item {
   position: relative;
-  z-index: 0;
-  display: grid;
+  display: block;
   width: 204px;
   height: 42px;
-  grid-template-columns: 28px 1fr;
-  align-items: center;
-  gap: 12px;
   border: 0;
-  border-radius: 16px;
   background: transparent;
   color: rgba(255, 255, 255, 0.5);
-  padding: 0 14px;
+  padding: 0;
   font-size: 18px;
   font-weight: 400;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
+  overflow: visible;
 }
 
 .sf-nav-item:disabled {
   cursor: default;
+}
+
+.sf-nav-item-surface {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 12px;
+  border-radius: 16px;
+  padding: 0 14px;
 }
 
 .sf-nav-item img {
@@ -1455,20 +1464,22 @@ textarea {
 }
 
 .sf-nav-item--active {
+  color: #fff;
+}
+
+.sf-nav-item--active .sf-nav-item-surface {
   border: 1px solid #1b1e28;
   background: rgba(17, 20, 29, 0.94);
-  color: #fff;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-.sf-nav-item--active::after {
-  content: "";
+.sf-nav-item-accent {
   position: absolute;
   right: -4px;
   top: 8px;
-  z-index: -1;
+  z-index: 1;
   width: 8px;
   height: 26px;
   border-radius: 20px;
@@ -1536,17 +1547,41 @@ textarea {
   left: var(--sf-clock-left, 865px);
   top: 21px;
   z-index: 4;
+  --sf-clock-card-width: 100px;
   display: grid;
   width: 380px;
   height: 60px;
-  grid-template-columns: repeat(3, 100px);
+  grid-template-columns: repeat(3, var(--sf-clock-card-width));
   justify-content: space-between;
+  isolation: isolate;
+}
+
+.sf-clock-card-wrap {
+  position: relative;
+  width: var(--sf-clock-card-width);
+  height: 60px;
+  overflow: visible;
+}
+
+.sf-clock-card-accent {
+  position: absolute;
+  right: -4px;
+  top: 16px;
+  z-index: 1;
+  width: 18px;
+  height: 28px;
+  border-radius: 999px;
+  background: #0df29e;
+  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  pointer-events: none;
 }
 
 .sf-clock-card {
   position: relative;
-  z-index: 0;
+  z-index: 2;
   display: grid;
+  width: 100%;
+  height: 100%;
   place-items: center;
   align-content: center;
   gap: 3px;
@@ -1557,32 +1592,20 @@ textarea {
 }
 
 .sf-clock-time {
+  position: relative;
+  z-index: 3;
   font-size: 20px;
   font-weight: 600;
   line-height: 1;
 }
 
 .sf-clock-label {
+  position: relative;
+  z-index: 3;
   font-size: 10px;
   font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
-}
-
-.sf-clock-card:nth-child(2) .sf-clock-label {
-  font-weight: 600;
-}
-
-.sf-clock-accent {
-  position: absolute;
-  right: -5px;
-  top: 18px;
-  z-index: -1;
-  width: 10px;
-  height: 24px;
-  border-radius: 20px;
-  background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
 }
 
 .sf-notice {
@@ -1843,14 +1866,20 @@ textarea {
   width: var(--sf-main-width, 1400px);
   height: 600px;
   overflow: visible;
+}
+
+.sf-schedule-table-surface {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
   border: 1px solid #212530;
   border-radius: 20px;
   background: #11141d;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.sf-schedule-table::after {
-  content: "";
+.sf-schedule-table-accent {
   position: absolute;
   right: -5px;
   top: 230px;
@@ -1863,7 +1892,7 @@ textarea {
   pointer-events: none;
 }
 
-.sf-schedule-table::before {
+.sf-schedule-table-surface::before {
   content: "";
   position: absolute;
   left: 0;
@@ -2348,15 +2377,38 @@ textarea {
 }
 
 .sfr-clocks {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(78px, 1fr));
-  overflow: hidden;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.sfr-clock-wrap {
+  position: relative;
+  min-height: 54px;
+  overflow: visible;
+}
+
+.sfr-clock-accent {
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  z-index: 0;
+  width: 18px;
+  height: 28px;
+  border-radius: 999px;
+  background: #0df29e;
+  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .sfr-clock {
   position: relative;
-  z-index: 0;
+  z-index: 2;
   display: grid;
+  height: 100%;
   min-height: 54px;
   align-content: center;
   gap: 4px;
@@ -2364,7 +2416,7 @@ textarea {
   padding: 0 18px 0 14px;
 }
 
-.sfr-clock:last-child {
+.sfr-clock-wrap:last-child .sfr-clock {
   border-right: 0;
 }
 
@@ -2392,19 +2444,6 @@ textarea {
 
 .sfr-clock--active strong {
   color: #0b0d14;
-}
-
-.sfr-clock-accent {
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  z-index: -1;
-  width: 10px;
-  height: 22px;
-  border-radius: 20px;
-  background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
-  transform: translateY(-50%);
 }
 
 .sfr-drawer-layer {

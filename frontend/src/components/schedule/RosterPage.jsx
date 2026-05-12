@@ -296,14 +296,19 @@ function ClockPanel() {
 
   return (
     <div className="sf-clock-panel">
-      {entries.map(([label, value]) => (
-        <div className="sf-clock-card" key={label}>
-          <div className="sf-clock-time">{value}</div>
-          <div className="sf-clock-label">{label}</div>
-        </div>
-      ))}
+      {entries.map(([label, value]) => {
+        const isActive = label === 'YOUR';
 
-      <span className="sf-clock-accent" />
+        return (
+          <div className={`sf-clock-card-wrap ${isActive ? 'sf-clock-card-wrap--active' : ''}`} key={label}>
+            {isActive ? <span className="sf-clock-card-accent" aria-hidden="true" /> : null}
+            <div className="sf-clock-card">
+              <div className="sf-clock-time">{value}</div>
+              <div className="sf-clock-label">{label}</div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -329,10 +334,10 @@ function ScheduleSidebar({ user }) {
       <nav className="sf-nav" aria-label="Schedule navigation">
         {NAV_ITEMS.map((item) => {
           const content = (
-            <>
+            <span className="sf-nav-item-surface">
               <img src={`/static/img/figma/schedule/icons/${item.icon}`} alt="" />
               <span>{item.label}</span>
-            </>
+            </span>
           );
 
           if (!item.href) {
@@ -345,6 +350,7 @@ function ScheduleSidebar({ user }) {
 
           return (
             <a className={`sf-nav-item ${item.active ? 'sf-nav-item--active' : ''}`} href={item.href} key={item.label}>
+              {item.active ? <span className="sf-nav-item-accent" aria-hidden="true" /> : null}
               {content}
             </a>
           );
@@ -541,57 +547,60 @@ function ScheduleTable({
 
   return (
     <section className="sf-schedule-table">
-      <div className="sf-table-header">
-        <div className="sf-table-header-cell sf-table-header-cell--players">Players</div>
-        {days.map((day) => {
-          const label = DAY_NAMES[day.value] || day.label;
-          return (
-            <div className={`sf-table-header-cell ${day.isToday ? 'sf-table-header-cell--today' : ''}`} key={day.value}>
-              <span className="sf-day-name">{label}</span>
-              <span className="sf-day-date">{day.date}</span>
-            </div>
-          );
-        })}
-      </div>
+      <span className="sf-schedule-table-accent" aria-hidden="true" />
+      <div className="sf-schedule-table-surface">
+        <div className="sf-table-header">
+          <div className="sf-table-header-cell sf-table-header-cell--players">Players</div>
+          {days.map((day) => {
+            const label = DAY_NAMES[day.value] || day.label;
+            return (
+              <div className={`sf-table-header-cell ${day.isToday ? 'sf-table-header-cell--today' : ''}`} key={day.value}>
+                <span className="sf-day-name">{label}</span>
+                <span className="sf-day-date">{day.date}</span>
+              </div>
+            );
+          })}
+        </div>
 
-      <div className="sf-table-body">
-        {players.map((player) => (
-          <div className="sf-table-row" key={player.id}>
-            <PlayerCell player={player} />
-            {days.map((day) => {
-              const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
-              const canEditCell = player.canEdit && canEditSelectedWeek;
-              return (
-                <div className={`sf-schedule-cell ${dayCellClass(cellSlots)}`} key={`${player.id}-${day.value}`}>
-                  {cellSlots.length ? (
-                    <div className="sf-cell-events">
-                      {cellSlots.map((slot) => (
-                        <EventCard
-                          key={slot.id}
-                          event={slot}
-                          onEdit={onEdit}
-                          onNoteHoverStart={onNoteHoverStart}
-                          onNoteHoverEnd={onNoteHoverEnd}
-                        />
-                      ))}
-                      {canEditCell ? (
-                        <button className="sf-cell-add sf-cell-add--compact" type="button" onClick={() => onAdd(day.value)}>
-                          +
-                        </button>
-                      ) : null}
-                    </div>
-                  ) : canEditCell ? (
-                    <button className="sf-cell-add" type="button" onClick={() => onAdd(day.value)} aria-label={`Add slot for ${day.label}`}>
-                      +
-                    </button>
-                  ) : (
-                    <span className="sf-cell-add sf-cell-add--disabled">+</span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+        <div className="sf-table-body">
+          {players.map((player) => (
+            <div className="sf-table-row" key={player.id}>
+              <PlayerCell player={player} />
+              {days.map((day) => {
+                const cellSlots = slotsByCell.get(`${player.id}:${day.value}`) || [];
+                const canEditCell = player.canEdit && canEditSelectedWeek;
+                return (
+                  <div className={`sf-schedule-cell ${dayCellClass(cellSlots)}`} key={`${player.id}-${day.value}`}>
+                    {cellSlots.length ? (
+                      <div className="sf-cell-events">
+                        {cellSlots.map((slot) => (
+                          <EventCard
+                            key={slot.id}
+                            event={slot}
+                            onEdit={onEdit}
+                            onNoteHoverStart={onNoteHoverStart}
+                            onNoteHoverEnd={onNoteHoverEnd}
+                          />
+                        ))}
+                        {canEditCell ? (
+                          <button className="sf-cell-add sf-cell-add--compact" type="button" onClick={() => onAdd(day.value)}>
+                            +
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : canEditCell ? (
+                      <button className="sf-cell-add" type="button" onClick={() => onAdd(day.value)} aria-label={`Add slot for ${day.label}`}>
+                        +
+                      </button>
+                    ) : (
+                      <span className="sf-cell-add sf-cell-add--disabled">+</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -717,13 +726,19 @@ function ResponsiveClockStrip() {
 
   return (
     <div className="sfr-clocks" aria-label="World clocks">
-      {entries.map(([label, value]) => (
-        <div className={`sfr-clock ${label === 'YOUR' ? 'sfr-clock--active' : ''}`} key={label}>
-          <span>{label}</span>
-          <strong>{value}</strong>
-          {label === 'YOUR' ? <i className="sfr-clock-accent" aria-hidden="true" /> : null}
-        </div>
-      ))}
+      {entries.map(([label, value]) => {
+        const isActive = label === 'YOUR';
+
+        return (
+          <div className={`sfr-clock-wrap ${isActive ? 'sfr-clock-wrap--active' : ''}`} key={label}>
+            {isActive ? <span className="sfr-clock-accent" aria-hidden="true" /> : null}
+            <div className={`sfr-clock ${isActive ? 'sfr-clock--active' : ''}`}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

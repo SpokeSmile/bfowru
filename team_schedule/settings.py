@@ -19,6 +19,26 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def load_local_env():
+    env_path = BASE_DIR / '.env'
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding='utf-8').splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] in {'"', "'"} and value[-1] == value[0]:
+            value = value[1:-1]
+        os.environ.setdefault(key, value)
+
+
+load_local_env()
+
+
 def env_bool(name, default=False):
     value = os.environ.get(name)
     if value is None:
