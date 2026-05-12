@@ -6,9 +6,9 @@
   place-items: center;
   padding: 16px;
   background:
-    radial-gradient(circle at 50% 20%, rgba(13, 242, 158, 0.08), transparent 34%),
-    rgba(3, 5, 9, 0.84);
-  backdrop-filter: blur(18px);
+    radial-gradient(circle at 50% 20%, rgba(13, 242, 158, 0.08), transparent 80%),
+    rgba(3, 5, 9, 0.3);
+  backdrop-filter: blur(4px);
 }
 
 .edit-time-modal {
@@ -65,8 +65,9 @@
 .edit-time-types {
   display: grid;
   grid-template-columns: repeat(4, 200px);
-  gap: 50px;
-  margin-left: 93px;
+  justify-content: space-between;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .edit-time-type {
@@ -123,8 +124,8 @@
 .edit-time-main-grid {
   display: grid;
   grid-template-columns: 467px 420px;
-  gap: 44px;
-  margin: 20px 57px 0 93px;
+  gap: 45px;
+  margin: 30px 50px 0 50px;
   min-height: 336px;
 }
 
@@ -504,9 +505,10 @@
 }
 
 .edit-time-action-pair {
-  display: flex;
-  gap: 74px;
-  margin-right: 0;
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 30px;
+  margin-right: 50px;
 }
 
 .edit-time-cancel,
