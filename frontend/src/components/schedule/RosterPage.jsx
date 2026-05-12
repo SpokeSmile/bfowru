@@ -317,7 +317,7 @@ function ScheduleSidebar({ user }) {
   return (
     <aside className="sf-sidebar">
       <div className="sf-sidebar-top">
-        <img className="sf-sidebar-mark" src="/static/img/logo1.png" alt="" />
+        <img className="sf-sidebar-mark" src="/static/img/Logo.png" alt="" />
         <div className="sf-sidebar-brand">
           <span>MANAGE</span>
           <span>

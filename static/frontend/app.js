@@ -46903,7 +46903,7 @@ function ClockPanel() {
 function ScheduleSidebar({ user }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/logo1.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [

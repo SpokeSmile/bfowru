@@ -246,7 +246,7 @@
   height: 26px;
   border-radius: 20px;
   background: #0df29e;
-  box-shadow: 0 0 10px rgba(13, 242, 158, 0.9);
+  box-shadow: 0 0 10px #0df29e;
 }
 
 .sf-nav-item--active img {
@@ -333,7 +333,7 @@
   height: 28px;
   border-radius: 999px;
   background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  box-shadow: 0 0 8px #0df29e;
   pointer-events: none;
 }
 
@@ -649,7 +649,7 @@
   height: 224px;
   border-radius: 20px;
   background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  box-shadow: 0 0 8px #0df29e;
   pointer-events: none;
 }
 
@@ -748,7 +748,7 @@
 .sf-table-body::-webkit-scrollbar-thumb {
   border-radius: 20px;
   background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  box-shadow: 0 0 8px #0df29e;
 }
 
 .sf-table-row {

@@ -132,7 +132,7 @@
   height: 28px;
   border-radius: 999px;
   background: #0df29e;
-  box-shadow: 0 0 8px rgba(13, 242, 158, 0.8);
+  box-shadow: 0 0 8px #0df29e;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -306,7 +306,7 @@
   border: 1px solid #1b1e28;
   background: rgba(17, 20, 29, 0.96);
   color: #fff;
-  box-shadow: 0 0 18px rgba(13, 242, 158, 0.08);
+  box-shadow: 0 0 18px #0df29e;
 }
 
 .sfr-drawer-nav-item--active img {
@@ -711,7 +711,7 @@
 .sfr-day-tab--active {
   border-color: rgba(13, 242, 158, 0.58);
   background: rgba(13, 242, 158, 0.12);
-  box-shadow: 0 0 20px rgba(13, 242, 158, 0.08);
+  box-shadow: 0 0 20px #0df29e;
 }
 
 .sfr-day-tab--today:not(.sfr-day-tab--active) {
