@@ -12645,7 +12645,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$q = [
+const __iconNode$s = [
   [
     "path",
     {
@@ -12656,8 +12656,8 @@ const __iconNode$q = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$q);
-const __iconNode$p = [
+const BookText = createLucideIcon("book-text", __iconNode$s);
+const __iconNode$r = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -12669,36 +12669,38 @@ const __iconNode$p = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$p);
-const __iconNode$o = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$r);
+const __iconNode$q = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$o);
-const __iconNode$n = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$n);
-const __iconNode$m = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$m);
-const __iconNode$l = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$q);
+const __iconNode$p = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$p);
+const __iconNode$o = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$o);
+const __iconNode$n = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$n);
+const __iconNode$m = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$l);
-const __iconNode$k = [
+const CircleCheck = createLucideIcon("circle-check", __iconNode$m);
+const __iconNode$l = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$k);
-const __iconNode$j = [
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$l);
+const __iconNode$k = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
   ["path", { d: "m9 9 6 6", key: "z0biqf" }]
 ];
-const CircleX = createLucideIcon("circle-x", __iconNode$j);
-const __iconNode$i = [
+const CircleX = createLucideIcon("circle-x", __iconNode$k);
+const __iconNode$j = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -12712,24 +12714,24 @@ const __iconNode$i = [
   ["path", { d: "M8 11h.01", key: "1dfujw" }],
   ["path", { d: "M8 16h.01", key: "18s6g9" }]
 ];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$i);
-const __iconNode$h = [
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$j);
+const __iconNode$i = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$h);
-const __iconNode$g = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$i);
+const __iconNode$h = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$g);
-const __iconNode$f = [
+const Copy = createLucideIcon("copy", __iconNode$h);
+const __iconNode$g = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$f);
-const __iconNode$e = [
+const ExternalLink = createLucideIcon("external-link", __iconNode$g);
+const __iconNode$f = [
   [
     "path",
     {
@@ -12739,34 +12741,34 @@ const __iconNode$e = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Eye = createLucideIcon("eye", __iconNode$e);
-const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
-const __iconNode$c = [
+const Eye = createLucideIcon("eye", __iconNode$f);
+const __iconNode$e = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$e);
+const __iconNode$d = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
   ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$c);
-const __iconNode$b = [
+const LogOut = createLucideIcon("log-out", __iconNode$d);
+const __iconNode$c = [
   ["path", { d: "M4 5h16", key: "1tepv9" }],
   ["path", { d: "M4 12h16", key: "1lakjw" }],
   ["path", { d: "M4 19h16", key: "1djgab" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$b);
-const __iconNode$a = [
+const Menu = createLucideIcon("menu", __iconNode$c);
+const __iconNode$b = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const Plus = createLucideIcon("plus", __iconNode$a);
-const __iconNode$9 = [
+const Plus = createLucideIcon("plus", __iconNode$b);
+const __iconNode$a = [
   ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
   ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
   ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
   ["path", { d: "M8 16H3v5", key: "1cv678" }]
 ];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$9);
-const __iconNode$8 = [
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$a);
+const __iconNode$9 = [
   [
     "path",
     {
@@ -12777,8 +12779,8 @@ const __iconNode$8 = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$8);
-const __iconNode$7 = [
+const Save = createLucideIcon("save", __iconNode$9);
+const __iconNode$8 = [
   [
     "path",
     {
@@ -12788,8 +12790,8 @@ const __iconNode$7 = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Settings = createLucideIcon("settings", __iconNode$7);
-const __iconNode$6 = [
+const Settings = createLucideIcon("settings", __iconNode$8);
+const __iconNode$7 = [
   [
     "path",
     {
@@ -12799,16 +12801,16 @@ const __iconNode$6 = [
   ],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$6);
-const __iconNode$5 = [
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$7);
+const __iconNode$6 = [
   ["path", { d: "M10 11v6", key: "nco0om" }],
   ["path", { d: "M14 11v6", key: "outv1u" }],
   ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
   ["path", { d: "M3 6h18", key: "d0wm0j" }],
   ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
 ];
-const Trash2 = createLucideIcon("trash-2", __iconNode$5);
-const __iconNode$4 = [
+const Trash2 = createLucideIcon("trash-2", __iconNode$6);
+const __iconNode$5 = [
   [
     "path",
     {
@@ -12819,8 +12821,8 @@ const __iconNode$4 = [
   ["path", { d: "M12 9v4", key: "juzpu7" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$4);
-const __iconNode$3 = [
+const TriangleAlert = createLucideIcon("triangle-alert", __iconNode$5);
+const __iconNode$4 = [
   ["path", { d: "M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978", key: "1n3hpd" }],
   ["path", { d: "M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978", key: "rfe1zi" }],
   ["path", { d: "M18 9h1.5a1 1 0 0 0 0-5H18", key: "7xy6bh" }],
@@ -12828,14 +12830,19 @@ const __iconNode$3 = [
   ["path", { d: "M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z", key: "1mhfuq" }],
   ["path", { d: "M6 9H4.5a1 1 0 0 1 0-5H6", key: "tex48p" }]
 ];
-const Trophy = createLucideIcon("trophy", __iconNode$3);
-const __iconNode$2 = [
+const Trophy = createLucideIcon("trophy", __iconNode$4);
+const __iconNode$3 = [
   ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
   ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
   ["line", { x1: "19", x2: "19", y1: "8", y2: "14", key: "1bvyxn" }],
   ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
 ];
-const UserPlus = createLucideIcon("user-plus", __iconNode$2);
+const UserPlus = createLucideIcon("user-plus", __iconNode$3);
+const __iconNode$2 = [
+  ["circle", { cx: "12", cy: "8", r: "5", key: "1hypcn" }],
+  ["path", { d: "M20 21a8 8 0 0 0-16 0", key: "rfgkzh" }]
+];
+const UserRound = createLucideIcon("user-round", __iconNode$2);
 const __iconNode$1 = [
   ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
   ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
@@ -47038,6 +47045,11 @@ function HeroPanel() {
   ] });
 }
 function ScheduleSidebar({ user }) {
+  const [isProfileOpen, setIsProfileOpen] = reactExports.useState(false);
+  async function handleLogout() {
+    const response = await logout();
+    window.location.href = response.redirectUrl || "/login/";
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
@@ -47066,13 +47078,35 @@ function ScheduleSidebar({ user }) {
         content
       ] }, item.label);
     }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile", href: "/profile/", "aria-label": "Open profile", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isProfileOpen ? "sf-sidebar-profile--open" : ""}`, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isProfileOpen, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 22, strokeWidth: 1.8 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit", type: "button", onClick: handleLogout, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 23, strokeWidth: 1.8 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
+        ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: ">" })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: "sf-sidebar-profile-toggle",
+          type: "button",
+          "aria-expanded": isProfileOpen,
+          "aria-label": isProfileOpen ? "Close profile menu" : "Open profile menu",
+          onClick: () => setIsProfileOpen((value) => !value),
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "sf-sidebar-profile-arrow", size: 26, strokeWidth: 2.4 })
+          ]
+        }
+      )
     ] })
   ] });
 }
