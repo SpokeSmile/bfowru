@@ -47,6 +47,7 @@ const SLOT_TYPES = [
     icon: XCircle,
   },
 ];
+const INACTIVE_PREVIEW_TYPES = new Set(['tentative', 'unavailable']);
 
 function formatHours(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
@@ -125,10 +126,15 @@ function SelectBox({ value, options, onChange, ariaLabel }) {
 }
 
 function TimelinePreview({ slotType, timeSlots }) {
-  const visibleSlots = slotType === 'available' ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
+  const visibleSlots = isInactivePreview
+    ? []
+    : slotType === 'available'
+      ? timeSlots
+      : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
 
   return (
-    <div className="edit-time-preview">
+    <div className={`edit-time-preview ${isInactivePreview ? 'edit-time-preview--inactive' : ''}`}>
       <div className="edit-time-preview-scale">
         {['00:00', '06:00', '12:00', '18:00', '00:00'].map((label) => (
           <span key={label}>{label}</span>
@@ -161,14 +167,18 @@ function TimelinePreview({ slotType, timeSlots }) {
 }
 
 function Summary({ slotType, timeSlots }) {
-  const totalMinutes = slotType === 'available'
-    ? timeSlots.reduce((sum, slot) => sum + Math.max(0, slot.endTimeMinutes - slot.startTimeMinutes), 0)
-    : 1440;
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
+  const slotCount = isInactivePreview ? 0 : (slotType === 'available' ? timeSlots.length : 1);
+  const totalMinutes = isInactivePreview
+    ? 0
+    : slotType === 'available'
+      ? timeSlots.reduce((sum, slot) => sum + Math.max(0, slot.endTimeMinutes - slot.startTimeMinutes), 0)
+      : 1440;
 
   return (
     <div className="edit-time-summary-values">
       <div>
-        <strong>{slotType === 'available' ? timeSlots.length : 1}</strong>
+        <strong>{slotCount}</strong>
         <span>TIME SLOTS</span>
       </div>
       <div>
@@ -313,6 +323,7 @@ export default function EventModal({
 
   const noteLength = Array.from(formState.note).length;
   const hasExistingDaySlots = Boolean((slotsByDay.get(formState.dayOfWeek) || []).length);
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(formState.slotType);
 
   return (
     <div className="edit-time-overlay">
@@ -392,7 +403,7 @@ export default function EventModal({
                     <button
                       className="edit-time-slot-remove"
                       type="button"
-                      disabled={formState.timeSlots.length === 1}
+                      disabled={isSaving}
                       onClick={() => removeTimeSlot(index)}
                       aria-label="Remove time slot"
                     >
@@ -417,7 +428,7 @@ export default function EventModal({
             {errors.end_time_minutes ? <div className="edit-time-field-error">{errors.end_time_minutes.join(', ')}</div> : null}
           </section>
 
-          <section className="edit-time-right-panel">
+          <section className={`edit-time-right-panel ${isInactivePreview ? 'edit-time-right-panel--inactive' : ''}`}>
             <div className="edit-time-section-label">
               <Eye size={25} />
               <span>VISUAL PREVIEW</span>

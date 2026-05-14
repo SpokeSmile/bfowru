@@ -21166,6 +21166,7 @@ const SLOT_TYPES = [
     icon: CircleX
   }
 ];
+const INACTIVE_PREVIEW_TYPES = /* @__PURE__ */ new Set(["tentative", "unavailable"]);
 function formatHours$1(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
@@ -21224,8 +21225,9 @@ function SelectBox({ value, options, onChange, ariaLabel }) {
   ] });
 }
 function TimelinePreview({ slotType, timeSlots }) {
-  const visibleSlots = slotType === "available" ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-preview", children: [
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
+  const visibleSlots = isInactivePreview ? [] : slotType === "available" ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `edit-time-preview ${isInactivePreview ? "edit-time-preview--inactive" : ""}`, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-preview-scale", children: ["00:00", "06:00", "12:00", "18:00", "00:00"].map((label) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }, label)) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-preview-track", children: [
       [0, 1, 2, 3, 4].map((tick) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "edit-time-preview-tick" }, tick)),
@@ -21251,10 +21253,12 @@ function TimelinePreview({ slotType, timeSlots }) {
   ] });
 }
 function Summary({ slotType, timeSlots }) {
-  const totalMinutes = slotType === "available" ? timeSlots.reduce((sum, slot) => sum + Math.max(0, slot.endTimeMinutes - slot.startTimeMinutes), 0) : 1440;
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
+  const slotCount = isInactivePreview ? 0 : slotType === "available" ? timeSlots.length : 1;
+  const totalMinutes = isInactivePreview ? 0 : slotType === "available" ? timeSlots.reduce((sum, slot) => sum + Math.max(0, slot.endTimeMinutes - slot.startTimeMinutes), 0) : 1440;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-summary-values", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: slotType === "available" ? timeSlots.length : 1 }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: slotCount }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TIME SLOTS" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -21382,6 +21386,7 @@ function EventModal({
   }
   const noteLength = Array.from(formState.note).length;
   const hasExistingDaySlots = Boolean((slotsByDay.get(formState.dayOfWeek) || []).length);
+  const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(formState.slotType);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-overlay", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     motion.form,
     {
@@ -21458,7 +21463,7 @@ function EventModal({
                   {
                     className: "edit-time-slot-remove",
                     type: "button",
-                    disabled: formState.timeSlots.length === 1,
+                    disabled: isSaving,
                     onClick: () => removeTimeSlot(index),
                     "aria-label": "Remove time slot",
                     children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 18 })
@@ -21474,7 +21479,7 @@ function EventModal({
             errors.start_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error", children: errors.start_time_minutes.join(", ") }) : null,
             errors.end_time_minutes ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-field-error", children: errors.end_time_minutes.join(", ") }) : null
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "edit-time-right-panel", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: `edit-time-right-panel ${isInactivePreview ? "edit-time-right-panel--inactive" : ""}`, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { size: 25 }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "VISUAL PREVIEW" })
