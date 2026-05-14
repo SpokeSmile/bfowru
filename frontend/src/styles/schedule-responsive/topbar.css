@@ -1,0 +1,142 @@
+.sfr-topbar {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 1400px);
+  margin: 0 auto;
+}
+
+.sfr-menu-button,
+.sfr-brand,
+.sfr-user,
+.sfr-clocks,
+.sfr-action,
+.sfr-week-switcher,
+.sfr-info-card,
+.sfr-table-card,
+.sfr-player-card,
+.sfr-day-tab {
+  border: 1px solid #1b1e28;
+  border-radius: 20px;
+  background: rgba(17, 20, 29, 0.92);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.36);
+}
+
+.sfr-menu-button {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.sfr-brand,
+.sfr-user {
+  min-height: 54px;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.sfr-brand img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.sfr-brand span,
+.sfr-user span {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sfr-user {
+  justify-self: end;
+  max-width: 190px;
+}
+
+.sfr-user-avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
+.sfr-clocks {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(78px, 1fr));
+  overflow: visible;
+  isolation: isolate;
+}
+
+.sfr-clock-wrap {
+  position: relative;
+  min-height: 54px;
+  overflow: visible;
+}
+
+.sfr-clock-accent {
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  z-index: 0;
+  width: 18px;
+  height: 28px;
+  border-radius: 999px;
+  background: #0df29e;
+  box-shadow: 0 0 8px #0df29e;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.sfr-clock {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  height: 100%;
+  min-height: 54px;
+  align-content: center;
+  gap: 4px;
+  border-right: 1px solid #1b1e28;
+  padding: 0 18px 0 14px;
+}
+
+.sfr-clock-wrap:last-child .sfr-clock {
+  border-right: 0;
+}
+
+.sfr-clock span {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.sfr-clock strong {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sfr-clock--active {
+  background: #f4f7fb;
+}
+
+.sfr-clock--active span {
+  color: rgba(11, 13, 20, 0.6);
+}
+
+.sfr-clock--active strong {
+  color: #0b0d14;
+}
+

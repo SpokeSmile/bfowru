@@ -1,0 +1,142 @@
+.sfr-day-tabs {
+  display: flex;
+  width: min(100%, 620px);
+  gap: 10px;
+  margin: 14px auto 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x proximity;
+}
+
+.sfr-day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.sfr-day-tab {
+  position: relative;
+  min-width: 116px;
+  display: grid;
+  flex: 0 0 auto;
+  justify-items: center;
+  gap: 4px;
+  padding: 12px 10px;
+  color: rgba(255, 255, 255, 0.62);
+  scroll-snap-align: start;
+}
+
+.sfr-day-tab strong {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sfr-day-tab > span {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.sfr-day-tab--active {
+  border-color: rgba(13, 242, 158, 0.58);
+  background: rgba(13, 242, 158, 0.12);
+  box-shadow: 0 0 20px #0df29e;
+}
+
+.sfr-day-tab--today:not(.sfr-day-tab--active) {
+  border-color: rgba(13, 242, 158, 0.32);
+}
+
+.sfr-day-tab--today::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  width: 28px;
+  height: 3px;
+  border-radius: 20px;
+  background: #0df29e;
+  transform: translateX(-50%);
+}
+
+.sfr-mobile-list {
+  width: min(100%, 620px);
+  display: grid;
+  gap: 12px;
+  margin: 14px auto 0;
+}
+
+.sfr-player-card {
+  overflow: hidden;
+  padding: 13px;
+}
+
+.sfr-player-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sfr-player-card-add {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(13, 242, 158, 0.35);
+  border-radius: 16px;
+  background: rgba(13, 242, 158, 0.12);
+  color: #0df29e;
+}
+
+.sfr-player-card-events {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sfr-mobile-event {
+  width: 100%;
+  min-height: 46px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  gap: 4px;
+  border: 1px solid;
+  border-radius: 18px;
+  padding: 10px 12px;
+  color: #fff;
+  text-align: center;
+}
+
+.sfr-mobile-event-main {
+  width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sfr-mobile-event-note {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.sfr-player-card-empty {
+  min-height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 13px;
+  font-weight: 600;
+}
+

@@ -1,0 +1,52 @@
+.sf-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  width: 234px;
+  height: 1080px;
+  background-color: #0c0f17;
+  background-image:
+    url("/static/img/tile/TILE_SIDEBAR.png"),
+    linear-gradient(180deg, rgba(15, 19, 29, 0.96), rgba(10, 13, 20, 0.98));
+  background-position: 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 235px 1080px, 100% 100%;
+  border-right: 1px solid #1b1e28;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.sf-sidebar::after {
+  content: "";
+  position: absolute;
+  right: -132px;
+  bottom: -138px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 42%, transparent 72%);
+  filter: blur(72px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.sf-sidebar::before {
+  content: "";
+  position: absolute;
+  left: -78px;
+  top: -86px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 44%, transparent 74%);
+  filter: blur(68px);
+  pointer-events: none;
+}
+
+.sf-sidebar-top,
+.sf-team-logo-box,
+.sf-nav,
+.sf-sidebar-profile {
+  z-index: 2;
+}

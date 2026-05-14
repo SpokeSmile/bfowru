@@ -1,0 +1,31 @@
+.sfr-hero {
+  width: min(100%, 1400px);
+  min-height: 128px;
+  display: grid;
+  place-items: center;
+  margin: 18px auto 0;
+  overflow: hidden;
+  border: 1px solid #212530;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(13, 242, 158, 0.18), transparent 36%),
+    url("/static/img/tile/TILE_HERO.png") center / cover no-repeat,
+    #11141d;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.sfr-hero span {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sfr-hero h1 {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: clamp(34px, 5vw, 55px);
+  font-weight: 500;
+  line-height: 1;
+}
+

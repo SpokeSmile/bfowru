@@ -1,0 +1,149 @@
+.sfr-drawer-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.sfr-drawer-layer--open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.sfr-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 180ms ease;
+}
+
+.sfr-drawer-layer--open .sfr-drawer-backdrop {
+  background: rgba(0, 0, 0, 0.62);
+}
+
+.sfr-drawer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: min(320px, calc(100vw - 40px));
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 22px;
+  border-right: 1px solid #1b1e28;
+  background:
+    url("/static/img/tile/TILE_SIDEBAR.png") left top / cover no-repeat,
+    linear-gradient(180deg, rgba(15, 19, 29, 0.98), rgba(10, 13, 20, 0.99));
+  padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+  box-shadow: 18px 0 48px rgba(0, 0, 0, 0.45);
+  transform: translateX(-100%);
+  transition: transform 220ms ease;
+}
+
+.sfr-drawer-layer--open .sfr-drawer {
+  transform: translateX(0);
+}
+
+.sfr-drawer-head,
+.sfr-drawer-profile {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.sfr-drawer-head img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.sfr-drawer-head strong,
+.sfr-drawer-profile strong {
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sfr-drawer-head span,
+.sfr-drawer-profile span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.sfr-drawer-head button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #1b1e28;
+  border-radius: 14px;
+  background: #11141d;
+  color: #fff;
+}
+
+.sfr-drawer-nav {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.sfr-drawer-nav-item {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.56);
+  padding: 0 12px;
+  font-size: 15px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.sfr-drawer-nav-item img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.58;
+}
+
+.sfr-drawer-nav-item--active {
+  border: 1px solid #1b1e28;
+  background: rgba(17, 20, 29, 0.96);
+  color: #fff;
+  box-shadow: 0 0 18px #0df29e;
+}
+
+.sfr-drawer-nav-item--active img {
+  opacity: 1;
+}
+
+.sfr-drawer-profile {
+  border: 1px solid #1b1e28;
+  border-radius: 16px;
+  background: #11141d;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.sfr-drawer-avatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+}
+

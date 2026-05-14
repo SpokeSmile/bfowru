@@ -1,0 +1,109 @@
+@media (max-width: 1279px) {
+  .sfr-topbar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .sfr-clocks {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .sfr-user {
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sfr-topbar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .sfr-brand {
+    min-height: 50px;
+    padding-inline: 12px;
+  }
+
+  .sfr-brand span {
+    font-size: 12px;
+  }
+
+  .sfr-menu-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .sfr-user {
+    width: 50px;
+    height: 50px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sfr-user span {
+    display: none;
+  }
+
+  .sfr-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .sfr-clocks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sfr-clock {
+    min-height: 50px;
+    padding-inline: 10px;
+  }
+
+  .sfr-clock strong {
+    font-size: 16px;
+  }
+
+  .sfr-hero {
+    min-height: 106px;
+    margin-top: 12px;
+    padding: 18px;
+  }
+
+  .sfr-hero span {
+    font-size: 12px;
+  }
+
+  .sfr-hero h1 {
+    font-size: clamp(29px, 10vw, 42px);
+  }
+
+  .sfr-controls {
+    grid-template-columns: 1fr;
+    margin-top: 12px;
+  }
+
+  .sfr-week-switcher {
+    min-height: 54px;
+    grid-template-columns: 50px minmax(0, 1fr) 50px;
+  }
+
+  .sfr-week-switcher span {
+    font-size: 15px;
+  }
+
+  .sfr-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sfr-action {
+    min-height: 52px;
+    padding-inline: 10px;
+    font-size: 13px;
+  }
+
+  .sfr-action span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}

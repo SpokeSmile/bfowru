@@ -1,0 +1,111 @@
+.sfr-controls,
+.sfr-info-grid {
+  width: min(100%, 1400px);
+  display: grid;
+  gap: 14px;
+  margin: 18px auto 0;
+}
+
+.sfr-controls {
+  grid-template-columns: minmax(300px, 1fr) auto;
+  align-items: center;
+}
+
+.sfr-week-switcher {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 56px;
+  align-items: center;
+  overflow: hidden;
+  background: #0c0f17;
+}
+
+.sfr-week-switcher button {
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.sfr-week-switcher button:disabled {
+  color: rgba(255, 255, 255, 0.24);
+}
+
+.sfr-week-switcher span {
+  overflow: hidden;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sfr-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.sfr-action {
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sfr-action--primary {
+  background: #0df29e;
+  color: #0b0d14;
+}
+
+.sfr-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.sfr-info-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sfr-info-card {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+.sfr-info-card span {
+  display: block;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sfr-info-card strong {
+  display: block;
+  margin-top: 7px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sfr-info-card small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+}
+
+.sfr-info-card img {
+  width: 26px;
+  height: 26px;
+}

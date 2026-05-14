@@ -1,0 +1,12 @@
+.sfr-page .sf-availability {
+  position: static;
+  width: min(100%, 1400px);
+  height: auto;
+  min-height: 72px;
+  margin: 18px auto 0;
+}
+
+.sfr-page .sf-availability-track {
+  width: min(78%, 153px);
+}
+

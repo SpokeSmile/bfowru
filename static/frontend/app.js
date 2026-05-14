@@ -46683,131 +46683,6 @@ const STATUS_META = {
     cellClassName: "sf-schedule-cell--tentative"
   }
 };
-function shiftWeek(weekStart, offsetDays) {
-  const [year, month, day] = weekStart.split("-").map(Number);
-  const date2 = new Date(Date.UTC(year, month - 1, day));
-  date2.setUTCDate(date2.getUTCDate() + offsetDays);
-  return date2.toISOString().slice(0, 10);
-}
-function dateFromWeekStart(weekStart, offset = 0) {
-  const [year, month, day] = weekStart.split("-").map(Number);
-  const date2 = new Date(Date.UTC(year, month - 1, day));
-  date2.setUTCDate(date2.getUTCDate() + offset);
-  return date2;
-}
-function formatWeekRange(weekStart) {
-  if (!weekStart) return "";
-  const start = dateFromWeekStart(weekStart, 0);
-  const end = dateFromWeekStart(weekStart, 6);
-  return `${String(start.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[start.getUTCMonth()]} - ${String(end.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[end.getUTCMonth()]}`;
-}
-function formatClock(timeZone) {
-  const options = {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  };
-  if (timeZone) {
-    options.timeZone = timeZone;
-  }
-  return new Intl.DateTimeFormat("ru-RU", options).format(/* @__PURE__ */ new Date());
-}
-function useClocks() {
-  const [clocks, setClocks] = reactExports.useState({
-    utc: "--:--",
-    local: "--:--",
-    cet: "--:--"
-  });
-  reactExports.useEffect(() => {
-    const update = () => {
-      setClocks({
-        utc: formatClock("UTC"),
-        local: formatClock(),
-        cet: formatClock("Europe/Berlin")
-      });
-    };
-    update();
-    const timer = window.setInterval(update, 1e3);
-    return () => window.clearInterval(timer);
-  }, []);
-  return clocks;
-}
-function getViewportSize() {
-  if (typeof window === "undefined") {
-    return { width: DESKTOP_FRAME_WIDTH, height: DESKTOP_FRAME_HEIGHT };
-  }
-  const viewport = window.visualViewport;
-  const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
-  const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
-  return {
-    width: Math.max(0, Math.floor(width)),
-    height: Math.max(0, Math.floor(height))
-  };
-}
-function calculateLayout() {
-  const viewport = getViewportSize();
-  const scale2 = Math.max(0.01, Math.min(viewport.width / DESKTOP_FRAME_WIDTH, viewport.height / DESKTOP_FRAME_HEIGHT));
-  const frameWidth = Math.max(DESKTOP_FRAME_WIDTH, viewport.width / scale2);
-  const extraWidth = frameWidth - DESKTOP_FRAME_WIDTH;
-  const mainWidth = MAIN_WIDTH + extraWidth;
-  const controlWidth = mainWidth - CONTROL_GAP * 2;
-  const dateWidth = controlWidth * (DATE_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
-  const bestWidth = controlWidth * (BEST_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
-  const upcomingWidth = controlWidth * (UPCOMING_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
-  return {
-    width: viewport.width,
-    height: Math.min(viewport.height, DESKTOP_FRAME_HEIGHT * scale2),
-    scale: scale2,
-    style: {
-      "--sf-frame-width": `${frameWidth}px`,
-      "--sf-main-left": `${MAIN_LEFT}px`,
-      "--sf-main-width": `${mainWidth}px`,
-      "--sf-date-width": `${dateWidth}px`,
-      "--sf-best-width": `${bestWidth}px`,
-      "--sf-upcoming-width": `${upcomingWidth}px`,
-      "--sf-version-left": `${frameWidth - 94}px`
-    }
-  };
-}
-function useScheduleLayout() {
-  const [layout2, setLayout2] = reactExports.useState(calculateLayout);
-  reactExports.useEffect(() => {
-    const update = () => setLayout2(calculateLayout());
-    update();
-    window.addEventListener("resize", update);
-    window.visualViewport?.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("resize", update);
-      window.visualViewport?.removeEventListener("resize", update);
-    };
-  }, []);
-  return layout2;
-}
-function viewportMode(width) {
-  if (width >= DESKTOP_LAYOUT_MIN_WIDTH) return "desktop";
-  if (width <= MOBILE_MAX_WIDTH) return "mobile";
-  return "compact";
-}
-function useScheduleViewport() {
-  const [viewport, setViewport] = reactExports.useState(() => {
-    const size = getViewportSize();
-    return { ...size, mode: viewportMode(size.width) };
-  });
-  reactExports.useEffect(() => {
-    const update = () => {
-      const size = getViewportSize();
-      setViewport({ ...size, mode: viewportMode(size.width) });
-    };
-    update();
-    window.addEventListener("resize", update);
-    window.visualViewport?.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("resize", update);
-      window.visualViewport?.removeEventListener("resize", update);
-    };
-  }, []);
-  return viewport;
-}
 function bestDaysByAvailability(days, slots, players) {
   const playerIds = new Set(players.map((player) => player.id));
   const rankedDays = days.map((day) => {
@@ -46876,74 +46751,43 @@ function dayCellClass(slots) {
   }
   return "";
 }
-function ClockPanel() {
-  const clocks = useClocks();
-  const entries = [
-    ["UTC", clocks.utc],
-    ["YOUR", clocks.local],
-    ["CET", clocks.cet]
-  ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-panel", children: entries.map(([label, value]) => {
-    const isActive = label === "YOUR";
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-clock-card-wrap ${isActive ? "sf-clock-card-wrap--active" : ""}`, children: [
-      isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-clock-card-accent", "aria-hidden": "true" }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-clock-card", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-time", children: value }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-label", children: label })
-      ] })
-    ] }, label);
-  }) });
-}
-function ScheduleSidebar({ user }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-          "YOU ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TEAM" })
+function AvailabilityBar({ days, players, slots }) {
+  const availability = reactExports.useMemo(() => availabilityByDay(days, players, slots), [days, players, slots]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-availability", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-title", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "AVAILABILITY" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("small", { children: "PLAYERS" })
+    ] }),
+    availability.map((day) => {
+      const width = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : "0%";
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-availability-day sf-availability-day--${day.tone}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-availability-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { width } }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-count", children: [
+          day.availableCount,
+          "/",
+          day.totalPlayers
         ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
-      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-      ] });
-      if (!item.href) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
-      }
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${item.active ? "sf-nav-item--active" : ""}`, href: item.href, children: [
-        item.active ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
-        content
-      ] }, item.label);
-    }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile", href: "/profile/", "aria-label": "Open profile", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: ">" })
-    ] })
+      ] }, day.value);
+    })
   ] });
 }
-function HeroPanel() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-hero-panel", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-glow" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-hero-copy", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
-        "WEEKLY ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ROSTER" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BLACK FLOCK" })
-    ] })
-  ] });
+function shiftWeek(weekStart, offsetDays) {
+  const [year, month, day] = weekStart.split("-").map(Number);
+  const date2 = new Date(Date.UTC(year, month - 1, day));
+  date2.setUTCDate(date2.getUTCDate() + offsetDays);
+  return date2.toISOString().slice(0, 10);
+}
+function dateFromWeekStart(weekStart, offset = 0) {
+  const [year, month, day] = weekStart.split("-").map(Number);
+  const date2 = new Date(Date.UTC(year, month - 1, day));
+  date2.setUTCDate(date2.getUTCDate() + offset);
+  return date2;
+}
+function formatWeekRange(weekStart) {
+  if (!weekStart) return "";
+  const start = dateFromWeekStart(weekStart, 0);
+  const end = dateFromWeekStart(weekStart, 6);
+  return `${String(start.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[start.getUTCMonth()]} - ${String(end.getUTCDate()).padStart(2, "0")} ${MONTH_NAMES[end.getUTCMonth()]}`;
 }
 function IconBox({ className = "", children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `sf-icon-box ${className}`, children });
@@ -47029,15 +46873,6 @@ function ControlsRow({
     ] })
   ] });
 }
-function PlayerCell({ player }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-cell", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sf-player-avatar" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-copy", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-player-name", children: player.name }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor, className: "sf-player-role" })
-    ] })
-  ] });
-}
 function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
   const statusMeta = STATUS_META[event.slotType];
   const isAllDayStatus = Boolean(statusMeta);
@@ -47076,6 +46911,15 @@ function EventCard({ event, onEdit, onNoteHoverStart, onNoteHoverEnd }) {
       ]
     }
   );
+}
+function PlayerCell({ player }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-cell", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sf-player-avatar" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-player-copy", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-player-name", children: player.name }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(RoleBadge, { role: player.role, color: player.roleColor, className: "sf-player-role" })
+    ] })
+  ] });
 }
 function ScheduleTable({
   days,
@@ -47132,128 +46976,249 @@ function ScheduleTable({
     ] })
   ] });
 }
-function AvailabilityBar({ days, players, slots }) {
-  const availability = reactExports.useMemo(() => availabilityByDay(days, players, slots), [days, players, slots]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-availability", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-title", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "AVAILABILITY" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("small", { children: "PLAYERS" })
-    ] }),
-    availability.map((day) => {
-      const width = day.totalPlayers ? `${Math.max(day.ratio * 100, day.availableCount ? 8 : 0)}%` : "0%";
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-availability-day sf-availability-day--${day.tone}`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-availability-track", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { width } }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-availability-count", children: [
-          day.availableCount,
-          "/",
-          day.totalPlayers
-        ] })
-      ] }, day.value);
-    })
-  ] });
+function formatClock(timeZone) {
+  const options = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  };
+  if (timeZone) {
+    options.timeZone = timeZone;
+  }
+  return new Intl.DateTimeFormat("ru-RU", options).format(/* @__PURE__ */ new Date());
 }
-function useSlotsByCell(slots) {
-  return reactExports.useMemo(() => {
-    const grouped = /* @__PURE__ */ new Map();
-    slots.forEach((slot) => {
-      const key = `${slot.playerId}:${slot.dayOfWeek}`;
-      if (!grouped.has(key)) grouped.set(key, []);
-      grouped.get(key).push(slot);
-    });
-    grouped.forEach((cellSlots) => {
-      cellSlots.sort((left, right) => (left.startTimeMinutes ?? -1) - (right.startTimeMinutes ?? -1));
-    });
-    return grouped;
-  }, [slots]);
-}
-function ScheduleDrawer({ user, isOpen, onClose }) {
+function useClocks() {
+  const [clocks, setClocks] = reactExports.useState({
+    utc: "--:--",
+    local: "--:--",
+    cet: "--:--"
+  });
   reactExports.useEffect(() => {
-    if (!isOpen) return void 0;
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
+    const update = () => {
+      setClocks({
+        utc: formatClock("UTC"),
+        local: formatClock(),
+        cet: formatClock("Europe/Berlin")
+      });
     };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-drawer-layer ${isOpen ? "sfr-drawer-layer--open" : ""}`, "aria-hidden": !isOpen, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-backdrop", type: "button", onClick: onClose, "aria-label": "Close navigation" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sfr-drawer", "aria-label": "Schedule navigation", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-drawer-head", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "BLACK FLOCK" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM HUB" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: onClose, "aria-label": "Close navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sfr-drawer-nav", children: NAV_ITEMS.map((item) => {
-        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-        ] });
-        if (!item.href) {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-nav-item", type: "button", disabled: true, children: content }, item.label);
-        }
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "a",
-          {
-            className: `sfr-drawer-nav-item ${item.active ? "sfr-drawer-nav-item--active" : ""}`,
-            href: item.href,
-            onClick: onClose,
-            children: content
-          },
-          item.label
-        );
-      }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-drawer-profile", href: "/profile/", onClick: onClose, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-drawer-avatar" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: user.username }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Open profile" })
-        ] })
-      ] })
-    ] })
-  ] });
+    update();
+    const timer = window.setInterval(update, 1e3);
+    return () => window.clearInterval(timer);
+  }, []);
+  return clocks;
 }
-function ResponsiveClockStrip() {
+function ClockPanel() {
   const clocks = useClocks();
   const entries = [
     ["UTC", clocks.utc],
     ["YOUR", clocks.local],
     ["CET", clocks.cet]
   ];
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-clocks", "aria-label": "World clocks", children: entries.map(([label, value]) => {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-panel", children: entries.map(([label, value]) => {
     const isActive = label === "YOUR";
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock-wrap ${isActive ? "sfr-clock-wrap--active" : ""}`, children: [
-      isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-clock-accent", "aria-hidden": "true" }) : null,
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock ${isActive ? "sfr-clock--active" : ""}`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: value })
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-clock-card-wrap ${isActive ? "sf-clock-card-wrap--active" : ""}`, children: [
+      isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-clock-card-accent", "aria-hidden": "true" }) : null,
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-clock-card", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-time", children: value }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-clock-label", children: label })
       ] })
     ] }, label);
   }) });
 }
-function ResponsiveTopBar({ user, onMenuOpen }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "sfr-topbar", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-menu-button", type: "button", onClick: onMenuOpen, "aria-label": "Open navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { size: 22 }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-brand", href: "/", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveClockStrip, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-user", href: "/profile/", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-user-avatar" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
+function HeroPanel() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-hero-panel", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-glow" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-hero-copy", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
+        "WEEKLY ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ROSTER" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BLACK FLOCK" })
     ] })
   ] });
 }
-function ResponsiveHero() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-hero", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "WEEKLY ROSTER" })
+function ScheduleSidebar({ user }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          "YOU ",
+          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TEAM" })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
+      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+      ] });
+      if (!item.href) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
+      }
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${item.active ? "sf-nav-item--active" : ""}`, href: item.href, children: [
+        item.active ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
+        content
+      ] }, item.label);
+    }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile", href: "/profile/", "aria-label": "Open profile", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-sidebar-profile-arrow", children: ">" })
+    ] })
+  ] });
+}
+function ScheduleDesktopPage({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange,
+  onNoteHoverStart,
+  onNoteHoverEnd,
+  appVersion,
+  layout: layout2
+}) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-desktop-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-frame", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
+          null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ControlsRow,
+        {
+          selectedWeekStart,
+          canGoPreviousWeek,
+          canAdd,
+          hasPlayerProfile,
+          canEditSelectedWeek,
+          days,
+          slots,
+          dayEventTypes,
+          players,
+          onWeekChange,
+          onAdd,
+          onCopy
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ScheduleTable,
+        {
+          days,
+          players,
+          slots,
+          canEditSelectedWeek,
+          onAdd,
+          onEdit,
+          onNoteHoverStart,
+          onNoteHoverEnd
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
   ] }) });
+}
+function getViewportSize() {
+  if (typeof window === "undefined") {
+    return { width: DESKTOP_FRAME_WIDTH, height: DESKTOP_FRAME_HEIGHT };
+  }
+  const viewport = window.visualViewport;
+  const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
+  const height = viewport?.height || document.documentElement.clientHeight || window.innerHeight;
+  return {
+    width: Math.max(0, Math.floor(width)),
+    height: Math.max(0, Math.floor(height))
+  };
+}
+function calculateLayout() {
+  const viewport = getViewportSize();
+  const scale2 = Math.max(0.01, Math.min(viewport.width / DESKTOP_FRAME_WIDTH, viewport.height / DESKTOP_FRAME_HEIGHT));
+  const frameWidth = Math.max(DESKTOP_FRAME_WIDTH, viewport.width / scale2);
+  const extraWidth = frameWidth - DESKTOP_FRAME_WIDTH;
+  const mainWidth = MAIN_WIDTH + extraWidth;
+  const controlWidth = mainWidth - CONTROL_GAP * 2;
+  const dateWidth = controlWidth * (DATE_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
+  const bestWidth = controlWidth * (BEST_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
+  const upcomingWidth = controlWidth * (UPCOMING_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
+  return {
+    width: viewport.width,
+    height: Math.min(viewport.height, DESKTOP_FRAME_HEIGHT * scale2),
+    scale: scale2,
+    style: {
+      "--sf-frame-width": `${frameWidth}px`,
+      "--sf-main-left": `${MAIN_LEFT}px`,
+      "--sf-main-width": `${mainWidth}px`,
+      "--sf-date-width": `${dateWidth}px`,
+      "--sf-best-width": `${bestWidth}px`,
+      "--sf-upcoming-width": `${upcomingWidth}px`,
+      "--sf-version-left": `${frameWidth - 94}px`
+    }
+  };
+}
+function viewportMode(width) {
+  if (width >= DESKTOP_LAYOUT_MIN_WIDTH) return "desktop";
+  if (width <= MOBILE_MAX_WIDTH) return "mobile";
+  return "compact";
+}
+function useScheduleLayout() {
+  const [layout2, setLayout2] = reactExports.useState(calculateLayout);
+  reactExports.useEffect(() => {
+    const update = () => setLayout2(calculateLayout());
+    update();
+    window.addEventListener("resize", update);
+    window.visualViewport?.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("resize", update);
+    };
+  }, []);
+  return layout2;
+}
+function useScheduleViewport() {
+  const [viewport, setViewport] = reactExports.useState(() => {
+    const size = getViewportSize();
+    return { ...size, mode: viewportMode(size.width) };
+  });
+  reactExports.useEffect(() => {
+    const update = () => {
+      const size = getViewportSize();
+      setViewport({ ...size, mode: viewportMode(size.width) });
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.visualViewport?.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("resize", update);
+    };
+  }, []);
+  return viewport;
 }
 function ResponsiveWeekSwitcher({ selectedWeekStart, canGoPreviousWeek, onWeekChange }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-week-switcher", children: [
@@ -47335,6 +47300,26 @@ function ResponsiveInfoCards({ days, players, slots, dayEventTypes }) {
     ] })
   ] });
 }
+function ResponsiveHero() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "sfr-hero", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "WEEKLY ROSTER" })
+  ] }) });
+}
+function useSlotsByCell(slots) {
+  return reactExports.useMemo(() => {
+    const grouped = /* @__PURE__ */ new Map();
+    slots.forEach((slot) => {
+      const key = `${slot.playerId}:${slot.dayOfWeek}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(slot);
+    });
+    grouped.forEach((cellSlots) => {
+      cellSlots.sort((left, right) => (left.startTimeMinutes ?? -1) - (right.startTimeMinutes ?? -1));
+    });
+    return grouped;
+  }, [slots]);
+}
 function ResponsivePlayerInline({ player }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-player-inline", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: player.avatarUrl, alt: player.name, fallbackLabel: player.name, className: "sfr-player-avatar" }),
@@ -47384,6 +47369,149 @@ function ResponsiveScheduleTable({
       })
     ] }, player.id))
   ] }) }) });
+}
+function ResponsiveClockStrip() {
+  const clocks = useClocks();
+  const entries = [
+    ["UTC", clocks.utc],
+    ["YOUR", clocks.local],
+    ["CET", clocks.cet]
+  ];
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-clocks", "aria-label": "World clocks", children: entries.map(([label, value]) => {
+    const isActive = label === "YOUR";
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock-wrap ${isActive ? "sfr-clock-wrap--active" : ""}`, children: [
+      isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sfr-clock-accent", "aria-hidden": "true" }) : null,
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-clock ${isActive ? "sfr-clock--active" : ""}`, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: value })
+      ] })
+    ] }, label);
+  }) });
+}
+function ResponsiveTopBar({ user, onMenuOpen }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "sfr-topbar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-menu-button", type: "button", onClick: onMenuOpen, "aria-label": "Open navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { size: 22 }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-brand", href: "/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "BLACK FLOCK" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveClockStrip, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-user", href: "/profile/", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-user-avatar" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: user.username })
+    ] })
+  ] });
+}
+function ScheduleDrawer({ user, isOpen, onClose }) {
+  reactExports.useEffect(() => {
+    if (!isOpen) return void 0;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sfr-drawer-layer ${isOpen ? "sfr-drawer-layer--open" : ""}`, "aria-hidden": !isOpen, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-backdrop", type: "button", onClick: onClose, "aria-label": "Close navigation" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sfr-drawer", "aria-label": "Schedule navigation", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-drawer-head", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/Logo.png", alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: "BLACK FLOCK" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM HUB" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: onClose, "aria-label": "Close navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 }) })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sfr-drawer-nav", children: NAV_ITEMS.map((item) => {
+        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+        ] });
+        if (!item.href) {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-nav-item", type: "button", disabled: true, children: content }, item.label);
+        }
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "a",
+          {
+            className: `sfr-drawer-nav-item ${item.active ? "sfr-drawer-nav-item--active" : ""}`,
+            href: item.href,
+            onClick: onClose,
+            children: content
+          },
+          item.label
+        );
+      }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-drawer-profile", href: "/profile/", onClick: onClose, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-drawer-avatar" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: user.username }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Open profile" })
+        ] })
+      ] })
+    ] })
+  ] });
+}
+function ScheduleCompactView({
+  user,
+  hasPlayerProfile,
+  canAdd,
+  canEditSelectedWeek,
+  selectedWeekStart,
+  canGoPreviousWeek,
+  days,
+  players,
+  slots,
+  dayEventTypes,
+  onAdd,
+  onEdit,
+  onCopy,
+  onWeekChange,
+  onNoteHoverStart,
+  onNoteHoverEnd
+}) {
+  const [isDrawerOpen, setIsDrawerOpen] = reactExports.useState(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--compact", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveWeekSwitcher,
+        {
+          selectedWeekStart,
+          canGoPreviousWeek,
+          onWeekChange
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ResponsiveActions,
+        {
+          canAdd,
+          hasPlayerProfile,
+          canEditSelectedWeek,
+          onAdd,
+          onCopy
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveInfoCards, { days, players, slots, dayEventTypes }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ResponsiveScheduleTable,
+      {
+        days,
+        players,
+        slots,
+        canEditSelectedWeek,
+        onAdd,
+        onEdit,
+        onNoteHoverStart,
+        onNoteHoverEnd
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
+  ] });
 }
 function ScheduleDayTabs({ days, activeDay, onChange }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sfr-day-tabs", role: "tablist", "aria-label": "Week days", children: days.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -47496,66 +47624,6 @@ function ScheduleMobileView({
     )) })
   ] });
 }
-function ScheduleCompactView({
-  user,
-  hasPlayerProfile,
-  canAdd,
-  canEditSelectedWeek,
-  selectedWeekStart,
-  canGoPreviousWeek,
-  days,
-  players,
-  slots,
-  dayEventTypes,
-  onAdd,
-  onEdit,
-  onCopy,
-  onWeekChange,
-  onNoteHoverStart,
-  onNoteHoverEnd
-}) {
-  const [isDrawerOpen, setIsDrawerOpen] = reactExports.useState(false);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--compact", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ResponsiveWeekSwitcher,
-        {
-          selectedWeekStart,
-          canGoPreviousWeek,
-          onWeekChange
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ResponsiveActions,
-        {
-          canAdd,
-          hasPlayerProfile,
-          canEditSelectedWeek,
-          onAdd,
-          onCopy
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveInfoCards, { days, players, slots, dayEventTypes }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ResponsiveScheduleTable,
-      {
-        days,
-        players,
-        slots,
-        canEditSelectedWeek,
-        onAdd,
-        onEdit,
-        onNoteHoverStart,
-        onNoteHoverEnd
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
-  ] });
-}
 function RosterPage({
   user,
   hasPlayerProfile,
@@ -47620,53 +47688,29 @@ function RosterPage({
       }
     );
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-desktop-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-frame", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
-          null
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ControlsRow,
-        {
-          selectedWeekStart,
-          canGoPreviousWeek,
-          canAdd,
-          hasPlayerProfile,
-          canEditSelectedWeek,
-          days,
-          slots,
-          dayEventTypes,
-          players,
-          onWeekChange,
-          onAdd,
-          onCopy
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ScheduleTable,
-        {
-          days,
-          players,
-          slots,
-          canEditSelectedWeek,
-          onAdd,
-          onEdit,
-          onNoteHoverStart,
-          onNoteHoverEnd
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    ScheduleDesktopPage,
+    {
+      user,
+      hasPlayerProfile,
+      canAdd,
+      canEditSelectedWeek,
+      selectedWeekStart,
+      canGoPreviousWeek,
+      days,
+      players,
+      slots,
+      dayEventTypes,
+      onAdd,
+      onEdit,
+      onCopy,
+      onWeekChange,
+      onNoteHoverStart,
+      onNoteHoverEnd,
+      appVersion,
+      layout: layout2
+    }
+  );
 }
 function TeamBanner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "glass-panel hero-banner relative mt-4 overflow-hidden rounded-xl border-bf-orange/45 px-6 py-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 grid gap-2 lg:max-w-[520px]", children: [

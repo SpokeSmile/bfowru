@@ -1,0 +1,68 @@
+.sf-hero-panel {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 130px;
+  margin-bottom: 33px;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: #11141d;
+  background-image: url("/static/img/tile/TILE_HERO.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sf-hero-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  text-align: center;
+}
+
+.sf-hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid #212530;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.sf-hero-glow {
+  left: 50%;
+  top: -74px;
+  width: 520px;
+  height: 118px;
+  border-radius: 50%;
+  background: #0df29e;
+  filter: blur(125px);
+  opacity: 0.85;
+  transform: translateX(-50%);
+}
+
+.sf-hero-panel h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 55px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.sf-hero-panel h1 span {
+  color: #0df29e;
+}
+
+.sf-hero-panel p {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+}

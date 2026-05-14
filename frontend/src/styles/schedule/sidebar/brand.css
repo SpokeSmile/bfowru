@@ -1,0 +1,51 @@
+.sf-sidebar-top {
+  position: absolute;
+  left: 15px;
+  top: 23px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sf-sidebar-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.sf-sidebar-brand {
+  display: grid;
+  gap: 1px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sf-sidebar-brand b {
+  color: #0df29e;
+  font: inherit;
+}
+
+.sf-team-logo-box {
+  position: absolute;
+  left: 52px;
+  top: 102px;
+  width: 130px;
+  height: 130px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid #1b1e28;
+  border-radius: 20px;
+  background: #11141d;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 20px;
+  line-height: 1;
+  text-align: center;
+}

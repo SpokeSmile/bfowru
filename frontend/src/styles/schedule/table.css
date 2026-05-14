@@ -1,0 +1,168 @@
+.sf-schedule-table {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 600px;
+  margin-bottom: 15px;
+  overflow: visible;
+}
+
+.sf-schedule-table-surface {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #212530;
+  border-radius: 20px;
+  background: #11141d;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sf-schedule-table-accent {
+  position: absolute;
+  right: -5px;
+  top: 230px;
+  z-index: 1;
+  width: 10px;
+  height: 224px;
+  border-radius: 20px;
+  background: #0df29e;
+  box-shadow: 0 0 8px #0df29e;
+  pointer-events: none;
+}
+
+.sf-schedule-table-surface::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 84px;
+  border-bottom: 1px solid #212530;
+  border-radius: 20px;
+  background: #0c0f17;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.sf-table-header {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  height: 84px;
+  grid-template-columns: 175px repeat(7, minmax(0, 1fr));
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px #212530;
+  border-radius: 20px;
+  background: #0c0f17;
+}
+
+.sf-table-header-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border-right: 1px solid #212530;
+  text-align: center;
+}
+
+.sf-table-header-cell:last-child {
+  border-right: 0;
+}
+
+.sf-table-header-cell--players {
+  justify-content: start;
+  padding-left: 54px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sf-table-header-cell--today::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  width: 35px;
+  height: 5px;
+  border-radius: 20px;
+  background: #0df29e;
+  transform: translateX(-50%);
+}
+
+.sf-day-name {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sf-day-date {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sf-table-body {
+  position: relative;
+  z-index: 2;
+  height: 516px;
+  border-radius: 0 0 20px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sf-table-body::-webkit-scrollbar {
+  width: 11px;
+}
+
+.sf-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sf-table-body::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #0df29e;
+  box-shadow: 0 0 8px #0df29e;
+}
+
+.sf-table-row {
+  display: grid;
+  min-height: 86px;
+  grid-template-columns: 175px repeat(7, minmax(0, 1fr));
+}
+
+.sf-player-cell,
+.sf-schedule-cell {
+  position: relative;
+  min-width: 0;
+  min-height: 86px;
+  overflow: hidden;
+  border-right: 1px solid #212530;
+  border-bottom: 1px solid #212530;
+}
+
+.sf-schedule-cell {
+  display: grid;
+  place-items: center;
+  background: #11141d;
+  padding: 6px 10px;
+}
+
+.sf-player-cell > *,
+.sf-schedule-cell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sf-schedule-cell.sf-schedule-cell--available,
+.sf-schedule-cell.sf-schedule-cell--tentative,
+.sf-schedule-cell.sf-schedule-cell--unavailable,
+.sfr-table-cell.sf-schedule-cell--available,
+.sfr-table-cell.sf-schedule-cell--tentative,
+.sfr-table-cell.sf-schedule-cell--unavailable {
+  background: #11141d;
+}

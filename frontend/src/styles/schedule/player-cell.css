@@ -1,0 +1,36 @@
+.sf-player-cell {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+}
+
+.sf-player-avatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+}
+
+.sf-player-name {
+  max-width: 92px;
+  overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-player-role {
+  margin-top: 4px;
+  max-width: 90px;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 13.5px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
