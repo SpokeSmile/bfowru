@@ -46645,10 +46645,9 @@ function CommentTooltip({ tooltip }) {
     document.body
   );
 }
-const CANVAS_WIDTH = 1920;
-const CANVAS_HEIGHT = 1080;
+const DESKTOP_FRAME_WIDTH = 1920;
+const DESKTOP_FRAME_HEIGHT = 1080;
 const MAIN_LEFT = 366;
-const MAIN_RIGHT = 154;
 const MAIN_WIDTH = 1400;
 const CONTROL_GAP = 32;
 const DATE_CARD_WIDTH = 540;
@@ -46657,7 +46656,7 @@ const UPCOMING_CARD_WIDTH = 404;
 const CONTROL_CONTENT_WIDTH = DATE_CARD_WIDTH + BEST_CARD_WIDTH + UPCOMING_CARD_WIDTH;
 const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-const DESKTOP_CANVAS_MIN_WIDTH = 1440;
+const DESKTOP_LAYOUT_MIN_WIDTH = 1440;
 const MOBILE_MAX_WIDTH = 767;
 const NAV_ITEMS = [
   { label: "Schedule", href: "/", icon: "schedule.png", active: true },
@@ -46735,7 +46734,7 @@ function useClocks() {
 }
 function getViewportSize() {
   if (typeof window === "undefined") {
-    return { width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+    return { width: DESKTOP_FRAME_WIDTH, height: DESKTOP_FRAME_HEIGHT };
   }
   const viewport = window.visualViewport;
   const width = viewport?.width || document.documentElement.clientWidth || window.innerWidth;
@@ -46747,9 +46746,9 @@ function getViewportSize() {
 }
 function calculateLayout() {
   const viewport = getViewportSize();
-  const scale2 = Math.max(0.01, Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT));
-  const canvasWidth = Math.max(CANVAS_WIDTH, viewport.width / scale2);
-  const extraWidth = canvasWidth - CANVAS_WIDTH;
+  const scale2 = Math.max(0.01, Math.min(viewport.width / DESKTOP_FRAME_WIDTH, viewport.height / DESKTOP_FRAME_HEIGHT));
+  const frameWidth = Math.max(DESKTOP_FRAME_WIDTH, viewport.width / scale2);
+  const extraWidth = frameWidth - DESKTOP_FRAME_WIDTH;
   const mainWidth = MAIN_WIDTH + extraWidth;
   const controlWidth = mainWidth - CONTROL_GAP * 2;
   const dateWidth = controlWidth * (DATE_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
@@ -46757,21 +46756,16 @@ function calculateLayout() {
   const upcomingWidth = controlWidth * (UPCOMING_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
   return {
     width: viewport.width,
-    height: Math.min(viewport.height, CANVAS_HEIGHT * scale2),
+    height: Math.min(viewport.height, DESKTOP_FRAME_HEIGHT * scale2),
     scale: scale2,
     style: {
-      "--sf-canvas-width": `${canvasWidth}px`,
+      "--sf-frame-width": `${frameWidth}px`,
       "--sf-main-left": `${MAIN_LEFT}px`,
-      "--sf-main-right": `${MAIN_RIGHT}px`,
       "--sf-main-width": `${mainWidth}px`,
       "--sf-date-width": `${dateWidth}px`,
       "--sf-best-width": `${bestWidth}px`,
       "--sf-upcoming-width": `${upcomingWidth}px`,
-      "--sf-best-left": `${MAIN_LEFT + dateWidth + CONTROL_GAP}px`,
-      "--sf-upcoming-left": `${MAIN_LEFT + dateWidth + CONTROL_GAP + bestWidth + CONTROL_GAP}px`,
-      "--sf-clock-left": `${MAIN_LEFT + (mainWidth - 380) / 2}px`,
-      "--sf-notice-left": `${MAIN_LEFT + mainWidth - 60}px`,
-      "--sf-version-left": `${canvasWidth - 94}px`
+      "--sf-version-left": `${frameWidth - 94}px`
     }
   };
 }
@@ -46790,7 +46784,7 @@ function useScheduleLayout() {
   return layout2;
 }
 function viewportMode(width) {
-  if (width >= DESKTOP_CANVAS_MIN_WIDTH) return "desktopCanvas";
+  if (width >= DESKTOP_LAYOUT_MIN_WIDTH) return "desktop";
   if (width <= MOBILE_MAX_WIDTH) return "mobile";
   return "compact";
 }
@@ -46942,11 +46936,13 @@ function ScheduleSidebar({ user }) {
 function HeroPanel() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-hero-panel", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-hero-glow" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
-      "WEEKLY ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ROSTER" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BLACK FLOCK" })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-hero-copy", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { children: [
+        "WEEKLY ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ROSTER" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "BLACK FLOCK" })
+    ] })
   ] });
 }
 function IconBox({ className = "", children }) {
@@ -46970,7 +46966,7 @@ function ControlsRow({
   const bestDays = bestDaysByAvailability(days, slots, players);
   const upcoming = buildUpcoming(days, slots, dayEventTypes);
   const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-controls-row", "aria-label": "Schedule controls", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-date-card", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-week-switcher", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47624,47 +47620,51 @@ function RosterPage({
       }
     );
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-canvas", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-desktop-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-frame", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
-      null
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
+          null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ControlsRow,
+        {
+          selectedWeekStart,
+          canGoPreviousWeek,
+          canAdd,
+          hasPlayerProfile,
+          canEditSelectedWeek,
+          days,
+          slots,
+          dayEventTypes,
+          players,
+          onWeekChange,
+          onAdd,
+          onCopy
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ScheduleTable,
+        {
+          days,
+          players,
+          slots,
+          canEditSelectedWeek,
+          onAdd,
+          onEdit,
+          onNoteHoverStart,
+          onNoteHoverEnd
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ControlsRow,
-      {
-        selectedWeekStart,
-        canGoPreviousWeek,
-        canAdd,
-        hasPlayerProfile,
-        canEditSelectedWeek,
-        days,
-        slots,
-        dayEventTypes,
-        players,
-        onWeekChange,
-        onAdd,
-        onCopy
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      ScheduleTable,
-      {
-        days,
-        players,
-        slots,
-        canEditSelectedWeek,
-        onAdd,
-        onEdit,
-        onNoteHoverStart,
-        onNoteHoverEnd
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
   ] }) });
 }

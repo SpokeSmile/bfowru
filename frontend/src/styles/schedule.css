@@ -9,7 +9,7 @@
   background: #0b0d14;
 }
 
-.sf-viewport {
+.sf-desktop-viewport {
   position: relative;
   flex: 0 0 auto;
   max-width: 100vw;
@@ -18,16 +18,35 @@
   overflow: hidden;
 }
 
-.sf-canvas {
+.sf-desktop-frame {
   position: absolute;
   inset: 0 auto auto 0;
-  width: var(--sf-canvas-width, 1920px);
+  width: var(--sf-frame-width, 1920px);
   height: 1080px;
   overflow: hidden;
   transform-origin: top left;
   background: #0b0d14;
   color: #fff;
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.sf-desktop-main {
+  position: absolute;
+  left: var(--sf-main-left, 366px);
+  top: 21px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: var(--sf-main-width, 1400px);
+}
+
+.sf-topbar {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 380px 1fr;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 22px;
 }
 
 .sf-bg-base,
@@ -304,11 +323,11 @@
 }
 
 .sf-clock-panel {
-  position: absolute;
-  left: var(--sf-clock-left, 865px);
-  top: 21px;
+  position: relative;
   z-index: 4;
   --sf-clock-card-width: 100px;
+  grid-column: 2;
+  justify-self: center;
   display: grid;
   width: 380px;
   height: 60px;
@@ -370,10 +389,10 @@
 }
 
 .sf-notice {
-  position: absolute;
-  left: var(--sf-notice-left, 1706px);
-  top: 21px;
+  position: relative;
   z-index: 4;
+  grid-column: 3;
+  justify-self: end;
   width: 60px;
   height: 60px;
   display: grid;
@@ -400,12 +419,13 @@
 }
 
 .sf-hero-panel {
-  position: absolute;
-  left: var(--sf-main-left, 366px);
-  top: 103px;
+  position: relative;
   z-index: 2;
-  width: var(--sf-main-width, 1400px);
+  display: grid;
+  place-items: center;
+  width: 100%;
   height: 130px;
+  margin-bottom: 33px;
   overflow: hidden;
   border-radius: 20px;
   background-color: #11141d;
@@ -414,6 +434,15 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sf-hero-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  text-align: center;
 }
 
 .sf-hero-panel::before {
@@ -438,10 +467,6 @@
 }
 
 .sf-hero-panel h1 {
-  position: absolute;
-  left: 50%;
-  top: 25px;
-  transform: translateX(-50%);
   margin: 0;
   color: #fff;
   font-size: 55px;
@@ -455,10 +480,6 @@
 }
 
 .sf-hero-panel p {
-  position: absolute;
-  left: 50%;
-  top: 84px;
-  transform: translateX(-50%);
   margin: 0;
   color: #fff;
   font-size: 20px;
@@ -467,7 +488,7 @@
 }
 
 .sf-control-card {
-  position: absolute;
+  position: relative;
   z-index: 3;
   height: 86px;
   border: 1px solid #212530;
@@ -476,29 +497,47 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+.sf-controls-row {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  width: 100%;
+  height: 86px;
+  grid-template-columns: var(--sf-date-width, 540px) var(--sf-best-width, 392px) var(--sf-upcoming-width, 404px);
+  gap: 32px;
+  margin-bottom: 30px;
+}
+
 .sf-date-card {
-  left: var(--sf-main-left, 366px);
-  top: 266px;
-  width: var(--sf-date-width, 540px);
-  --sf-date-controls-left: calc((var(--sf-date-width, 540px) - 464px) / 2);
+  display: grid;
+  grid-template-columns: 300px 61px 61px;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
 }
 
 .sf-best-card {
-  left: var(--sf-best-left, 938px);
-  top: 266px;
-  width: var(--sf-best-width, 392px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  align-content: center;
+  column-gap: 14px;
+  row-gap: 9px;
+  width: 100%;
+  padding: 0 15px 0 33px;
 }
 
 .sf-upcoming-card {
-  left: var(--sf-upcoming-left, 1362px);
-  top: 266px;
-  width: var(--sf-upcoming-width, 404px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  align-content: center;
+  column-gap: 14px;
+  row-gap: 9px;
+  width: 100%;
+  padding: 0 15px 0 33px;
 }
 
 .sf-week-switcher {
-  position: absolute;
-  left: var(--sf-date-controls-left, 39px);
-  top: 15px;
   width: 300px;
   height: 55px;
   display: grid;
@@ -532,8 +571,6 @@
 }
 
 .sf-square-action {
-  position: absolute;
-  top: 16px;
   width: 61px;
   height: 54px;
   display: grid;
@@ -563,19 +600,11 @@
 }
 
 .sf-square-action--primary {
-  left: calc(var(--sf-date-controls-left, 39px) + 331px);
   background: #0df29e;
   color: #0b0d14;
 }
 
-.sf-square-action:not(.sf-square-action--primary) {
-  left: calc(var(--sf-date-controls-left, 39px) + 403px);
-}
-
 .sf-control-title {
-  position: absolute;
-  left: 33px;
-  top: 15px;
   color: #fff;
   font-size: 20px;
   font-weight: 600;
@@ -583,9 +612,7 @@
 }
 
 .sf-control-corner-icon {
-  position: absolute;
-  right: 15px;
-  top: 15px;
+  justify-self: end;
 }
 
 .sf-icon-box,
@@ -596,11 +623,10 @@
 }
 
 .sf-chip-row {
-  position: absolute;
-  left: 18px;
-  top: 44px;
+  grid-column: 1 / -1;
   display: flex;
   gap: 10px;
+  min-width: 0;
 }
 
 .sf-chip {
@@ -620,12 +646,11 @@
 }
 
 .sf-schedule-table {
-  position: absolute;
-  left: var(--sf-main-left, 366px);
-  top: 382px;
+  position: relative;
   z-index: 2;
-  width: var(--sf-main-width, 1400px);
+  width: 100%;
   height: 600px;
+  margin-bottom: 15px;
   overflow: visible;
 }
 
@@ -659,7 +684,7 @@
   left: 0;
   top: 0;
   z-index: 1;
-  width: var(--sf-main-width, 1400px);
+  width: 100%;
   height: 84px;
   border-bottom: 1px solid #212530;
   border-radius: 20px;
@@ -928,11 +953,9 @@
 }
 
 .sf-availability {
-  position: absolute;
-  left: var(--sf-main-left, 366px);
-  top: 997px;
+  position: relative;
   z-index: 2;
-  width: var(--sf-main-width, 1400px);
+  width: 100%;
   height: 69px;
   display: grid;
   grid-template-columns: 175px repeat(7, minmax(0, 1fr));

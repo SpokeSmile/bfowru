@@ -5,10 +5,9 @@ import { Clock3, Copy, Menu, Plus, X } from 'lucide-react';
 import { Avatar, RoleBadge } from '../common.jsx';
 import { buildDayEventMap, previewNote } from '../../scheduleConfig.js';
 
-const CANVAS_WIDTH = 1920;
-const CANVAS_HEIGHT = 1080;
+const DESKTOP_FRAME_WIDTH = 1920;
+const DESKTOP_FRAME_HEIGHT = 1080;
 const MAIN_LEFT = 366;
-const MAIN_RIGHT = 154;
 const MAIN_WIDTH = 1400;
 const CONTROL_GAP = 32;
 const DATE_CARD_WIDTH = 540;
@@ -17,7 +16,7 @@ const UPCOMING_CARD_WIDTH = 404;
 const CONTROL_CONTENT_WIDTH = DATE_CARD_WIDTH + BEST_CARD_WIDTH + UPCOMING_CARD_WIDTH;
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-const DESKTOP_CANVAS_MIN_WIDTH = 1440;
+const DESKTOP_LAYOUT_MIN_WIDTH = 1440;
 const MOBILE_MAX_WIDTH = 767;
 const NAV_ITEMS = [
   { label: 'Schedule', href: '/', icon: 'schedule.png', active: true },
@@ -107,7 +106,7 @@ function useClocks() {
 
 function getViewportSize() {
   if (typeof window === 'undefined') {
-    return { width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+    return { width: DESKTOP_FRAME_WIDTH, height: DESKTOP_FRAME_HEIGHT };
   }
 
   const viewport = window.visualViewport;
@@ -122,9 +121,9 @@ function getViewportSize() {
 
 function calculateLayout() {
   const viewport = getViewportSize();
-  const scale = Math.max(0.01, Math.min(viewport.width / CANVAS_WIDTH, viewport.height / CANVAS_HEIGHT));
-  const canvasWidth = Math.max(CANVAS_WIDTH, viewport.width / scale);
-  const extraWidth = canvasWidth - CANVAS_WIDTH;
+  const scale = Math.max(0.01, Math.min(viewport.width / DESKTOP_FRAME_WIDTH, viewport.height / DESKTOP_FRAME_HEIGHT));
+  const frameWidth = Math.max(DESKTOP_FRAME_WIDTH, viewport.width / scale);
+  const extraWidth = frameWidth - DESKTOP_FRAME_WIDTH;
   const mainWidth = MAIN_WIDTH + extraWidth;
   const controlWidth = mainWidth - CONTROL_GAP * 2;
   const dateWidth = controlWidth * (DATE_CARD_WIDTH / CONTROL_CONTENT_WIDTH);
@@ -133,21 +132,16 @@ function calculateLayout() {
 
   return {
     width: viewport.width,
-    height: Math.min(viewport.height, CANVAS_HEIGHT * scale),
+    height: Math.min(viewport.height, DESKTOP_FRAME_HEIGHT * scale),
     scale,
     style: {
-      '--sf-canvas-width': `${canvasWidth}px`,
+      '--sf-frame-width': `${frameWidth}px`,
       '--sf-main-left': `${MAIN_LEFT}px`,
-      '--sf-main-right': `${MAIN_RIGHT}px`,
       '--sf-main-width': `${mainWidth}px`,
       '--sf-date-width': `${dateWidth}px`,
       '--sf-best-width': `${bestWidth}px`,
       '--sf-upcoming-width': `${upcomingWidth}px`,
-      '--sf-best-left': `${MAIN_LEFT + dateWidth + CONTROL_GAP}px`,
-      '--sf-upcoming-left': `${MAIN_LEFT + dateWidth + CONTROL_GAP + bestWidth + CONTROL_GAP}px`,
-      '--sf-clock-left': `${MAIN_LEFT + (mainWidth - 380) / 2}px`,
-      '--sf-notice-left': `${MAIN_LEFT + mainWidth - 60}px`,
-      '--sf-version-left': `${canvasWidth - 94}px`,
+      '--sf-version-left': `${frameWidth - 94}px`,
     },
   };
 }
@@ -171,7 +165,7 @@ function useScheduleLayout() {
 }
 
 function viewportMode(width) {
-  if (width >= DESKTOP_CANVAS_MIN_WIDTH) return 'desktopCanvas';
+  if (width >= DESKTOP_LAYOUT_MIN_WIDTH) return 'desktop';
   if (width <= MOBILE_MAX_WIDTH) return 'mobile';
   return 'compact';
 }
@@ -373,10 +367,12 @@ function HeroPanel() {
   return (
     <section className="sf-hero-panel">
       <div className="sf-hero-glow" />
-      <h1>
-        WEEKLY <span>ROSTER</span>
-      </h1>
-      <p>BLACK FLOCK</p>
+      <div className="sf-hero-copy">
+        <h1>
+          WEEKLY <span>ROSTER</span>
+        </h1>
+        <p>BLACK FLOCK</p>
+      </div>
     </section>
   );
 }
@@ -405,7 +401,7 @@ function ControlsRow({
   const canUsePlayerActions = hasPlayerProfile && canEditSelectedWeek;
 
   return (
-    <>
+    <section className="sf-controls-row" aria-label="Schedule controls">
       <section className="sf-control-card sf-date-card">
         <div className="sf-week-switcher">
           <button
@@ -468,7 +464,7 @@ function ControlsRow({
           <span className="sf-chip">{upcoming.timeLabel}</span>
         </div>
       </section>
-    </>
+    </section>
   );
 }
 
@@ -1196,44 +1192,48 @@ export default function RosterPage({
   }
 
   return (
-    <div className="sf-viewport" style={{ width: layout.width, height: layout.height }}>
-      <div className="sf-canvas" style={{ ...layout.style, transform: `scale(${layout.scale})` }}>
+    <div className="sf-desktop-viewport" style={{ width: layout.width, height: layout.height }}>
+      <div className="sf-desktop-frame" style={{ ...layout.style, transform: `scale(${layout.scale})` }}>
         <div className="sf-bg-base" />
         <div className="sf-bg-glow" />
 
         <ScheduleSidebar user={user} />
-        <ClockPanel />
-        <button className="sf-notice" type="button" aria-label="Notifications">
-          <img src="/static/img/figma/schedule/icons/bell.png" alt="" />
-          {hasNotifications ? <span className="sf-notice-dot" /> : null}
-        </button>
+        <main className="sf-desktop-main" aria-label="Weekly roster">
+          <div className="sf-topbar">
+            <ClockPanel />
+            <button className="sf-notice" type="button" aria-label="Notifications">
+              <img src="/static/img/figma/schedule/icons/bell.png" alt="" />
+              {hasNotifications ? <span className="sf-notice-dot" /> : null}
+            </button>
+          </div>
 
-        <HeroPanel />
-        <ControlsRow
-          selectedWeekStart={selectedWeekStart}
-          canGoPreviousWeek={canGoPreviousWeek}
-          canAdd={canAdd}
-          hasPlayerProfile={hasPlayerProfile}
-          canEditSelectedWeek={canEditSelectedWeek}
-          days={days}
-          slots={slots}
-          dayEventTypes={dayEventTypes}
-          players={players}
-          onWeekChange={onWeekChange}
-          onAdd={onAdd}
-          onCopy={onCopy}
-        />
-        <ScheduleTable
-          days={days}
-          players={players}
-          slots={slots}
-          canEditSelectedWeek={canEditSelectedWeek}
-          onAdd={onAdd}
-          onEdit={onEdit}
-          onNoteHoverStart={onNoteHoverStart}
-          onNoteHoverEnd={onNoteHoverEnd}
-        />
-        <AvailabilityBar days={days} players={players} slots={slots} />
+          <HeroPanel />
+          <ControlsRow
+            selectedWeekStart={selectedWeekStart}
+            canGoPreviousWeek={canGoPreviousWeek}
+            canAdd={canAdd}
+            hasPlayerProfile={hasPlayerProfile}
+            canEditSelectedWeek={canEditSelectedWeek}
+            days={days}
+            slots={slots}
+            dayEventTypes={dayEventTypes}
+            players={players}
+            onWeekChange={onWeekChange}
+            onAdd={onAdd}
+            onCopy={onCopy}
+          />
+          <ScheduleTable
+            days={days}
+            players={players}
+            slots={slots}
+            canEditSelectedWeek={canEditSelectedWeek}
+            onAdd={onAdd}
+            onEdit={onEdit}
+            onNoteHoverStart={onNoteHoverStart}
+            onNoteHoverEnd={onNoteHoverEnd}
+          />
+          <AvailabilityBar days={days} players={players} slots={slots} />
+        </main>
         <div className="sf-version">{appVersion || 'v0.0.0'}</div>
       </div>
     </div>
