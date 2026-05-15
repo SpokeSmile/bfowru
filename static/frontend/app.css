@@ -1373,12 +1373,12 @@ textarea {
 }
 
 .sf-bg-glow {
-  left: 50%;
+  left: 55%;
   top: -118px;
-  width: 760px;
-  height: 250px;
+  width: 1250px;
+  height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.36), rgba(13, 242, 158, 0.12) 44%, transparent 74%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
 }
@@ -1883,13 +1883,12 @@ textarea {
 
 .sf-hero-glow {
   left: 50%;
-  top: -74px;
-  width: 520px;
+  top: -45px;
+  width: 1150px;
   height: 118px;
   border-radius: 50%;
-  background: #0df29e;
-  filter: blur(125px);
-  opacity: 0.85;
+  background: radial-gradient(ellipse at center, rgb(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
+  filter: blur(50px);
   transform: translateX(-50%);
 }
 

@@ -36,13 +36,12 @@
 
 .sf-hero-glow {
   left: 50%;
-  top: -74px;
-  width: 520px;
+  top: -45px;
+  width: 1150px;
   height: 118px;
   border-radius: 50%;
-  background: #0df29e;
-  filter: blur(125px);
-  opacity: 0.85;
+  background: radial-gradient(ellipse at center, rgb(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
+  filter: blur(50px);
   transform: translateX(-50%);
 }
 

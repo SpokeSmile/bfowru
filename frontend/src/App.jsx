@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 
 import {
   bootstrap,
@@ -312,29 +313,35 @@ export default function App() {
   const selectedStats = statsByMode[statsMode] || null;
   const sharedModals = (
     <>
-      {slotModal ? (
-        <EventModal
-          event={slotModal.event}
-          day={slotModal.day}
-          days={data.days}
-          slots={data.slots}
-          currentPlayerId={data.user.playerId}
-          weekStart={data.selectedWeekStart}
-          onClose={() => setSlotModal(null)}
-          onSaved={replaceDaySlots}
-        />
-      ) : null}
-      {copyModalOpen ? (
-        <CopyScheduleModal
-          sourceWeeks={data.copySourceWeeks || []}
-          targetWeeks={data.copyTargetWeeks || []}
-          selectedWeekStart={data.selectedWeekStart}
-          currentWeekStart={data.currentWeekStart}
-          canEditSelectedWeek={data.canEditSelectedWeek}
-          onClose={() => setCopyModalOpen(false)}
-          onCopied={handleCopyWeekCopied}
-        />
-      ) : null}
+      <AnimatePresence>
+        {slotModal ? (
+          <EventModal
+            key="event-modal"
+            event={slotModal.event}
+            day={slotModal.day}
+            days={data.days}
+            slots={data.slots}
+            currentPlayerId={data.user.playerId}
+            weekStart={data.selectedWeekStart}
+            onClose={() => setSlotModal(null)}
+            onSaved={replaceDaySlots}
+          />
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
+        {copyModalOpen ? (
+          <CopyScheduleModal
+            key="copy-schedule-modal"
+            sourceWeeks={data.copySourceWeeks || []}
+            targetWeeks={data.copyTargetWeeks || []}
+            selectedWeekStart={data.selectedWeekStart}
+            currentWeekStart={data.currentWeekStart}
+            canEditSelectedWeek={data.canEditSelectedWeek}
+            onClose={() => setCopyModalOpen(false)}
+            onCopied={handleCopyWeekCopied}
+          />
+        ) : null}
+      </AnimatePresence>
       {commentTooltip?.visible ? (
         <CommentTooltip
           key={`${commentTooltip.anchorRect.left}-${commentTooltip.anchorRect.top}-${commentTooltip.text}`}

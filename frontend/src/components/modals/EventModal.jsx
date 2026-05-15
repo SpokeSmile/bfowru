@@ -326,10 +326,18 @@ export default function EventModal({
   const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(formState.slotType);
 
   return (
-    <div className="edit-time-overlay">
+    <motion.div
+      className="edit-time-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
       <motion.form
-        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        initial={{ opacity: 0, y: 24, scale: 0.5 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 24, scale: 0.5 }}
+        transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
         className="edit-time-modal"
         onSubmit={submitReplacement}
       >
@@ -476,6 +484,6 @@ export default function EventModal({
           </div>
         </div>
       </motion.form>
-    </div>
+    </motion.div>
   );
 }

@@ -66,12 +66,12 @@
 }
 
 .sf-bg-glow {
-  left: 50%;
+  left: 55%;
   top: -118px;
-  width: 760px;
-  height: 250px;
+  width: 1250px;
+  height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.36), rgba(13, 242, 158, 0.12) 44%, transparent 74%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
 }
