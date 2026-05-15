@@ -21040,10 +21040,7 @@ function LoadingView() {
       transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
       children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "loading-screen-card", "aria-label": "Loading data", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-progress", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "loading-progress-fill" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-track", cx: "32", cy: "32", r: "25", pathLength: "100" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100" })
-        ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100" }) })
       ] })
     }
   );

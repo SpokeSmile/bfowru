@@ -15,7 +15,6 @@ export function LoadingView() {
           <span className="loading-progress-fill" />
         </div>
         <svg className="loading-arc-spinner" viewBox="0 0 64 64" aria-hidden="true">
-          <circle className="loading-arc-track" cx="32" cy="32" r="25" pathLength="100" />
           <circle className="loading-arc-line" cx="32" cy="32" r="25" pathLength="100" />
         </svg>
       </div>
