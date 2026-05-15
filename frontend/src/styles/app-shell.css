@@ -347,6 +347,7 @@ textarea {
   justify-items: center;
   align-content: center;
   gap: 7px;
+  border: 0;
   border-radius: 12px;
   background: transparent;
   color: rgba(232, 237, 245, 0.62);

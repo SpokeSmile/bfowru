@@ -22,6 +22,8 @@ export default function ScheduleMobileView({
   onEdit,
   onCopy,
   onWeekChange,
+  onFeedback,
+  isFeedbackOpen,
 }) {
   const initialDay = days.find((day) => day.isToday)?.value ?? days[0]?.value ?? 0;
   const [activeDay, setActiveDay] = useState(initialDay);
@@ -40,7 +42,13 @@ export default function ScheduleMobileView({
   return (
     <div className="sfr-page sfr-page--mobile">
       <ResponsiveTopBar user={user} onMenuOpen={() => setIsDrawerOpen(true)} />
-      <ScheduleDrawer user={user} isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <ScheduleDrawer
+        user={user}
+        isOpen={isDrawerOpen}
+        isFeedbackOpen={isFeedbackOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onFeedback={onFeedback}
+      />
       <ResponsiveHero />
       <section className="sfr-controls">
         <ResponsiveWeekSwitcher

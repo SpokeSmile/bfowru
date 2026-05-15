@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/discord/connect/', api.discord_connect, name='api_discord_connect'),
     path('api/discord/callback/', api.discord_callback, name='api_discord_callback'),
     path('api/discord/disconnect/', api.discord_disconnect, name='api_discord_disconnect'),
+    path('api/feedback/', api.feedback_create, name='api_feedback_create'),
     path('api/logout/', api.logout_view, name='api_logout'),
 ]

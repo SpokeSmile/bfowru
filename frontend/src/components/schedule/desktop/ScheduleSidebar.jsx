@@ -1,11 +1,11 @@
-import { ChevronUp, LogOut, UserRound } from 'lucide-react';
+import { ChevronUp, LogOut, MessageSquareText, UserRound } from 'lucide-react';
 import { useState } from 'react';
 
 import { logout } from '../../../api.js';
 import { Avatar } from '../../common.jsx';
 import { NAV_ITEMS } from '../constants.js';
 
-export default function ScheduleSidebar({ user }) {
+export default function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = false }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   async function handleLogout() {
@@ -32,6 +32,7 @@ export default function ScheduleSidebar({ user }) {
 
       <nav className="sf-nav" aria-label="Schedule navigation">
         {NAV_ITEMS.map((item) => {
+          const isActive = item.active && !isFeedbackOpen;
           const content = (
             <span className="sf-nav-item-surface">
               <img src={`/static/img/schedule/icons/${item.icon}`} alt="" />
@@ -48,12 +49,23 @@ export default function ScheduleSidebar({ user }) {
           }
 
           return (
-            <a className={`sf-nav-item ${item.active ? 'sf-nav-item--active' : ''}`} href={item.href} key={item.label}>
-              {item.active ? <span className="sf-nav-item-accent" aria-hidden="true" /> : null}
+            <a className={`sf-nav-item ${isActive ? 'sf-nav-item--active' : ''}`} href={item.href} key={item.label}>
+              {isActive ? <span className="sf-nav-item-accent" aria-hidden="true" /> : null}
               {content}
             </a>
           );
         })}
+        <button
+          className={`sf-nav-item ${isFeedbackOpen ? 'sf-nav-item--active' : ''}`}
+          type="button"
+          onClick={onFeedback}
+        >
+          {isFeedbackOpen ? <span className="sf-nav-item-accent" aria-hidden="true" /> : null}
+          <span className="sf-nav-item-surface">
+            <MessageSquareText size={28} strokeWidth={1.8} />
+            <span>Feedback</span>
+          </span>
+        </button>
       </nav>
 
       <div className={`sf-sidebar-profile ${isProfileOpen ? 'sf-sidebar-profile--open' : ''}`}>

@@ -22,6 +22,8 @@ export default function ScheduleDesktopPage({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen,
   appVersion,
   layout,
 }) {
@@ -33,7 +35,7 @@ export default function ScheduleDesktopPage({
         <div className="sf-bg-base" />
         <div className="sf-bg-glow" />
 
-        <ScheduleSidebar user={user} />
+        <ScheduleSidebar user={user} onFeedback={onFeedback} isFeedbackOpen={isFeedbackOpen} />
         <main className="sf-desktop-main" aria-label="Weekly roster">
           <div className="sf-topbar">
             <ClockPanel />

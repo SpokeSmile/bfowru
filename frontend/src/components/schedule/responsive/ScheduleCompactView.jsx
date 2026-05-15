@@ -24,13 +24,21 @@ export default function ScheduleCompactView({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen,
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
     <div className="sfr-page sfr-page--compact">
       <ResponsiveTopBar user={user} onMenuOpen={() => setIsDrawerOpen(true)} />
-      <ScheduleDrawer user={user} isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <ScheduleDrawer
+        user={user}
+        isOpen={isDrawerOpen}
+        isFeedbackOpen={isFeedbackOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onFeedback={onFeedback}
+      />
       <ResponsiveHero />
       <section className="sfr-controls">
         <ResponsiveWeekSwitcher

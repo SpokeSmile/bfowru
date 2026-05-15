@@ -20570,6 +20570,12 @@ function changePassword(payload) {
 function disconnectDiscord() {
   return request("/api/discord/disconnect/", { method: "POST" });
 }
+function submitFeedback(payload) {
+  return request("/api/feedback/", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
 function logout() {
   return request("/api/logout/", { method: "POST" });
 }
@@ -20648,7 +20654,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$r = [
+const __iconNode$v = [
   [
     "path",
     {
@@ -20659,8 +20665,22 @@ const __iconNode$r = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$r);
-const __iconNode$q = [
+const BookText = createLucideIcon("book-text", __iconNode$v);
+const __iconNode$u = [
+  ["path", { d: "M12 20v-9", key: "1qisl0" }],
+  ["path", { d: "M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z", key: "uouzyp" }],
+  ["path", { d: "M14.12 3.88 16 2", key: "qol33r" }],
+  ["path", { d: "M21 21a4 4 0 0 0-3.81-4", key: "1b0z45" }],
+  ["path", { d: "M21 5a4 4 0 0 1-3.55 3.97", key: "5cxbf6" }],
+  ["path", { d: "M22 13h-4", key: "1jl80f" }],
+  ["path", { d: "M3 21a4 4 0 0 1 3.81-4", key: "1fjd4g" }],
+  ["path", { d: "M3 5a4 4 0 0 0 3.55 3.97", key: "1d7oge" }],
+  ["path", { d: "M6 13H2", key: "82j7cp" }],
+  ["path", { d: "m8 2 1.88 1.88", key: "fmnt4t" }],
+  ["path", { d: "M9 7.13V6a3 3 0 1 1 6 0v1.13", key: "1vgav8" }]
+];
+const Bug = createLucideIcon("bug", __iconNode$u);
+const __iconNode$t = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -20672,38 +20692,38 @@ const __iconNode$q = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$q);
-const __iconNode$p = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$t);
+const __iconNode$s = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$p);
-const __iconNode$o = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$o);
-const __iconNode$n = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$n);
-const __iconNode$m = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$m);
-const __iconNode$l = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$s);
+const __iconNode$r = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$r);
+const __iconNode$q = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$q);
+const __iconNode$p = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$p);
+const __iconNode$o = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$l);
-const __iconNode$k = [
+const CircleCheck = createLucideIcon("circle-check", __iconNode$o);
+const __iconNode$n = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$k);
-const __iconNode$j = [
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$n);
+const __iconNode$m = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
   ["path", { d: "m9 9 6 6", key: "z0biqf" }]
 ];
-const CircleX = createLucideIcon("circle-x", __iconNode$j);
-const __iconNode$i = [
+const CircleX = createLucideIcon("circle-x", __iconNode$m);
+const __iconNode$l = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -20717,24 +20737,24 @@ const __iconNode$i = [
   ["path", { d: "M8 11h.01", key: "1dfujw" }],
   ["path", { d: "M8 16h.01", key: "18s6g9" }]
 ];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$i);
-const __iconNode$h = [
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$l);
+const __iconNode$k = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$h);
-const __iconNode$g = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$k);
+const __iconNode$j = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$g);
-const __iconNode$f = [
+const Copy = createLucideIcon("copy", __iconNode$j);
+const __iconNode$i = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$f);
-const __iconNode$e = [
+const ExternalLink = createLucideIcon("external-link", __iconNode$i);
+const __iconNode$h = [
   [
     "path",
     {
@@ -20744,27 +20764,52 @@ const __iconNode$e = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Eye = createLucideIcon("eye", __iconNode$e);
-const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
-const __iconNode$c = [
+const Eye = createLucideIcon("eye", __iconNode$h);
+const __iconNode$g = [
+  [
+    "path",
+    {
+      d: "M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5",
+      key: "1gvzjb"
+    }
+  ],
+  ["path", { d: "M9 18h6", key: "x1upvd" }],
+  ["path", { d: "M10 22h4", key: "ceow96" }]
+];
+const Lightbulb = createLucideIcon("lightbulb", __iconNode$g);
+const __iconNode$f = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$f);
+const __iconNode$e = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
   ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$c);
-const __iconNode$b = [
+const LogOut = createLucideIcon("log-out", __iconNode$e);
+const __iconNode$d = [
   ["path", { d: "M4 5h16", key: "1tepv9" }],
   ["path", { d: "M4 12h16", key: "1lakjw" }],
   ["path", { d: "M4 19h16", key: "1djgab" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$b);
-const __iconNode$a = [
+const Menu = createLucideIcon("menu", __iconNode$d);
+const __iconNode$c = [
+  [
+    "path",
+    {
+      d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
+      key: "18887p"
+    }
+  ],
+  ["path", { d: "M7 11h10", key: "1twpyw" }],
+  ["path", { d: "M7 15h6", key: "d9of3u" }],
+  ["path", { d: "M7 7h8", key: "af5zfr" }]
+];
+const MessageSquareText = createLucideIcon("message-square-text", __iconNode$c);
+const __iconNode$b = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const Plus = createLucideIcon("plus", __iconNode$a);
-const __iconNode$9 = [
+const Plus = createLucideIcon("plus", __iconNode$b);
+const __iconNode$a = [
   [
     "path",
     {
@@ -20775,7 +20820,18 @@ const __iconNode$9 = [
   ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
   ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
 ];
-const Save = createLucideIcon("save", __iconNode$9);
+const Save = createLucideIcon("save", __iconNode$a);
+const __iconNode$9 = [
+  [
+    "path",
+    {
+      d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+      key: "1ffxy3"
+    }
+  ],
+  ["path", { d: "m21.854 2.147-10.94 10.939", key: "12cjpa" }]
+];
+const Send = createLucideIcon("send", __iconNode$9);
 const __iconNode$8 = [
   [
     "path",
@@ -20976,7 +21032,7 @@ function Header({ user }) {
     ] })
   ] });
 }
-function Sidebar({ pathname }) {
+function Sidebar({ pathname, onFeedback, isFeedbackOpen = false }) {
   const items = [
     {
       href: "/",
@@ -21007,18 +21063,41 @@ function Sidebar({ pathname }) {
       label: "Настройки",
       icon: Settings,
       isActive: pathname.startsWith("/profile")
+    },
+    {
+      label: "Feedback",
+      icon: MessageSquareText,
+      isActive: isFeedbackOpen,
+      onClick: onFeedback
     }
   ];
   return /* @__PURE__ */ jsxRuntimeExports.jsx("aside", { className: "app-sidebar glass-panel rounded-xl xl:sticky xl:top-4 xl:self-start", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sidebar-shell", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sidebar-head", children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { className: "sidebar-brand", href: "/", "aria-label": "Black Flock", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "brand-logo", src: "/static/img/Logo.png", alt: "" }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sidebar-nav", "aria-label": "Основная навигация", children: items.map((item) => {
       const Icon2 = item.icon;
+      const isActive = item.isActive && (item.onClick || !isFeedbackOpen);
+      if (item.onClick) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: `sidebar-nav-link ${isActive ? "sidebar-nav-link-active" : ""}`,
+            type: "button",
+            onClick: item.onClick,
+            "aria-current": isActive ? "page" : void 0,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
+            ]
+          },
+          item.label
+        );
+      }
       return /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "a",
         {
-          className: `sidebar-nav-link ${item.isActive ? "sidebar-nav-link-active" : ""}`,
+          className: `sidebar-nav-link ${isActive ? "sidebar-nav-link-active" : ""}`,
           href: item.href,
-          "aria-current": item.isActive ? "page" : void 0,
+          "aria-current": isActive ? "page" : void 0,
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 20 }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-link-label", children: item.label })
@@ -21770,6 +21849,146 @@ function EventModal({
                 /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "edit-time-cancel", type: "button", disabled: isSaving, onClick: onClose, children: "Cancel" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "edit-time-save", type: "submit", disabled: isSaving, children: "Save" })
               ] })
+            ] })
+          ]
+        }
+      )
+    }
+  );
+}
+const MESSAGE_LIMIT = 2e3;
+const FEEDBACK_TYPES = [
+  {
+    value: "bug",
+    title: "BUG",
+    description: "Something is broken",
+    icon: Bug
+  },
+  {
+    value: "feature",
+    title: "FEATURE",
+    description: "Request an improvement",
+    icon: Lightbulb
+  },
+  {
+    value: "feedback",
+    title: "FEEDBACK",
+    description: "Share general feedback",
+    icon: MessageSquareText
+  },
+  {
+    value: "other",
+    title: "OTHER",
+    description: "Anything else",
+    icon: CircleQuestionMark
+  }
+];
+function FeedbackModal({ onClose }) {
+  const [feedbackType, setFeedbackType] = reactExports.useState("bug");
+  const [message, setMessage] = reactExports.useState("");
+  const [errors, setErrors] = reactExports.useState({});
+  const [isSaving, setIsSaving] = reactExports.useState(false);
+  const [isSent, setIsSent] = reactExports.useState(false);
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (isSent) {
+      onClose();
+      return;
+    }
+    setIsSaving(true);
+    setErrors({});
+    try {
+      await submitFeedback({
+        type: feedbackType,
+        message,
+        pageUrl: window.location.href
+      });
+      setIsSent(true);
+      setMessage("");
+    } catch (error) {
+      setErrors(error.payload?.errors || { __all__: [error.message] });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+  const messageLength = Array.from(message).length;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    motion.div,
+    {
+      className: "feedback-overlay",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { duration: 0.15 },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        motion.form,
+        {
+          className: "feedback-modal",
+          initial: { opacity: 0, y: 24, scale: 0.94 },
+          animate: { opacity: 1, y: 0, scale: 1 },
+          exit: { opacity: 0, y: 24, scale: 0.94 },
+          transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] },
+          onSubmit: handleSubmit,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-modal-glow", "aria-hidden": "true" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "feedback-header", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "TEAM EXPERIENCE" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "FEEDBACK" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Report a bug, request a feature, or share what should be improved." })
+            ] }),
+            errors.__all__ ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-error", children: errors.__all__.join(", ") }) : null,
+            isSent ? /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "feedback-success", "aria-live": "polite", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 46, strokeWidth: 1.8 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Feedback sent" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Thanks. Your message is saved and will be reviewed in the admin panel." })
+            ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-types", role: "radiogroup", "aria-label": "Feedback type", children: FEEDBACK_TYPES.map((type) => {
+                const Icon2 = type.icon;
+                const isActive = feedbackType === type.value;
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    className: `feedback-type ${isActive ? "feedback-type--active" : ""}`,
+                    type: "button",
+                    role: "radio",
+                    "aria-checked": isActive,
+                    onClick: () => setFeedbackType(type.value),
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { size: 32, strokeWidth: 1.8 }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: type.title }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: type.description })
+                    ]
+                  },
+                  type.value
+                );
+              }) }),
+              errors.type ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-field-error", children: errors.type.join(", ") }) : null,
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "feedback-message", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Describe your feedback" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("strong", { children: [
+                  messageLength,
+                  "/",
+                  MESSAGE_LIMIT
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "textarea",
+                  {
+                    maxLength: MESSAGE_LIMIT,
+                    placeholder: "What happened? What would you like to change?",
+                    value: message,
+                    onChange: (event) => setMessage(event.target.value)
+                  }
+                )
+              ] }),
+              errors.message ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-field-error", children: errors.message.join(", ") }) : null,
+              errors.pageUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-field-error", children: errors.pageUrl.join(", ") }) : null
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("footer", { className: "feedback-actions", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "feedback-cancel", type: "button", disabled: isSaving, onClick: onClose, children: isSent ? "Close" : "Cancel" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "feedback-send", type: "submit", disabled: isSaving, children: isSent ? "Done" : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { size: 18 }),
+                isSaving ? "Sending..." : "Send"
+              ] }) })
             ] })
           ]
         }
@@ -47293,7 +47512,7 @@ function HeroPanel() {
     ] })
   ] });
 }
-function ScheduleSidebar({ user }) {
+function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = false }) {
   const [isProfileOpen, setIsProfileOpen] = reactExports.useState(false);
   async function handleLogout() {
     const response = await logout();
@@ -47314,19 +47533,37 @@ function ScheduleSidebar({ user }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
-      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-      ] });
-      if (!item.href) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
-      }
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${item.active ? "sf-nav-item--active" : ""}`, href: item.href, children: [
-        item.active ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
-        content
-      ] }, item.label);
-    }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: [
+      NAV_ITEMS.map((item) => {
+        const isActive = item.active && !isFeedbackOpen;
+        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+        ] });
+        if (!item.href) {
+          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
+        }
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${isActive ? "sf-nav-item--active" : ""}`, href: item.href, children: [
+          isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
+          content
+        ] }, item.label);
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "button",
+        {
+          className: `sf-nav-item ${isFeedbackOpen ? "sf-nav-item--active" : ""}`,
+          type: "button",
+          onClick: onFeedback,
+          children: [
+            isFeedbackOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 28, strokeWidth: 1.8 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
+            ] })
+          ]
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isProfileOpen ? "sf-sidebar-profile--open" : ""}`, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isProfileOpen, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
@@ -47376,13 +47613,15 @@ function ScheduleDesktopPage({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen,
   appVersion,
   layout: layout2
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-desktop-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-frame", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user, onFeedback, isFeedbackOpen }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
@@ -47685,7 +47924,7 @@ function ResponsiveTopBar({ user, onMenuOpen }) {
     ] })
   ] });
 }
-function ScheduleDrawer({ user, isOpen, onClose }) {
+function ScheduleDrawer({ user, isOpen, isFeedbackOpen = false, onClose, onFeedback }) {
   reactExports.useEffect(() => {
     if (!isOpen) return void 0;
     const handleKeyDown = (event) => {
@@ -47707,25 +47946,43 @@ function ScheduleDrawer({ user, isOpen, onClose }) {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: onClose, "aria-label": "Close navigation", children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sfr-drawer-nav", children: NAV_ITEMS.map((item) => {
-        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-        ] });
-        if (!item.href) {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-nav-item", type: "button", disabled: true, children: content }, item.label);
-        }
-        return /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "a",
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "sfr-drawer-nav", children: [
+        NAV_ITEMS.map((item) => {
+          const isActive = item.active && !isFeedbackOpen;
+          const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+          ] });
+          if (!item.href) {
+            return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sfr-drawer-nav-item", type: "button", disabled: true, children: content }, item.label);
+          }
+          return /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "a",
+            {
+              className: `sfr-drawer-nav-item ${isActive ? "sfr-drawer-nav-item--active" : ""}`,
+              href: item.href,
+              onClick: onClose,
+              children: content
+            },
+            item.label
+          );
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
           {
-            className: `sfr-drawer-nav-item ${item.active ? "sfr-drawer-nav-item--active" : ""}`,
-            href: item.href,
-            onClick: onClose,
-            children: content
-          },
-          item.label
-        );
-      }) }),
+            className: `sfr-drawer-nav-item ${isFeedbackOpen ? "sfr-drawer-nav-item--active" : ""}`,
+            type: "button",
+            onClick: () => {
+              onFeedback();
+              onClose();
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 22, strokeWidth: 1.8 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
+            ]
+          }
+        )
+      ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sfr-drawer-profile", href: "/profile/", onClick: onClose, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sfr-drawer-avatar" }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -47752,12 +48009,23 @@ function ScheduleCompactView({
   onCopy,
   onWeekChange,
   onNoteHoverStart,
-  onNoteHoverEnd
+  onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = reactExports.useState(false);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--compact", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScheduleDrawer,
+      {
+        user,
+        isOpen: isDrawerOpen,
+        isFeedbackOpen,
+        onClose: () => setIsDrawerOpen(false),
+        onFeedback
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47849,7 +48117,9 @@ function ScheduleMobileView({
   onAdd,
   onEdit,
   onCopy,
-  onWeekChange
+  onWeekChange,
+  onFeedback,
+  isFeedbackOpen
 }) {
   const initialDay = days.find((day) => day.isToday)?.value ?? days[0]?.value ?? 0;
   const [activeDay, setActiveDay] = reactExports.useState(initialDay);
@@ -47862,7 +48132,16 @@ function ScheduleMobileView({
   }, [activeDay, days]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sfr-page sfr-page--mobile", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveTopBar, { user, onMenuOpen: () => setIsDrawerOpen(true) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleDrawer, { user, isOpen: isDrawerOpen, onClose: () => setIsDrawerOpen(false) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      ScheduleDrawer,
+      {
+        user,
+        isOpen: isDrawerOpen,
+        isFeedbackOpen,
+        onClose: () => setIsDrawerOpen(false),
+        onFeedback
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ResponsiveHero, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sfr-controls", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -47924,6 +48203,8 @@ function RosterPage({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen,
   appVersion
 }) {
   const viewport = useScheduleViewport();
@@ -47944,7 +48225,9 @@ function RosterPage({
         onAdd,
         onEdit,
         onCopy,
-        onWeekChange
+        onWeekChange,
+        onFeedback,
+        isFeedbackOpen
       }
     );
   }
@@ -47967,7 +48250,9 @@ function RosterPage({
         onCopy,
         onWeekChange,
         onNoteHoverStart,
-        onNoteHoverEnd
+        onNoteHoverEnd,
+        onFeedback,
+        isFeedbackOpen
       }
     );
   }
@@ -47990,6 +48275,8 @@ function RosterPage({
       onWeekChange,
       onNoteHoverStart,
       onNoteHoverEnd,
+      onFeedback,
+      isFeedbackOpen,
       appVersion,
       layout: layout2
     }
@@ -48251,6 +48538,7 @@ function App() {
   const [error, setError] = reactExports.useState("");
   const [slotModal, setSlotModal] = reactExports.useState(null);
   const [copyModalOpen, setCopyModalOpen] = reactExports.useState(false);
+  const [feedbackModalOpen, setFeedbackModalOpen] = reactExports.useState(false);
   const [commentTooltip, setCommentTooltip] = reactExports.useState(null);
   const [updatesList, setUpdatesList] = reactExports.useState([]);
   const [updatesBySlug, setUpdatesBySlug] = reactExports.useState({});
@@ -48472,6 +48760,13 @@ function App() {
       },
       "event-modal"
     ) : null }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: feedbackModalOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+      FeedbackModal,
+      {
+        onClose: () => setFeedbackModalOpen(false)
+      },
+      "feedback-modal"
+    ) : null }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: copyModalOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(
       CopyScheduleModal,
       {
@@ -48526,7 +48821,9 @@ function App() {
                 onCopy: () => setCopyModalOpen(true),
                 onWeekChange: handleWeekChange,
                 onNoteHoverStart: handleNoteHoverStart,
-                onNoteHoverEnd: handleNoteHoverEnd
+                onNoteHoverEnd: handleNoteHoverEnd,
+                onFeedback: () => setFeedbackModalOpen(true),
+                isFeedbackOpen: feedbackModalOpen
               }
             ),
             sharedModals
@@ -48546,7 +48843,14 @@ function App() {
         transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { pathname }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Sidebar,
+              {
+                pathname,
+                onFeedback: () => setFeedbackModalOpen(true),
+                isFeedbackOpen: feedbackModalOpen
+              }
+            ),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { user: data.user }),
               isMainPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -48608,7 +48912,9 @@ function App() {
                   onCopy: () => setCopyModalOpen(true),
                   onWeekChange: handleWeekChange,
                   onNoteHoverStart: handleNoteHoverStart,
-                  onNoteHoverEnd: handleNoteHoverEnd
+                  onNoteHoverEnd: handleNoteHoverEnd,
+                  onFeedback: () => setFeedbackModalOpen(true),
+                  isFeedbackOpen: feedbackModalOpen
                 }
               ) })
             ] })

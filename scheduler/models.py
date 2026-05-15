@@ -54,6 +54,58 @@ class DiscordConnection(models.Model):
         return f'https://cdn.discordapp.com/avatars/{self.discord_user_id}/{self.avatar_hash}.png?size=128'
 
 
+class FeedbackEntry(models.Model):
+    BUG = 'bug'
+    FEATURE = 'feature'
+    FEEDBACK = 'feedback'
+    OTHER = 'other'
+
+    NEW = 'new'
+    IN_PROGRESS = 'in_progress'
+    DONE = 'done'
+    REJECTED = 'rejected'
+
+    TYPE_CHOICES = [
+        (BUG, 'Bug'),
+        (FEATURE, 'Feature'),
+        (FEEDBACK, 'Feedback'),
+        (OTHER, 'Other'),
+    ]
+
+    STATUS_CHOICES = [
+        (NEW, 'New'),
+        (IN_PROGRESS, 'In progress'),
+        (DONE, 'Done'),
+        (REJECTED, 'Rejected'),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name='пользователь',
+        on_delete=models.SET_NULL,
+        related_name='feedback_entries',
+        blank=True,
+        null=True,
+    )
+    type = models.CharField('тип', max_length=20, choices=TYPE_CHOICES)
+    message = models.TextField('сообщение', max_length=2000)
+    page_url = models.URLField('страница', max_length=500, blank=True)
+    user_agent = models.CharField('user agent', max_length=500, blank=True)
+    status = models.CharField('статус', max_length=20, choices=STATUS_CHOICES, default=NEW)
+    admin_note = models.TextField('заметка администратора', blank=True)
+    created_at = models.DateTimeField('создано', auto_now_add=True)
+    updated_at = models.DateTimeField('обновлено', auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        verbose_name = 'feedback'
+        verbose_name_plural = 'feedback'
+
+    def __str__(self):
+        username = self.user.username if self.user else 'deleted user'
+        return f'{self.get_type_display()} from {username}'
+
+
 class Player(models.Model):
     name = models.CharField('имя игрока', max_length=80)
     role = models.CharField('роль', max_length=80, blank=True)

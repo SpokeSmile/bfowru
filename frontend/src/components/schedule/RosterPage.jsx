@@ -19,6 +19,8 @@ export default function RosterPage({
   onWeekChange,
   onNoteHoverStart,
   onNoteHoverEnd,
+  onFeedback,
+  isFeedbackOpen,
   appVersion,
 }) {
   const viewport = useScheduleViewport();
@@ -40,6 +42,8 @@ export default function RosterPage({
         onEdit={onEdit}
         onCopy={onCopy}
         onWeekChange={onWeekChange}
+        onFeedback={onFeedback}
+        isFeedbackOpen={isFeedbackOpen}
       />
     );
   }
@@ -63,6 +67,8 @@ export default function RosterPage({
         onWeekChange={onWeekChange}
         onNoteHoverStart={onNoteHoverStart}
         onNoteHoverEnd={onNoteHoverEnd}
+        onFeedback={onFeedback}
+        isFeedbackOpen={isFeedbackOpen}
       />
     );
   }
@@ -85,6 +91,8 @@ export default function RosterPage({
       onWeekChange={onWeekChange}
       onNoteHoverStart={onNoteHoverStart}
       onNoteHoverEnd={onNoteHoverEnd}
+      onFeedback={onFeedback}
+      isFeedbackOpen={isFeedbackOpen}
       appVersion={appVersion}
       layout={layout}
     />

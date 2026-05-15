@@ -99,6 +99,13 @@ export function disconnectDiscord() {
   return request('/api/discord/disconnect/', { method: 'POST' });
 }
 
+export function submitFeedback(payload) {
+  return request('/api/feedback/', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function logout() {
   return request('/api/logout/', { method: 'POST' });
 }

@@ -47,6 +47,12 @@
   opacity: 0.5;
 }
 
+.sf-nav-item svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.5;
+}
+
 .sf-nav-item--active {
   color: #fff;
 }
@@ -72,5 +78,9 @@
 }
 
 .sf-nav-item--active img {
+  opacity: 1;
+}
+
+.sf-nav-item--active svg {
   opacity: 1;
 }

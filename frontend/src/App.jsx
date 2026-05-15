@@ -12,6 +12,7 @@ import { ErrorView, LoadingView } from './components/AppStateViews.jsx';
 import MainPage from './components/MainPage.jsx';
 import CopyScheduleModal from './components/modals/CopyScheduleModal.jsx';
 import EventModal from './components/modals/EventModal.jsx';
+import FeedbackModal from './components/modals/FeedbackModal.jsx';
 import OverwatchStatsPage from './components/OverwatchStatsPage.jsx';
 import ProfilePage from './components/profile/ProfilePage.jsx';
 import CommentTooltip from './components/schedule/CommentTooltip.jsx';
@@ -54,6 +55,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [slotModal, setSlotModal] = useState(null);
   const [copyModalOpen, setCopyModalOpen] = useState(false);
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [commentTooltip, setCommentTooltip] = useState(null);
   const [updatesList, setUpdatesList] = useState([]);
   const [updatesBySlug, setUpdatesBySlug] = useState({});
@@ -373,6 +375,14 @@ export default function App() {
         ) : null}
       </AnimatePresence>
       <AnimatePresence>
+        {feedbackModalOpen ? (
+          <FeedbackModal
+            key="feedback-modal"
+            onClose={() => setFeedbackModalOpen(false)}
+          />
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
         {copyModalOpen ? (
           <CopyScheduleModal
             key="copy-schedule-modal"
@@ -426,6 +436,8 @@ export default function App() {
             onWeekChange={handleWeekChange}
             onNoteHoverStart={handleNoteHoverStart}
             onNoteHoverEnd={handleNoteHoverEnd}
+            onFeedback={() => setFeedbackModalOpen(true)}
+            isFeedbackOpen={feedbackModalOpen}
           />
           {sharedModals}
         </motion.main>
@@ -443,7 +455,11 @@ export default function App() {
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="app-shell">
-          <Sidebar pathname={pathname} />
+          <Sidebar
+            pathname={pathname}
+            onFeedback={() => setFeedbackModalOpen(true)}
+            isFeedbackOpen={feedbackModalOpen}
+          />
           <div className="min-w-0">
             <Header user={data.user} />
             {isMainPage ? (
@@ -504,6 +520,8 @@ export default function App() {
                   onWeekChange={handleWeekChange}
                   onNoteHoverStart={handleNoteHoverStart}
                   onNoteHoverEnd={handleNoteHoverEnd}
+                  onFeedback={() => setFeedbackModalOpen(true)}
+                  isFeedbackOpen={feedbackModalOpen}
                 />
               </>
             )}

@@ -3,6 +3,7 @@
 @import "./styles/base.css";
 @import "./styles/app-state.css";
 @import "./styles/edit-time-modal.css";
+@import "./styles/feedback-modal.css";
 @import "./styles/app-shell.css";
 @import "./styles/modals.css";
 @import "./styles/schedule.css";

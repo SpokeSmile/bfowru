@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { MessageSquareText, X } from 'lucide-react';
 
 import { Avatar } from '../../common.jsx';
 import { NAV_ITEMS } from '../constants.js';
 
-export default function ScheduleDrawer({ user, isOpen, onClose }) {
+export default function ScheduleDrawer({ user, isOpen, isFeedbackOpen = false, onClose, onFeedback }) {
   useEffect(() => {
     if (!isOpen) return undefined;
 
@@ -35,6 +35,7 @@ export default function ScheduleDrawer({ user, isOpen, onClose }) {
 
         <nav className="sfr-drawer-nav">
           {NAV_ITEMS.map((item) => {
+            const isActive = item.active && !isFeedbackOpen;
             const content = (
               <>
                 <img src={`/static/img/schedule/icons/${item.icon}`} alt="" />
@@ -52,7 +53,7 @@ export default function ScheduleDrawer({ user, isOpen, onClose }) {
 
             return (
               <a
-                className={`sfr-drawer-nav-item ${item.active ? 'sfr-drawer-nav-item--active' : ''}`}
+                className={`sfr-drawer-nav-item ${isActive ? 'sfr-drawer-nav-item--active' : ''}`}
                 href={item.href}
                 key={item.label}
                 onClick={onClose}
@@ -61,6 +62,17 @@ export default function ScheduleDrawer({ user, isOpen, onClose }) {
               </a>
             );
           })}
+          <button
+            className={`sfr-drawer-nav-item ${isFeedbackOpen ? 'sfr-drawer-nav-item--active' : ''}`}
+            type="button"
+            onClick={() => {
+              onFeedback();
+              onClose();
+            }}
+          >
+            <MessageSquareText size={22} strokeWidth={1.8} />
+            <span>Feedback</span>
+          </button>
         </nav>
 
         <a className="sfr-drawer-profile" href="/profile/" onClick={onClose}>

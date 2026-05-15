@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BarChart3, BookText, Clock3, LogOut, Settings, Users } from 'lucide-react';
+import { BarChart3, BookText, Clock3, LogOut, MessageSquareText, Settings, Users } from 'lucide-react';
 
 import { logout } from '../api.js';
 import { Avatar } from './common.jsx';
@@ -93,7 +93,7 @@ export function Header({ user }) {
   );
 }
 
-export function Sidebar({ pathname }) {
+export function Sidebar({ pathname, onFeedback, isFeedbackOpen = false }) {
   const items = [
     {
       href: '/',
@@ -125,6 +125,12 @@ export function Sidebar({ pathname }) {
       icon: Settings,
       isActive: pathname.startsWith('/profile'),
     },
+    {
+      label: 'Feedback',
+      icon: MessageSquareText,
+      isActive: isFeedbackOpen,
+      onClick: onFeedback,
+    },
   ];
 
   return (
@@ -139,12 +145,28 @@ export function Sidebar({ pathname }) {
         <nav className="sidebar-nav" aria-label="Основная навигация">
           {items.map((item) => {
             const Icon = item.icon;
+            const isActive = item.isActive && (item.onClick || !isFeedbackOpen);
+            if (item.onClick) {
+              return (
+                <button
+                  key={item.label}
+                  className={`sidebar-nav-link ${isActive ? 'sidebar-nav-link-active' : ''}`}
+                  type="button"
+                  onClick={item.onClick}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <Icon size={20} />
+                  <span className="sidebar-link-label">{item.label}</span>
+                </button>
+              );
+            }
+
             return (
               <a
                 key={item.href}
-                className={`sidebar-nav-link ${item.isActive ? 'sidebar-nav-link-active' : ''}`}
+                className={`sidebar-nav-link ${isActive ? 'sidebar-nav-link-active' : ''}`}
                 href={item.href}
-                aria-current={item.isActive ? 'page' : undefined}
+                aria-current={isActive ? 'page' : undefined}
               >
                 <Icon size={20} />
                 <span className="sidebar-link-label">{item.label}</span>

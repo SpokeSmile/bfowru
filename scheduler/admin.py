@@ -8,7 +8,7 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .game_updates import GameUpdateSyncError, sync_game_updates
-from .models import DayEventType, DiscordConnection, GameUpdate, OverwatchStatsCache, Player, ScheduleSlot, StaffMember
+from .models import DayEventType, DiscordConnection, FeedbackEntry, GameUpdate, OverwatchStatsCache, Player, ScheduleSlot, StaffMember
 
 
 class PlayerAdminForm(forms.ModelForm):
@@ -160,6 +160,34 @@ class DayEventTypeAdmin(admin.ModelAdmin):
     list_display = ('week_start', 'day_of_week', 'event_type', 'event_label')
     list_filter = ('week_start', 'event_type')
     date_hierarchy = 'week_start'
+
+
+@admin.register(FeedbackEntry)
+class FeedbackEntryAdmin(admin.ModelAdmin):
+    list_display = ('type', 'status', 'user', 'short_message', 'created_at')
+    list_editable = ('status',)
+    list_filter = ('type', 'status', 'created_at')
+    search_fields = ('message', 'admin_note', 'page_url', 'user__username')
+    readonly_fields = ('user', 'type', 'message', 'page_url', 'user_agent', 'created_at', 'updated_at')
+    fields = (
+        'status',
+        'admin_note',
+        'user',
+        'type',
+        'message',
+        'page_url',
+        'user_agent',
+        'created_at',
+        'updated_at',
+    )
+    date_hierarchy = 'created_at'
+
+    def has_add_permission(self, request):
+        return False
+
+    @admin.display(description='message')
+    def short_message(self, obj):
+        return obj.message if len(obj.message) <= 80 else f'{obj.message[:77]}...'
 
 
 @admin.register(GameUpdate)
