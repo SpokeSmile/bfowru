@@ -38,7 +38,7 @@ export default function ScheduleDesktopPage({
           <div className="sf-topbar">
             <ClockPanel />
             <button className="sf-notice" type="button" aria-label="Notifications">
-              <img src="/static/img/figma/schedule/icons/bell.png" alt="" />
+              <img src="/static/img/schedule/icons/bell.png" alt="" />
               {hasNotifications ? <span className="sf-notice-dot" /> : null}
             </button>
           </div>

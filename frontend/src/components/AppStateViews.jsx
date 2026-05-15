@@ -1,13 +1,25 @@
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function LoadingView() {
   return (
-    <main className="grid min-h-screen place-items-center px-6">
-      <div className="glass-panel rounded-xl px-8 py-6 text-center">
-        <RefreshCw className="mx-auto animate-spin text-bf-orange" />
-        <div className="mt-3 font-black uppercase">Загрузка данных</div>
+    <motion.main
+      className="loading-screen"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="loading-screen-card" aria-label="Loading data">
+        <div className="loading-progress" aria-hidden="true">
+          <span className="loading-progress-fill" />
+        </div>
+        <svg className="loading-arc-spinner" viewBox="0 0 64 64" aria-hidden="true">
+          <circle className="loading-arc-track" cx="32" cy="32" r="25" pathLength="100" />
+          <circle className="loading-arc-line" cx="32" cy="32" r="25" pathLength="100" />
+        </svg>
       </div>
-    </main>
+    </motion.main>
   );
 }
 

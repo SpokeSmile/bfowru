@@ -37,7 +37,7 @@ export default function ScheduleDrawer({ user, isOpen, onClose }) {
           {NAV_ITEMS.map((item) => {
             const content = (
               <>
-                <img src={`/static/img/figma/schedule/icons/${item.icon}`} alt="" />
+                <img src={`/static/img/schedule/icons/${item.icon}`} alt="" />
                 <span>{item.label}</span>
               </>
             );

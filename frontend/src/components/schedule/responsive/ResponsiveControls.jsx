@@ -72,7 +72,7 @@ export function ResponsiveInfoCards({ days, players, slots, dayEventTypes }) {
           <strong>{upcoming.eventLabel}</strong>
           <small>{upcoming.dateLabel} · {upcoming.timeLabel}</small>
         </div>
-        <img src="/static/img/figma/schedule/icons/trophy.png" alt="" />
+        <img src="/static/img/schedule/icons/trophy.png" alt="" />
       </article>
     </section>
   );

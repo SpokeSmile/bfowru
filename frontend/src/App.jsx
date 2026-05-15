@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import {
   bootstrap,
@@ -21,6 +21,7 @@ import UpdatesPage from './components/UpdatesPage.jsx';
 
 const UPDATES_DISABLED = true;
 const STATS_MIN_LOADING_MS = 3000;
+const LOADING_SCREEN_MIN_MS = 500;
 
 function wait(ms) {
   return new Promise((resolve) => {
@@ -64,6 +65,7 @@ export default function App() {
 
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
+    const startedAt = shouldShowLoading ? window.performance.now() : 0;
     if (shouldShowLoading) {
       setIsLoading(true);
     }
@@ -78,6 +80,10 @@ export default function App() {
       setError(loadError.message);
     } finally {
       if (shouldShowLoading) {
+        const remainingLoadingTime = LOADING_SCREEN_MIN_MS - (window.performance.now() - startedAt);
+        if (remainingLoadingTime > 0) {
+          await wait(remainingLoadingTime);
+        }
         setIsLoading(false);
       }
     }
@@ -295,12 +301,32 @@ export default function App() {
     }));
   }
 
-  if (isLoading) {
-    return <LoadingView />;
+  const loadingOverlay = (
+    <AnimatePresence>
+      {isLoading ? <LoadingView key="app-loading" /> : null}
+    </AnimatePresence>
+  );
+
+  if (error && !data) {
+    return (
+      <>
+        {loadingOverlay}
+        <ErrorView error={error} onRetry={loadData} />
+      </>
+    );
+  }
+
+  if (!data) {
+    return loadingOverlay;
   }
 
   if (error) {
-    return <ErrorView error={error} onRetry={loadData} />;
+    return (
+      <>
+        {loadingOverlay}
+        <ErrorView error={error} onRetry={loadData} />
+      </>
+    );
   }
 
   const hasPlayerProfile = Boolean(data.user.playerId);
@@ -353,104 +379,120 @@ export default function App() {
 
   if (isSchedulePage) {
     return (
-      <main className="schedule-page-root">
-        <RosterPage
-          user={data.user}
-          hasPlayerProfile={hasPlayerProfile}
-          canAdd={canAdd}
-          canEditSelectedWeek={data.canEditSelectedWeek}
-          selectedWeekStart={data.selectedWeekStart}
-          weekRangeLabel={data.weekRangeLabel}
-          canGoPreviousWeek={data.canGoPreviousWeek}
-          days={data.days}
-          players={data.players}
-          slots={data.slots}
-          dayEventTypes={data.dayEventTypes}
-          eventTypes={data.eventTypes}
-          lastUpdated={data.lastUpdated}
-          appVersion={data.appVersion}
-          onAdd={(day) => setSlotModal({ day })}
-          onEdit={(event) => setSlotModal({ event })}
-          onCopy={() => setCopyModalOpen(true)}
-          onWeekChange={handleWeekChange}
-          onNoteHoverStart={handleNoteHoverStart}
-          onNoteHoverEnd={handleNoteHoverEnd}
-        />
-        {sharedModals}
-      </main>
+      <>
+        {loadingOverlay}
+        <motion.main
+          className="schedule-page-root"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <RosterPage
+            user={data.user}
+            hasPlayerProfile={hasPlayerProfile}
+            canAdd={canAdd}
+            canEditSelectedWeek={data.canEditSelectedWeek}
+            selectedWeekStart={data.selectedWeekStart}
+            weekRangeLabel={data.weekRangeLabel}
+            canGoPreviousWeek={data.canGoPreviousWeek}
+            days={data.days}
+            players={data.players}
+            slots={data.slots}
+            dayEventTypes={data.dayEventTypes}
+            eventTypes={data.eventTypes}
+            lastUpdated={data.lastUpdated}
+            appVersion={data.appVersion}
+            onAdd={(day) => setSlotModal({ day })}
+            onEdit={(event) => setSlotModal({ event })}
+            onCopy={() => setCopyModalOpen(true)}
+            onWeekChange={handleWeekChange}
+            onNoteHoverStart={handleNoteHoverStart}
+            onNoteHoverEnd={handleNoteHoverEnd}
+          />
+          {sharedModals}
+        </motion.main>
+      </>
     );
   }
 
   return (
-    <main className="app-main mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]">
-      <div className="app-shell">
-        <Sidebar pathname={pathname} />
-        <div className="min-w-0">
-          <Header user={data.user} />
-          {isMainPage ? (
-            <MainPage
-              players={data.players}
-              staffMembers={data.staffMembers}
-              slots={data.slots}
-              weekRangeLabel={data.weekRangeLabel}
-              user={data.user}
-            />
-          ) : isProfilePage ? (
-            <ProfilePage
-              user={data.user}
-              profile={currentProfile}
-              profileType={data.user.profileType}
-              onSaved={handleProfileSaved}
-            />
-          ) : isTeamPage ? (
-            <TeamPage players={data.players} staffMembers={data.staffMembers} />
-          ) : isUpdatesPage ? (
-            <UpdatesPage
-              disabled={UPDATES_DISABLED}
-              updates={updatesList}
-              selectedSlug={selectedUpdateSlug}
-              selectedUpdate={selectedUpdate}
-              onSelect={selectUpdate}
-              isLoadingList={isLoadingUpdatesList}
-              isLoadingDetail={isLoadingUpdateDetail}
-              error={updatesError}
-            />
-          ) : isStatsPage ? (
-            <OverwatchStatsPage
-              stats={selectedStats}
-              basePlayers={data.players}
-              isLoading={isLoadingStats}
-              error={statsError}
-            />
-          ) : (
-            <>
-              <RosterPage
-                user={data.user}
-                hasPlayerProfile={hasPlayerProfile}
-                canAdd={canAdd}
-                canEditSelectedWeek={data.canEditSelectedWeek}
-                selectedWeekStart={data.selectedWeekStart}
-                weekRangeLabel={data.weekRangeLabel}
-                canGoPreviousWeek={data.canGoPreviousWeek}
-                days={data.days}
+    <>
+      {loadingOverlay}
+      <motion.main
+        className="app-main mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="app-shell">
+          <Sidebar pathname={pathname} />
+          <div className="min-w-0">
+            <Header user={data.user} />
+            {isMainPage ? (
+              <MainPage
                 players={data.players}
+                staffMembers={data.staffMembers}
                 slots={data.slots}
-                dayEventTypes={data.dayEventTypes}
-                eventTypes={data.eventTypes}
-                lastUpdated={data.lastUpdated}
-                appVersion={data.appVersion}
-                onAdd={(day) => setSlotModal({ day })}
-                onEdit={(event) => setSlotModal({ event })}
-                onCopy={() => setCopyModalOpen(true)}
-                onWeekChange={handleWeekChange}
-                onNoteHoverStart={handleNoteHoverStart}
-                onNoteHoverEnd={handleNoteHoverEnd}
+                weekRangeLabel={data.weekRangeLabel}
+                user={data.user}
               />
-            </>
-          )}
+            ) : isProfilePage ? (
+              <ProfilePage
+                user={data.user}
+                profile={currentProfile}
+                profileType={data.user.profileType}
+                onSaved={handleProfileSaved}
+              />
+            ) : isTeamPage ? (
+              <TeamPage players={data.players} staffMembers={data.staffMembers} />
+            ) : isUpdatesPage ? (
+              <UpdatesPage
+                disabled={UPDATES_DISABLED}
+                updates={updatesList}
+                selectedSlug={selectedUpdateSlug}
+                selectedUpdate={selectedUpdate}
+                onSelect={selectUpdate}
+                isLoadingList={isLoadingUpdatesList}
+                isLoadingDetail={isLoadingUpdateDetail}
+                error={updatesError}
+              />
+            ) : isStatsPage ? (
+              <OverwatchStatsPage
+                stats={selectedStats}
+                basePlayers={data.players}
+                isLoading={isLoadingStats}
+                error={statsError}
+              />
+            ) : (
+              <>
+                <RosterPage
+                  user={data.user}
+                  hasPlayerProfile={hasPlayerProfile}
+                  canAdd={canAdd}
+                  canEditSelectedWeek={data.canEditSelectedWeek}
+                  selectedWeekStart={data.selectedWeekStart}
+                  weekRangeLabel={data.weekRangeLabel}
+                  canGoPreviousWeek={data.canGoPreviousWeek}
+                  days={data.days}
+                  players={data.players}
+                  slots={data.slots}
+                  dayEventTypes={data.dayEventTypes}
+                  eventTypes={data.eventTypes}
+                  lastUpdated={data.lastUpdated}
+                  appVersion={data.appVersion}
+                  onAdd={(day) => setSlotModal({ day })}
+                  onEdit={(event) => setSlotModal({ event })}
+                  onCopy={() => setCopyModalOpen(true)}
+                  onWeekChange={handleWeekChange}
+                  onNoteHoverStart={handleNoteHoverStart}
+                  onNoteHoverEnd={handleNoteHoverEnd}
+                />
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      {sharedModals}
-    </main>
+        {sharedModals}
+      </motion.main>
+    </>
   );
 }

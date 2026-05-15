@@ -20648,7 +20648,7 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$s = [
+const __iconNode$r = [
   [
     "path",
     {
@@ -20659,8 +20659,8 @@ const __iconNode$s = [
   ["path", { d: "M8 11h8", key: "vwpz6n" }],
   ["path", { d: "M8 7h6", key: "1f0q6e" }]
 ];
-const BookText = createLucideIcon("book-text", __iconNode$s);
-const __iconNode$r = [
+const BookText = createLucideIcon("book-text", __iconNode$r);
+const __iconNode$q = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
@@ -20672,38 +20672,38 @@ const __iconNode$r = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$r);
-const __iconNode$q = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$q);
+const __iconNode$p = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$q);
-const __iconNode$p = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$p);
-const __iconNode$o = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$o);
-const __iconNode$n = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$n);
-const __iconNode$m = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$p);
+const __iconNode$o = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$o);
+const __iconNode$n = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$n);
+const __iconNode$m = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$m);
+const __iconNode$l = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$m);
-const __iconNode$l = [
+const CircleCheck = createLucideIcon("circle-check", __iconNode$l);
+const __iconNode$k = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$l);
-const __iconNode$k = [
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$k);
+const __iconNode$j = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
   ["path", { d: "m9 9 6 6", key: "z0biqf" }]
 ];
-const CircleX = createLucideIcon("circle-x", __iconNode$k);
-const __iconNode$j = [
+const CircleX = createLucideIcon("circle-x", __iconNode$j);
+const __iconNode$i = [
   ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
   [
     "path",
@@ -20717,24 +20717,24 @@ const __iconNode$j = [
   ["path", { d: "M8 11h.01", key: "1dfujw" }],
   ["path", { d: "M8 16h.01", key: "18s6g9" }]
 ];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$j);
-const __iconNode$i = [
+const ClipboardList = createLucideIcon("clipboard-list", __iconNode$i);
+const __iconNode$h = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-const Clock3 = createLucideIcon("clock-3", __iconNode$i);
-const __iconNode$h = [
+const Clock3 = createLucideIcon("clock-3", __iconNode$h);
+const __iconNode$g = [
   ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
   ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
 ];
-const Copy = createLucideIcon("copy", __iconNode$h);
-const __iconNode$g = [
+const Copy = createLucideIcon("copy", __iconNode$g);
+const __iconNode$f = [
   ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
   ["path", { d: "M10 14 21 3", key: "gplh6r" }],
   ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
 ];
-const ExternalLink = createLucideIcon("external-link", __iconNode$g);
-const __iconNode$f = [
+const ExternalLink = createLucideIcon("external-link", __iconNode$f);
+const __iconNode$e = [
   [
     "path",
     {
@@ -20744,33 +20744,26 @@ const __iconNode$f = [
   ],
   ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
 ];
-const Eye = createLucideIcon("eye", __iconNode$f);
-const __iconNode$e = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$e);
-const __iconNode$d = [
+const Eye = createLucideIcon("eye", __iconNode$e);
+const __iconNode$d = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$d);
+const __iconNode$c = [
   ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
   ["path", { d: "M21 12H9", key: "dn1m92" }],
   ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$d);
-const __iconNode$c = [
+const LogOut = createLucideIcon("log-out", __iconNode$c);
+const __iconNode$b = [
   ["path", { d: "M4 5h16", key: "1tepv9" }],
   ["path", { d: "M4 12h16", key: "1lakjw" }],
   ["path", { d: "M4 19h16", key: "1djgab" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$c);
-const __iconNode$b = [
+const Menu = createLucideIcon("menu", __iconNode$b);
+const __iconNode$a = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-const Plus = createLucideIcon("plus", __iconNode$b);
-const __iconNode$a = [
-  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
-  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
-  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
-  ["path", { d: "M8 16H3v5", key: "1cv678" }]
-];
-const RefreshCw = createLucideIcon("refresh-cw", __iconNode$a);
+const Plus = createLucideIcon("plus", __iconNode$a);
 const __iconNode$9 = [
   [
     "path",
@@ -21037,10 +21030,23 @@ function Sidebar({ pathname }) {
   ] }) });
 }
 function LoadingView() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel rounded-xl px-8 py-6 text-center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: "mx-auto animate-spin text-bf-orange" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-3 font-black uppercase", children: "Загрузка данных" })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    motion.main,
+    {
+      className: "loading-screen",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "loading-screen-card", "aria-label": "Loading data", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-progress", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "loading-progress-fill" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-track", cx: "32", cy: "32", r: "25", pathLength: "100" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100" })
+        ] })
+      ] })
+    }
+  );
 }
 function ErrorView({ error, onRetry }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "grid min-h-screen place-items-center px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "glass-panel max-w-md rounded-xl px-8 py-6 text-center", children: [
@@ -47111,12 +47117,12 @@ function ControlsRow({
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-best-card", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-control-title", children: "BEST DAY FOR GAME:" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/clock.png", alt: "" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/clock.png", alt: "" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-chip-row", children: bestDays.map((day) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: day.label }, day.value)) })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "sf-control-card sf-upcoming-card", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-control-title", children: "UPCOMING:" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/trophy.png", alt: "" }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(IconBox, { className: "sf-control-corner-icon", children: /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/trophy.png", alt: "" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-chip-row", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: upcoming.eventLabel }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-chip", children: upcoming.dateLabel }),
@@ -47312,7 +47318,7 @@ function ScheduleSidebar({ user }) {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
       const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
       ] });
       if (!item.href) {
@@ -47383,7 +47389,7 @@ function ScheduleDesktopPage({
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/bell.png", alt: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/bell.png", alt: "" }),
           null
         ] })
       ] }),
@@ -47575,7 +47581,7 @@ function ResponsiveInfoCards({ days, players, slots, dayEventTypes }) {
           upcoming.timeLabel
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/figma/schedule/icons/trophy.png", alt: "" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/trophy.png", alt: "" })
     ] })
   ] });
 }
@@ -47705,7 +47711,7 @@ function ScheduleDrawer({ user, isOpen, onClose }) {
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sfr-drawer-nav", children: NAV_ITEMS.map((item) => {
         const content = /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/figma/schedule/icons/${item.icon}`, alt: "" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
         ] });
         if (!item.href) {
@@ -48218,6 +48224,7 @@ function UpdatesPage({
 }
 const UPDATES_DISABLED = true;
 const STATS_MIN_LOADING_MS = 3e3;
+const LOADING_SCREEN_MIN_MS = 500;
 function wait(ms) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -48256,6 +48263,7 @@ function App() {
   const statsRequestIdRef = reactExports.useRef(0);
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
+    const startedAt = shouldShowLoading ? window.performance.now() : 0;
     if (shouldShowLoading) {
       setIsLoading(true);
     }
@@ -48270,6 +48278,10 @@ function App() {
       setError(loadError.message);
     } finally {
       if (shouldShowLoading) {
+        const remainingLoadingTime = LOADING_SCREEN_MIN_MS - (window.performance.now() - startedAt);
+        if (remainingLoadingTime > 0) {
+          await wait(remainingLoadingTime);
+        }
         setIsLoading(false);
       }
     }
@@ -48405,11 +48417,21 @@ function App() {
       staffMembers: current2.staffMembers.map((existing) => existing.id === staffMember.id ? staffMember : existing)
     }));
   }
-  if (isLoading) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingView, {});
+  const loadingOverlay = /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingView, {}, "app-loading") : null });
+  if (error && !data) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      loadingOverlay,
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorView, { error, onRetry: loadData })
+    ] });
+  }
+  if (!data) {
+    return loadingOverlay;
   }
   if (error) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorView, { error, onRetry: loadData });
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      loadingOverlay,
+      /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorView, { error, onRetry: loadData })
+    ] });
   }
   const hasPlayerProfile = Boolean(data.user.playerId);
   const canAdd = hasPlayerProfile && data.canEditSelectedWeek;
@@ -48456,105 +48478,129 @@ function App() {
     ) : null
   ] });
   if (isSchedulePage) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "schedule-page-root", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        RosterPage,
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      loadingOverlay,
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        motion.main,
         {
-          user: data.user,
-          hasPlayerProfile,
-          canAdd,
-          canEditSelectedWeek: data.canEditSelectedWeek,
-          selectedWeekStart: data.selectedWeekStart,
-          weekRangeLabel: data.weekRangeLabel,
-          canGoPreviousWeek: data.canGoPreviousWeek,
-          days: data.days,
-          players: data.players,
-          slots: data.slots,
-          dayEventTypes: data.dayEventTypes,
-          eventTypes: data.eventTypes,
-          lastUpdated: data.lastUpdated,
-          appVersion: data.appVersion,
-          onAdd: (day) => setSlotModal({ day }),
-          onEdit: (event) => setSlotModal({ event }),
-          onCopy: () => setCopyModalOpen(true),
-          onWeekChange: handleWeekChange,
-          onNoteHoverStart: handleNoteHoverStart,
-          onNoteHoverEnd: handleNoteHoverEnd
+          className: "schedule-page-root",
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              RosterPage,
+              {
+                user: data.user,
+                hasPlayerProfile,
+                canAdd,
+                canEditSelectedWeek: data.canEditSelectedWeek,
+                selectedWeekStart: data.selectedWeekStart,
+                weekRangeLabel: data.weekRangeLabel,
+                canGoPreviousWeek: data.canGoPreviousWeek,
+                days: data.days,
+                players: data.players,
+                slots: data.slots,
+                dayEventTypes: data.dayEventTypes,
+                eventTypes: data.eventTypes,
+                lastUpdated: data.lastUpdated,
+                appVersion: data.appVersion,
+                onAdd: (day) => setSlotModal({ day }),
+                onEdit: (event) => setSlotModal({ event }),
+                onCopy: () => setCopyModalOpen(true),
+                onWeekChange: handleWeekChange,
+                onNoteHoverStart: handleNoteHoverStart,
+                onNoteHoverEnd: handleNoteHoverEnd
+              }
+            ),
+            sharedModals
+          ]
         }
-      ),
-      sharedModals
+      )
     ] });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "app-main mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { pathname }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { user: data.user }),
-        isMainPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          MainPage,
-          {
-            players: data.players,
-            staffMembers: data.staffMembers,
-            slots: data.slots,
-            weekRangeLabel: data.weekRangeLabel,
-            user: data.user
-          }
-        ) : isProfilePage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          ProfilePage,
-          {
-            user: data.user,
-            profile: currentProfile,
-            profileType: data.user.profileType,
-            onSaved: handleProfileSaved
-          }
-        ) : isTeamPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(TeamPage, { players: data.players, staffMembers: data.staffMembers }) : isUpdatesPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          UpdatesPage,
-          {
-            disabled: UPDATES_DISABLED,
-            updates: updatesList,
-            selectedSlug: selectedUpdateSlug,
-            selectedUpdate,
-            onSelect: selectUpdate,
-            isLoadingList: isLoadingUpdatesList,
-            isLoadingDetail: isLoadingUpdateDetail,
-            error: updatesError
-          }
-        ) : isStatsPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          OverwatchStatsPage,
-          {
-            stats: selectedStats,
-            basePlayers: data.players,
-            isLoading: isLoadingStats,
-            error: statsError
-          }
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          RosterPage,
-          {
-            user: data.user,
-            hasPlayerProfile,
-            canAdd,
-            canEditSelectedWeek: data.canEditSelectedWeek,
-            selectedWeekStart: data.selectedWeekStart,
-            weekRangeLabel: data.weekRangeLabel,
-            canGoPreviousWeek: data.canGoPreviousWeek,
-            days: data.days,
-            players: data.players,
-            slots: data.slots,
-            dayEventTypes: data.dayEventTypes,
-            eventTypes: data.eventTypes,
-            lastUpdated: data.lastUpdated,
-            appVersion: data.appVersion,
-            onAdd: (day) => setSlotModal({ day }),
-            onEdit: (event) => setSlotModal({ event }),
-            onCopy: () => setCopyModalOpen(true),
-            onWeekChange: handleWeekChange,
-            onNoteHoverStart: handleNoteHoverStart,
-            onNoteHoverEnd: handleNoteHoverEnd
-          }
-        ) })
-      ] })
-    ] }),
-    sharedModals
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    loadingOverlay,
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      motion.main,
+      {
+        className: "app-main mx-auto min-h-screen w-[min(1500px,calc(100%_-_48px))] py-4 xl:w-[min(1700px,calc(100%_-_32px))] 2xl:w-[min(1820px,calc(100%_-_28px))] max-sm:w-[min(100%_-_20px,760px)]",
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "app-shell", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { pathname }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-w-0", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Header, { user: data.user }),
+              isMainPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                MainPage,
+                {
+                  players: data.players,
+                  staffMembers: data.staffMembers,
+                  slots: data.slots,
+                  weekRangeLabel: data.weekRangeLabel,
+                  user: data.user
+                }
+              ) : isProfilePage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                ProfilePage,
+                {
+                  user: data.user,
+                  profile: currentProfile,
+                  profileType: data.user.profileType,
+                  onSaved: handleProfileSaved
+                }
+              ) : isTeamPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(TeamPage, { players: data.players, staffMembers: data.staffMembers }) : isUpdatesPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                UpdatesPage,
+                {
+                  disabled: UPDATES_DISABLED,
+                  updates: updatesList,
+                  selectedSlug: selectedUpdateSlug,
+                  selectedUpdate,
+                  onSelect: selectUpdate,
+                  isLoadingList: isLoadingUpdatesList,
+                  isLoadingDetail: isLoadingUpdateDetail,
+                  error: updatesError
+                }
+              ) : isStatsPage ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                OverwatchStatsPage,
+                {
+                  stats: selectedStats,
+                  basePlayers: data.players,
+                  isLoading: isLoadingStats,
+                  error: statsError
+                }
+              ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                RosterPage,
+                {
+                  user: data.user,
+                  hasPlayerProfile,
+                  canAdd,
+                  canEditSelectedWeek: data.canEditSelectedWeek,
+                  selectedWeekStart: data.selectedWeekStart,
+                  weekRangeLabel: data.weekRangeLabel,
+                  canGoPreviousWeek: data.canGoPreviousWeek,
+                  days: data.days,
+                  players: data.players,
+                  slots: data.slots,
+                  dayEventTypes: data.dayEventTypes,
+                  eventTypes: data.eventTypes,
+                  lastUpdated: data.lastUpdated,
+                  appVersion: data.appVersion,
+                  onAdd: (day) => setSlotModal({ day }),
+                  onEdit: (event) => setSlotModal({ event }),
+                  onCopy: () => setCopyModalOpen(true),
+                  onWeekChange: handleWeekChange,
+                  onNoteHoverStart: handleNoteHoverStart,
+                  onNoteHoverEnd: handleNoteHoverEnd
+                }
+              ) })
+            ] })
+          ] }),
+          sharedModals
+        ]
+      }
+    )
   ] });
 }
 clientExports.createRoot(document.getElementById("root")).render(

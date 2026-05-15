@@ -70,7 +70,7 @@ export default function ControlsRow({
       <section className="sf-control-card sf-best-card">
         <div className="sf-control-title">BEST DAY FOR GAME:</div>
         <IconBox className="sf-control-corner-icon">
-          <img src="/static/img/figma/schedule/icons/clock.png" alt="" />
+          <img src="/static/img/schedule/icons/clock.png" alt="" />
         </IconBox>
         <div className="sf-chip-row">
           {bestDays.map((day) => (
@@ -82,7 +82,7 @@ export default function ControlsRow({
       <section className="sf-control-card sf-upcoming-card">
         <div className="sf-control-title">UPCOMING:</div>
         <IconBox className="sf-control-corner-icon">
-          <img src="/static/img/figma/schedule/icons/trophy.png" alt="" />
+          <img src="/static/img/schedule/icons/trophy.png" alt="" />
         </IconBox>
         <div className="sf-chip-row">
           <span className="sf-chip">{upcoming.eventLabel}</span>

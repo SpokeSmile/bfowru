@@ -34,7 +34,7 @@ export default function ScheduleSidebar({ user }) {
         {NAV_ITEMS.map((item) => {
           const content = (
             <span className="sf-nav-item-surface">
-              <img src={`/static/img/figma/schedule/icons/${item.icon}`} alt="" />
+              <img src={`/static/img/schedule/icons/${item.icon}`} alt="" />
               <span>{item.label}</span>
             </span>
           );
