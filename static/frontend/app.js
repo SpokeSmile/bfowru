@@ -21041,7 +21041,7 @@ function LoadingView({ progress: progress2 = 0 }) {
       transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
       children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "loading-screen-card", "aria-label": "Loading data", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-progress", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": Math.round(normalizedProgress), children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "loading-progress-fill", style: { transform: `scaleX(${normalizedProgress / 100})` } }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100", transform: "rotate(90 32 32)" }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { class: "spinner-box", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { class: "circle-border", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { class: "circle-core" }) }) })
       ] })
     }
   );
@@ -48222,7 +48222,7 @@ function UpdatesPage({
 }
 const UPDATES_DISABLED = true;
 const STATS_MIN_LOADING_MS = 3e3;
-const LOADING_SCREEN_MIN_MS = 500;
+const LOADING_SCREEN_MIN_MS = 2e4;
 const LOADING_PROGRESS_MAX_BEFORE_DONE = 85;
 const LOADING_PROGRESS_INTERVAL_MS = 80;
 const LOADING_COMPLETE_ANIMATION_MS = 260;

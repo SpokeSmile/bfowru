@@ -16,9 +16,11 @@ export function LoadingView({ progress = 0 }) {
         <div className="loading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(normalizedProgress)}>
           <span className="loading-progress-fill" style={{ transform: `scaleX(${normalizedProgress / 100})` }} />
         </div>
-        <svg className="loading-arc-spinner" viewBox="0 0 64 64" aria-hidden="true">
-          <circle className="loading-arc-line" cx="32" cy="32" r="25" pathLength="100" transform="rotate(90 32 32)" />
-        </svg>
+        <div class="spinner-box">
+          <div class="circle-border">
+            <div class="circle-core"></div>
+          </div>  
+        </div>
       </div>
     </motion.main>
   );
