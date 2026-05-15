@@ -21029,7 +21029,8 @@ function Sidebar({ pathname }) {
     }) })
   ] }) });
 }
-function LoadingView() {
+function LoadingView({ progress: progress2 = 0 }) {
+  const normalizedProgress = Math.min(Math.max(Number(progress2) || 0, 0), 100);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     motion.main,
     {
@@ -21039,8 +21040,8 @@ function LoadingView() {
       exit: { opacity: 0 },
       transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
       children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "loading-screen-card", "aria-label": "Loading data", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-progress", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "loading-progress-fill" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100" }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-progress", role: "progressbar", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": Math.round(normalizedProgress), children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "loading-progress-fill", style: { transform: `scaleX(${normalizedProgress / 100})` } }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { className: "loading-arc-spinner", viewBox: "0 0 64 64", "aria-hidden": "true", children: /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { className: "loading-arc-line", cx: "32", cy: "32", r: "25", pathLength: "100", transform: "rotate(90 32 32)" }) })
       ] })
     }
   );
@@ -48222,6 +48223,9 @@ function UpdatesPage({
 const UPDATES_DISABLED = true;
 const STATS_MIN_LOADING_MS = 3e3;
 const LOADING_SCREEN_MIN_MS = 500;
+const LOADING_PROGRESS_MAX_BEFORE_DONE = 85;
+const LOADING_PROGRESS_INTERVAL_MS = 80;
+const LOADING_COMPLETE_ANIMATION_MS = 260;
 function wait(ms) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -48243,6 +48247,7 @@ function setScheduleWeekParam(weekStart) {
 function App() {
   const [data, setData] = reactExports.useState(null);
   const [isLoading, setIsLoading] = reactExports.useState(true);
+  const [loadingProgress, setLoadingProgress] = reactExports.useState(0);
   const [error, setError] = reactExports.useState("");
   const [slotModal, setSlotModal] = reactExports.useState(null);
   const [copyModalOpen, setCopyModalOpen] = reactExports.useState(false);
@@ -48261,8 +48266,20 @@ function App() {
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
     const startedAt = shouldShowLoading ? window.performance.now() : 0;
+    let loadingProgressTimer = null;
     if (shouldShowLoading) {
       setIsLoading(true);
+      setLoadingProgress(0);
+      window.requestAnimationFrame(() => setLoadingProgress(8));
+      loadingProgressTimer = window.setInterval(() => {
+        setLoadingProgress((current2) => {
+          if (current2 >= LOADING_PROGRESS_MAX_BEFORE_DONE) {
+            return current2;
+          }
+          const nextStep = Math.max(2, (LOADING_PROGRESS_MAX_BEFORE_DONE - current2) * 0.14);
+          return Math.min(LOADING_PROGRESS_MAX_BEFORE_DONE, current2 + nextStep);
+        });
+      }, LOADING_PROGRESS_INTERVAL_MS);
     }
     try {
       const response = await bootstrap(weekStart);
@@ -48274,11 +48291,13 @@ function App() {
     } catch (loadError) {
       setError(loadError.message);
     } finally {
+      if (loadingProgressTimer) {
+        window.clearInterval(loadingProgressTimer);
+      }
       if (shouldShowLoading) {
+        setLoadingProgress(100);
         const remainingLoadingTime = LOADING_SCREEN_MIN_MS - (window.performance.now() - startedAt);
-        if (remainingLoadingTime > 0) {
-          await wait(remainingLoadingTime);
-        }
+        await wait(Math.max(LOADING_COMPLETE_ANIMATION_MS, remainingLoadingTime));
         setIsLoading(false);
       }
     }
@@ -48414,7 +48433,7 @@ function App() {
       staffMembers: current2.staffMembers.map((existing) => existing.id === staffMember.id ? staffMember : existing)
     }));
   }
-  const loadingOverlay = /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingView, {}, "app-loading") : null });
+  const loadingOverlay = /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingView, { progress: loadingProgress }, "app-loading") : null });
   if (error && !data) {
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
       loadingOverlay,

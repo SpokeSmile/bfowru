@@ -22,6 +22,9 @@ import UpdatesPage from './components/UpdatesPage.jsx';
 const UPDATES_DISABLED = true;
 const STATS_MIN_LOADING_MS = 3000;
 const LOADING_SCREEN_MIN_MS = 500;
+const LOADING_PROGRESS_MAX_BEFORE_DONE = 85;
+const LOADING_PROGRESS_INTERVAL_MS = 80;
+const LOADING_COMPLETE_ANIMATION_MS = 260;
 
 function wait(ms) {
   return new Promise((resolve) => {
@@ -47,6 +50,7 @@ function setScheduleWeekParam(weekStart) {
 export default function App() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [error, setError] = useState('');
   const [slotModal, setSlotModal] = useState(null);
   const [copyModalOpen, setCopyModalOpen] = useState(false);
@@ -66,8 +70,20 @@ export default function App() {
   async function loadData(weekStart = getScheduleWeekParam(), options = {}) {
     const shouldShowLoading = options.showLoading !== false;
     const startedAt = shouldShowLoading ? window.performance.now() : 0;
+    let loadingProgressTimer = null;
     if (shouldShowLoading) {
       setIsLoading(true);
+      setLoadingProgress(0);
+      window.requestAnimationFrame(() => setLoadingProgress(8));
+      loadingProgressTimer = window.setInterval(() => {
+        setLoadingProgress((current) => {
+          if (current >= LOADING_PROGRESS_MAX_BEFORE_DONE) {
+            return current;
+          }
+          const nextStep = Math.max(2, (LOADING_PROGRESS_MAX_BEFORE_DONE - current) * 0.14);
+          return Math.min(LOADING_PROGRESS_MAX_BEFORE_DONE, current + nextStep);
+        });
+      }, LOADING_PROGRESS_INTERVAL_MS);
     }
     try {
       const response = await bootstrap(weekStart);
@@ -79,11 +95,13 @@ export default function App() {
     } catch (loadError) {
       setError(loadError.message);
     } finally {
+      if (loadingProgressTimer) {
+        window.clearInterval(loadingProgressTimer);
+      }
       if (shouldShowLoading) {
+        setLoadingProgress(100);
         const remainingLoadingTime = LOADING_SCREEN_MIN_MS - (window.performance.now() - startedAt);
-        if (remainingLoadingTime > 0) {
-          await wait(remainingLoadingTime);
-        }
+        await wait(Math.max(LOADING_COMPLETE_ANIMATION_MS, remainingLoadingTime));
         setIsLoading(false);
       }
     }
@@ -303,7 +321,7 @@ export default function App() {
 
   const loadingOverlay = (
     <AnimatePresence>
-      {isLoading ? <LoadingView key="app-loading" /> : null}
+      {isLoading ? <LoadingView key="app-loading" progress={loadingProgress} /> : null}
     </AnimatePresence>
   );
 

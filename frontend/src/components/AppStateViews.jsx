@@ -1,7 +1,9 @@
 import { AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function LoadingView() {
+export function LoadingView({ progress = 0 }) {
+  const normalizedProgress = Math.min(Math.max(Number(progress) || 0, 0), 100);
+
   return (
     <motion.main
       className="loading-screen"
@@ -11,11 +13,11 @@ export function LoadingView() {
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="loading-screen-card" aria-label="Loading data">
-        <div className="loading-progress" aria-hidden="true">
-          <span className="loading-progress-fill" />
+        <div className="loading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(normalizedProgress)}>
+          <span className="loading-progress-fill" style={{ transform: `scaleX(${normalizedProgress / 100})` }} />
         </div>
         <svg className="loading-arc-spinner" viewBox="0 0 64 64" aria-hidden="true">
-          <circle className="loading-arc-line" cx="32" cy="32" r="25" pathLength="100" />
+          <circle className="loading-arc-line" cx="32" cy="32" r="25" pathLength="100" transform="rotate(90 32 32)" />
         </svg>
       </div>
     </motion.main>
