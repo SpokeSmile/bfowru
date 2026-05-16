@@ -60,7 +60,7 @@ class FeedbackEntry(models.Model):
     FEEDBACK = 'feedback'
     OTHER = 'other'
 
-    NEW = 'new'
+    ACCEPTED = 'accepted'
     IN_PROGRESS = 'in_progress'
     DONE = 'done'
     REJECTED = 'rejected'
@@ -73,7 +73,7 @@ class FeedbackEntry(models.Model):
     ]
 
     STATUS_CHOICES = [
-        (NEW, 'New'),
+        (ACCEPTED, 'Accepted'),
         (IN_PROGRESS, 'In progress'),
         (DONE, 'Done'),
         (REJECTED, 'Rejected'),
@@ -91,7 +91,7 @@ class FeedbackEntry(models.Model):
     message = models.TextField('сообщение', max_length=2000)
     page_url = models.URLField('страница', max_length=500, blank=True)
     user_agent = models.CharField('user agent', max_length=500, blank=True)
-    status = models.CharField('статус', max_length=20, choices=STATUS_CHOICES, default=NEW)
+    status = models.CharField('статус', max_length=20, choices=STATUS_CHOICES, default=ACCEPTED)
     admin_note = models.TextField('заметка администратора', blank=True)
     created_at = models.DateTimeField('создано', auto_now_add=True)
     updated_at = models.DateTimeField('обновлено', auto_now=True)

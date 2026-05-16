@@ -21940,7 +21940,7 @@ function FeedbackModal({ onClose }) {
             isSent ? /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "feedback-success", "aria-live": "polite", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 46, strokeWidth: 1.8 }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Feedback sent" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Thanks. Your message is saved and will be reviewed in the admin panel." })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Thanks. We received your message and will use it to improve the team experience." })
             ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feedback-types", role: "radiogroup", "aria-label": "Feedback type", children: FEEDBACK_TYPES.map((type) => {
                 const Icon2 = type.icon;

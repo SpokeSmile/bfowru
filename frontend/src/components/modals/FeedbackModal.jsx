@@ -96,7 +96,7 @@ export default function FeedbackModal({ onClose }) {
           <section className="feedback-success" aria-live="polite">
             <MessageSquareText size={46} strokeWidth={1.8} />
             <h3>Feedback sent</h3>
-            <p>Thanks. Your message is saved and will be reviewed in the admin panel.</p>
+            <p>Thanks. We received your message and will use it to improve the team experience.</p>
           </section>
         ) : (
           <>

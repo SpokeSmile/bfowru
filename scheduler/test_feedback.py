@@ -48,7 +48,7 @@ class FeedbackApiTests(TestCase):
         self.assertEqual(feedback.message, 'Add team notifications.')
         self.assertEqual(feedback.page_url, 'https://bfow.vercel.app/')
         self.assertEqual(feedback.user_agent, 'Feedback browser')
-        self.assertEqual(feedback.status, FeedbackEntry.NEW)
+        self.assertEqual(feedback.status, FeedbackEntry.ACCEPTED)
 
     def test_rejects_empty_message(self):
         self.client.login(username='feedback-user', password='secret-pass')
