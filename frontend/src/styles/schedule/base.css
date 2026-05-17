@@ -30,14 +30,40 @@
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-.sf-desktop-main {
+.sf-desktop-layout {
   position: absolute;
-  left: var(--sf-main-left, 366px);
-  top: 21px;
+  inset: 0;
   z-index: 2;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: var(--sf-sidebar-width, 234px) minmax(0, 1fr);
+}
+
+.sf-sidebar-region,
+.sf-content-region {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.sf-sidebar-region {
+  z-index: 5;
+}
+
+.sf-content-region {
+  z-index: 2;
+  overflow: visible;
+}
+
+.sf-desktop-main {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: var(--sf-main-width, 1400px);
+  margin-top: 21px;
+  margin-left: var(--sf-main-offset-left, 132px);
 }
 
 .sf-topbar {
@@ -66,7 +92,7 @@
 }
 
 .sf-bg-glow {
-  left: 55%;
+  left: 50%;
   top: -118px;
   width: 1250px;
   height: 300px;

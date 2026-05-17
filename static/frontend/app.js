@@ -21716,6 +21716,8 @@ function EventModal({
           className: "edit-time-modal",
           onSubmit: submitReplacement,
           children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-background", "aria-hidden": "true" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-glow", "aria-hidden": "true" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "edit-time-title", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "EDIT" }),
               " TIME"
@@ -47122,7 +47124,9 @@ function CommentTooltip({ tooltip }) {
 }
 const DESKTOP_FRAME_WIDTH = 1920;
 const DESKTOP_FRAME_HEIGHT = 1080;
+const SIDEBAR_WIDTH = 234;
 const MAIN_LEFT = 366;
+const MAIN_OFFSET_LEFT = MAIN_LEFT - SIDEBAR_WIDTH;
 const MAIN_WIDTH = 1400;
 const CONTROL_GAP = 32;
 const DATE_CARD_WIDTH = 540;
@@ -47621,49 +47625,53 @@ function ScheduleDesktopPage({
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-desktop-viewport", style: { width: layout2.width, height: layout2.height }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-frame", style: { ...layout2.style, transform: `scale(${layout2.scale})` }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-base" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-bg-glow" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user, onFeedback, isFeedbackOpen }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/bell.png", alt: "" }),
-          null
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ControlsRow,
-        {
-          selectedWeekStart,
-          canGoPreviousWeek,
-          canAdd,
-          hasPlayerProfile,
-          canEditSelectedWeek,
-          days,
-          slots,
-          dayEventTypes,
-          players,
-          onWeekChange,
-          onAdd,
-          onCopy
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ScheduleTable,
-        {
-          days,
-          players,
-          slots,
-          canEditSelectedWeek,
-          onAdd,
-          onEdit,
-          onNoteHoverStart,
-          onNoteHoverEnd
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-desktop-layout", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-region", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ScheduleSidebar, { user, onFeedback, isFeedbackOpen }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-content-region", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "sf-desktop-main", "aria-label": "Weekly roster", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-topbar", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ClockPanel, {}),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-notice", type: "button", "aria-label": "Notifications", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/static/img/schedule/icons/bell.png", alt: "" }),
+              null
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(HeroPanel, {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            ControlsRow,
+            {
+              selectedWeekStart,
+              canGoPreviousWeek,
+              canAdd,
+              hasPlayerProfile,
+              canEditSelectedWeek,
+              days,
+              slots,
+              dayEventTypes,
+              players,
+              onWeekChange,
+              onAdd,
+              onCopy
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            ScheduleTable,
+            {
+              days,
+              players,
+              slots,
+              canEditSelectedWeek,
+              onAdd,
+              onEdit,
+              onNoteHoverStart,
+              onNoteHoverEnd
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AvailabilityBar, { days, players, slots })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-version", children: appVersion || "v0.0.0" })
+      ] })
+    ] })
   ] }) });
 }
 function getViewportSize() {
@@ -47694,12 +47702,15 @@ function calculateLayout() {
     scale: scale2,
     style: {
       "--sf-frame-width": `${frameWidth}px`,
+      "--sf-sidebar-width": `${SIDEBAR_WIDTH}px`,
+      "--sf-content-width": `${frameWidth - SIDEBAR_WIDTH}px`,
       "--sf-main-left": `${MAIN_LEFT}px`,
+      "--sf-main-offset-left": `${MAIN_OFFSET_LEFT}px`,
       "--sf-main-width": `${mainWidth}px`,
       "--sf-date-width": `${dateWidth}px`,
       "--sf-best-width": `${bestWidth}px`,
       "--sf-upcoming-width": `${upcomingWidth}px`,
-      "--sf-version-left": `${frameWidth - 94}px`
+      "--sf-version-left": `${frameWidth - SIDEBAR_WIDTH - 94}px`
     }
   };
 }

@@ -341,6 +341,8 @@ export default function EventModal({
         className="edit-time-modal"
         onSubmit={submitReplacement}
       >
+        <div className="edit-time-background" aria-hidden="true" />
+        <div className="edit-time-glow" aria-hidden="true" />
         <h2 className="edit-time-title">
           <span>EDIT</span> TIME
         </h2>

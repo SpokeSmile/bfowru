@@ -9,8 +9,10 @@ import {
   DESKTOP_FRAME_WIDTH,
   DESKTOP_LAYOUT_MIN_WIDTH,
   MAIN_LEFT,
+  MAIN_OFFSET_LEFT,
   MAIN_WIDTH,
   MOBILE_MAX_WIDTH,
+  SIDEBAR_WIDTH,
   UPCOMING_CARD_WIDTH,
 } from '../constants.js';
 
@@ -46,12 +48,15 @@ function calculateLayout() {
     scale,
     style: {
       '--sf-frame-width': `${frameWidth}px`,
+      '--sf-sidebar-width': `${SIDEBAR_WIDTH}px`,
+      '--sf-content-width': `${frameWidth - SIDEBAR_WIDTH}px`,
       '--sf-main-left': `${MAIN_LEFT}px`,
+      '--sf-main-offset-left': `${MAIN_OFFSET_LEFT}px`,
       '--sf-main-width': `${mainWidth}px`,
       '--sf-date-width': `${dateWidth}px`,
       '--sf-best-width': `${bestWidth}px`,
       '--sf-upcoming-width': `${upcomingWidth}px`,
-      '--sf-version-left': `${frameWidth - 94}px`,
+      '--sf-version-left': `${frameWidth - SIDEBAR_WIDTH - 94}px`,
     },
   };
 }

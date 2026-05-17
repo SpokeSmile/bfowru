@@ -12,21 +12,45 @@
 }
 
 .edit-time-modal {
+  position: relative;
+  isolation: isolate;
   width: min(1160px, calc(100vw - 48px));
   max-height: calc(100dvh - 32px);
   overflow-y: auto;
   border-radius: 10px;
   border: 1px solid rgba(27, 30, 40, 0.98);
-  background:
-    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
-    radial-gradient(ellipse 100% 45% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%),
-    #0b0d14;
+  background: #0b0d14;
   color: #ffffff;
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
   padding: 0 0 24px;
   box-shadow:
     0 22px 70px rgba(0, 0, 0, 0.64),
     inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+.edit-time-modal > :not(.edit-time-background):not(.edit-time-glow) {
+  position: relative;
+  z-index: 2;
+}
+
+.edit-time-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: url("/static/img/tile/TILE_EDITTIME.png") center / cover no-repeat;
+}
+
+.edit-time-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
+    radial-gradient(ellipse 100% 45% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%);
 }
 
 .edit-time-title {

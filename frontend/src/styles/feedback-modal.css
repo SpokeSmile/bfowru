@@ -42,7 +42,7 @@
   height: 260px;
   pointer-events: none;
   background:
-    url("/static/img/tile/DOT_TILE.svg") 0 0 / 60px 60px repeat,
+    url("/static/img/tile/DOT_TILE.png") 0 0 / 64px 64px repeat,
     radial-gradient(ellipse at center, rgba(13, 242, 158, 0.78), rgba(13, 242, 158, 0.22) 38%, transparent 62%);
   background-blend-mode: screen;
   opacity: 0.34;

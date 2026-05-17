@@ -118,21 +118,45 @@
 }
 
 .edit-time-modal {
+  position: relative;
+  isolation: isolate;
   width: min(1160px, calc(100vw - 48px));
   max-height: calc(100dvh - 32px);
   overflow-y: auto;
   border-radius: 10px;
   border: 1px solid rgba(27, 30, 40, 0.98);
-  background:
-    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
-    radial-gradient(ellipse 100% 45% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%),
-    #0b0d14;
+  background: #0b0d14;
   color: #ffffff;
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
   padding: 0 0 24px;
   box-shadow:
     0 22px 70px rgba(0, 0, 0, 0.64),
     inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+.edit-time-modal > :not(.edit-time-background):not(.edit-time-glow) {
+  position: relative;
+  z-index: 2;
+}
+
+.edit-time-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: url("/static/img/tile/TILE_EDITTIME.png") center / cover no-repeat;
+}
+
+.edit-time-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
+    radial-gradient(ellipse 100% 45% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%);
 }
 
 .edit-time-title {
@@ -859,7 +883,7 @@
   height: 260px;
   pointer-events: none;
   background:
-    url("/static/img/tile/DOT_TILE.svg") 0 0 / 60px 60px repeat,
+    url("/static/img/tile/DOT_TILE.png") 0 0 / 64px 64px repeat,
     radial-gradient(ellipse at center, rgba(13, 242, 158, 0.78), rgba(13, 242, 158, 0.22) 38%, transparent 62%);
   background-blend-mode: screen;
   opacity: 0.34;
@@ -1722,14 +1746,40 @@ textarea {
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-.sf-desktop-main {
+.sf-desktop-layout {
   position: absolute;
-  left: var(--sf-main-left, 366px);
-  top: 21px;
+  inset: 0;
   z-index: 2;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: var(--sf-sidebar-width, 234px) minmax(0, 1fr);
+}
+
+.sf-sidebar-region,
+.sf-content-region {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+
+.sf-sidebar-region {
+  z-index: 5;
+}
+
+.sf-content-region {
+  z-index: 2;
+  overflow: visible;
+}
+
+.sf-desktop-main {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: var(--sf-main-width, 1400px);
+  margin-top: 21px;
+  margin-left: var(--sf-main-offset-left, 132px);
 }
 
 .sf-topbar {
@@ -1758,7 +1808,7 @@ textarea {
 }
 
 .sf-bg-glow {
-  left: 55%;
+  left: 50%;
   top: -118px;
   width: 1250px;
   height: 300px;
@@ -1792,12 +1842,10 @@ textarea {
 }
 
 .sf-sidebar {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: relative;
   z-index: 5;
-  width: 234px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
   background-color: #0c0f17;
   background-image:
     url("/static/img/tile/TILE_SIDEBAR.png"),

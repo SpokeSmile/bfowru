@@ -1,6 +1,8 @@
 export const DESKTOP_FRAME_WIDTH = 1920;
 export const DESKTOP_FRAME_HEIGHT = 1080;
+export const SIDEBAR_WIDTH = 234;
 export const MAIN_LEFT = 366;
+export const MAIN_OFFSET_LEFT = MAIN_LEFT - SIDEBAR_WIDTH;
 export const MAIN_WIDTH = 1400;
 export const CONTROL_GAP = 32;
 export const DATE_CARD_WIDTH = 540;
