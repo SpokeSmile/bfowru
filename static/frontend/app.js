@@ -47617,83 +47617,98 @@ function HeroPanel() {
     ] })
   ] });
 }
-function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = false }) {
-  const [isProfileOpen, setIsProfileOpen] = reactExports.useState(false);
+function SidebarBrand() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        "YOU ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TEAM" })
+      ] })
+    ] })
+  ] });
+}
+function SidebarNavItem({ item, isFeedbackOpen }) {
+  const isActive = item.active && !isFeedbackOpen;
+  const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+  ] });
+  if (!item.href) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${isActive ? "sf-nav-item--active" : ""}`, href: item.href, children: [
+    isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
+    content
+  ] });
+}
+function SidebarNav({ isFeedbackOpen }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarNavItem, { item, isFeedbackOpen }, item.label)) });
+}
+function SidebarProfileMenu({ user, onFeedback, isFeedbackOpen = false }) {
+  const [isOpen, setIsOpen] = reactExports.useState(false);
   async function handleLogout() {
     const response = await logout();
     window.location.href = response.redirectUrl || "/login/";
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-top", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { className: "sf-sidebar-mark", src: "/static/img/Logo.png", alt: "" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-brand", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "MANAGE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-          "YOU ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "TEAM" })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
-      const isActive = item.active && !isFeedbackOpen;
-      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-      ] });
-      if (!item.href) {
-        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
-      }
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${isActive ? "sf-nav-item--active" : ""}`, href: item.href, children: [
-        isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
-        content
-      ] }, item.label);
-    }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isProfileOpen ? "sf-sidebar-profile--open" : ""}`, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isProfileOpen, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 22, strokeWidth: 1.8 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "button",
-          {
-            className: `sf-sidebar-profile-action ${isFeedbackOpen ? "sf-sidebar-profile-action--active" : ""}`,
-            type: "button",
-            onClick: onFeedback,
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 22, strokeWidth: 1.8 }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit", type: "button", onClick: handleLogout, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 23, strokeWidth: 1.8 }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
-        ] })
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isOpen ? "sf-sidebar-profile--open" : ""}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-actions", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 21, strokeWidth: 1.8 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "button",
         {
-          className: "sf-sidebar-profile-toggle",
+          className: `sf-sidebar-profile-action ${isFeedbackOpen ? "sf-sidebar-profile-action--active" : ""}`,
           type: "button",
-          "aria-expanded": isProfileOpen,
-          "aria-label": isProfileOpen ? "Close profile menu" : "Open profile menu",
-          onClick: () => setIsProfileOpen((value) => !value),
+          onClick: onFeedback,
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "sf-sidebar-profile-arrow", size: 26, strokeWidth: 2.4 })
+            /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 21, strokeWidth: 1.8 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
           ]
         }
-      )
-    ] })
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit", type: "button", onClick: handleLogout, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 22, strokeWidth: 1.8 }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        className: "sf-sidebar-profile-toggle",
+        type: "button",
+        "aria-expanded": isOpen,
+        "aria-label": isOpen ? "Close profile menu" : "Open profile menu",
+        onClick: () => setIsOpen((value) => !value),
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "sf-sidebar-profile-arrow", size: 26, strokeWidth: 2.4 })
+        ]
+      }
+    )
+  ] });
+}
+function SidebarTeamCard() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
+  ] });
+}
+function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = false }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { className: "sf-sidebar", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-content", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarBrand, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarTeamCard, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarNav, { isFeedbackOpen })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SidebarProfileMenu, { user, onFeedback, isFeedbackOpen })
   ] });
 }
 function ScheduleDesktopPage({
