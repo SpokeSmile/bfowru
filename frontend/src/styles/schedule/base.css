@@ -94,10 +94,10 @@
 .sf-bg-glow {
   left: 50%;
   top: -118px;
-  width: 1250px;
+  width: 55%;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.9), rgba(13, 242, 158, 0.3) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
 }
@@ -107,10 +107,10 @@
   position: absolute;
   left: 50%;
   bottom: -140px;
-  width: 900px;
-  height: 250px;
+  width: 55%;
+  height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.24), rgba(13, 242, 158, 0.08) 46%, transparent 76%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.9), rgba(13, 242, 158, 0.3) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
   pointer-events: none;

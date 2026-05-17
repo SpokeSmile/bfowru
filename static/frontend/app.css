@@ -1874,10 +1874,10 @@ textarea {
 .sf-bg-glow {
   left: 50%;
   top: -118px;
-  width: 1250px;
+  width: 55%;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158), rgba(13, 242, 158, 0.25) 44%, transparent 74%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.9), rgba(13, 242, 158, 0.3) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
 }
@@ -1887,10 +1887,10 @@ textarea {
   position: absolute;
   left: 50%;
   bottom: -140px;
-  width: 900px;
-  height: 250px;
+  width: 55%;
+  height: 300px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.24), rgba(13, 242, 158, 0.08) 46%, transparent 76%);
+  background: radial-gradient(ellipse at center, rgba(13, 242, 158, 0.9), rgba(13, 242, 158, 0.3) 44%, transparent 74%);
   filter: blur(120px);
   transform: translateX(-50%);
   pointer-events: none;
@@ -1914,8 +1914,8 @@ textarea {
   height: 100%;
   background-color: #0c0f17;
   background-image:
-    radial-gradient(circle at -35px -24px, rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 12%, transparent 25%),
-    radial-gradient(circle at calc(100% + 132px) calc(100% + 138px), rgba(13, 242, 158, 0.18), rgba(13, 242, 158, 0.08) 18%, transparent 36%),
+    radial-gradient(circle at -35px -24px, rgba(13, 242, 158, 0.3), rgba(13, 242, 158, 0.1) 10%, transparent 38%),
+    radial-gradient(circle at calc(100% + 132px) calc(100% + 138px), rgba(13, 242, 158, 0.1), rgba(13, 242, 158, 0.1) 15%, transparent 40%),
     url("/static/img/tile/TILE_SIDEBAR.png"),
     linear-gradient(180deg, rgba(15, 19, 29, 0.96), rgba(10, 13, 20, 0.98));
   background-position: 0 0, 0 0, 0 0, 0 0;
