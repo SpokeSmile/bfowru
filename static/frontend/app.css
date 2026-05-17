@@ -124,8 +124,8 @@
   border-radius: 10px;
   border: 1px solid rgba(27, 30, 40, 0.98);
   background:
-    radial-gradient(ellipse 48% 34% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
-    radial-gradient(ellipse 48% 34% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%),
+    radial-gradient(ellipse 100% 45% at 50% 0%, rgba(13, 242, 158, 0.18), transparent 62%),
+    radial-gradient(ellipse 100% 45% at 50% 100%, rgba(13, 242, 158, 0.14), transparent 62%),
     #0b0d14;
   color: #ffffff;
   font-family: Rubik, Inter, ui-sans-serif, system-ui, sans-serif;
