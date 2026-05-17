@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   CalendarDays,
+  CalendarCheck2,
   CheckCircle2,
   ChevronRight,
   CircleHelp,
-  ClipboardList,
   Clock3,
   Eye,
   Plus,
@@ -48,6 +48,10 @@ const SLOT_TYPES = [
   },
 ];
 const INACTIVE_PREVIEW_TYPES = new Set(['tentative', 'unavailable']);
+
+function clampMinutes(value) {
+  return Math.max(0, Math.min(1440, value));
+}
 
 function formatHours(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
@@ -101,6 +105,92 @@ function sortSlots(slots) {
   });
 }
 
+function overlapsHour(slot, hour) {
+  const hourStart = hour * 60;
+  const hourEnd = hourStart + 60;
+  const start = clampMinutes(minutesFromSlot(slot, 'startTimeMinutes', 0));
+  const end = clampMinutes(minutesFromSlot(slot, 'endTimeMinutes', 1440));
+  return start < hourEnd && end > hourStart;
+}
+
+function buildTeamPrimeData({ slots, players, currentPlayerId, dayOfWeek }) {
+  const playerIds = new Set(players.map((player) => player.id).filter((playerId) => playerId !== currentPlayerId));
+  const hours = Array.from({ length: 24 }, (_unused, hour) => ({
+    hour,
+    available: new Set(),
+    tentative: new Set(),
+    unavailable: new Set(),
+  }));
+
+  slots.forEach((slot) => {
+    if (slot.dayOfWeek !== dayOfWeek || !playerIds.has(slot.playerId)) return;
+
+    if (slot.slotType === 'full_day_available') {
+      hours.forEach((entry) => entry.available.add(slot.playerId));
+      return;
+    }
+
+    if (slot.slotType === 'tentative') {
+      hours.forEach((entry) => entry.tentative.add(slot.playerId));
+      return;
+    }
+
+    if (slot.slotType === 'unavailable') {
+      hours.forEach((entry) => entry.unavailable.add(slot.playerId));
+      return;
+    }
+
+    if (slot.slotType === 'available') {
+      hours.forEach((entry) => {
+        if (overlapsHour(slot, entry.hour)) entry.available.add(slot.playerId);
+      });
+    }
+  });
+
+  const segments = hours.map((entry) => ({
+    hour: entry.hour,
+    available: entry.available.size,
+    tentative: entry.tentative.size,
+    unavailable: entry.unavailable.size,
+  }));
+  const maxAvailable = Math.max(0, ...segments.map((segment) => segment.available));
+  const maxTentative = Math.max(0, ...segments.map((segment) => segment.tentative));
+  const metricKey = maxAvailable > 0 ? 'available' : 'tentative';
+  const targetCount = metricKey === 'available' ? maxAvailable : maxTentative;
+
+  let bestWindow = null;
+  if (targetCount > 0) {
+    let runStart = null;
+    let bestRun = null;
+
+    segments.forEach((segment, index) => {
+      const isMatch = segment[metricKey] === targetCount;
+      if (isMatch && runStart === null) runStart = index;
+      if ((!isMatch || index === segments.length - 1) && runStart !== null) {
+        const runEnd = isMatch && index === segments.length - 1 ? index + 1 : index;
+        const run = { start: runStart, end: runEnd, length: runEnd - runStart };
+        if (!bestRun || run.length > bestRun.length) bestRun = run;
+        runStart = null;
+      }
+    });
+
+    const startSegment = segments[bestRun.start];
+    bestWindow = {
+      startHour: bestRun.start,
+      endHour: bestRun.end,
+      available: startSegment.available,
+      tentative: startSegment.tentative,
+      isTentativeOnly: metricKey === 'tentative',
+    };
+  }
+
+  return {
+    segments,
+    bestWindow,
+    totalPlayers: playerIds.size,
+  };
+}
+
 function DayChip({ day, isSelected, onClick }) {
   return (
     <button className={`edit-time-day ${isSelected ? 'edit-time-day--active' : ''}`} type="button" onClick={onClick}>
@@ -125,22 +215,61 @@ function SelectBox({ value, options, onChange, ariaLabel }) {
   );
 }
 
-function TimelinePreview({ slotType, timeSlots }) {
+function TimelinePreview({ slotType, timeSlots, teamPrime }) {
   const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
-  const visibleSlots = isInactivePreview
-    ? []
-    : slotType === 'available'
-      ? timeSlots
-      : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  const visibleSlots = slotType === 'available'
+    ? timeSlots
+    : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  const bestWindow = teamPrime.bestWindow;
+  const bestWindowLabel = bestWindow
+    ? `${formatHours(bestWindow.startHour * 60)}-${formatHours(bestWindow.endHour * 60)}`
+    : 'No team data yet';
+  const bestWindowMeta = bestWindow
+    ? bestWindow.isTentativeOnly
+      ? `${bestWindow.tentative}/${teamPrime.totalPlayers} not sure`
+      : `${bestWindow.available}/${teamPrime.totalPlayers} available${bestWindow.tentative ? ` · ${bestWindow.tentative} not sure` : ''}`
+    : 'Ask teammates to add time';
 
   return (
     <div className={`edit-time-preview ${isInactivePreview ? 'edit-time-preview--inactive' : ''}`}>
+      <div className="edit-time-prime-header">
+        <div>
+          <span>{bestWindowMeta}</span>
+        </div>
+        <b>{bestWindowLabel}</b>
+      </div>
       <div className="edit-time-preview-scale">
         {['00:00', '06:00', '12:00', '18:00', '00:00'].map((label) => (
           <span key={label}>{label}</span>
         ))}
       </div>
       <div className="edit-time-preview-track">
+        <div className="edit-time-team-heatmap" aria-hidden="true">
+          {teamPrime.segments.map((segment) => {
+            const strongest = Math.max(segment.available, segment.tentative, segment.unavailable);
+            const color = segment.available
+              ? '13, 242, 158'
+              : segment.tentative
+                ? '245, 183, 89'
+                : segment.unavailable
+                  ? '255, 105, 116'
+                  : '255, 255, 255';
+            const alpha = strongest
+              ? Math.min(0.72, 0.12 + (strongest / Math.max(1, teamPrime.totalPlayers)) * 0.56)
+              : 0.035;
+            return (
+              <span
+                className="edit-time-team-hour"
+                key={segment.hour}
+                style={{
+                  '--team-hour-color': color,
+                  '--team-hour-alpha': alpha,
+                }}
+                title={`${formatHours(segment.hour * 60)} · ${segment.available} available · ${segment.tentative} not sure`}
+              />
+            );
+          })}
+        </div>
         {[0, 1, 2, 3, 4].map((tick) => (
           <span className="edit-time-preview-tick" key={tick} />
         ))}
@@ -151,11 +280,11 @@ function TimelinePreview({ slotType, timeSlots }) {
           const width = Math.min(100 - left, Math.max(8, ((end - start) / 1440) * 100));
           return (
             <span
-              className="edit-time-preview-bar"
+              className={`edit-time-preview-bar edit-time-preview-bar--${slotType}`}
               key={`${slot.startTimeMinutes}-${slot.endTimeMinutes}-${index}`}
               style={{
                 left: `${left}%`,
-                top: `${index % 2 === 0 ? 22 : 102}px`,
+                top: `${index % 2 === 0 ? 72 : 108}px`,
                 width: `${width}%`,
               }}
             />
@@ -193,6 +322,7 @@ export default function EventModal({
   event,
   day,
   days,
+  players = [],
   slots = [],
   currentPlayerId,
   weekStart,
@@ -324,6 +454,12 @@ export default function EventModal({
   const noteLength = Array.from(formState.note).length;
   const hasExistingDaySlots = Boolean((slotsByDay.get(formState.dayOfWeek) || []).length);
   const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(formState.slotType);
+  const teamPrime = useMemo(() => buildTeamPrimeData({
+    slots,
+    players,
+    currentPlayerId,
+    dayOfWeek: formState.dayOfWeek,
+  }), [slots, players, currentPlayerId, formState.dayOfWeek]);
 
   return (
     <motion.div
@@ -441,12 +577,12 @@ export default function EventModal({
           <section className={`edit-time-right-panel ${isInactivePreview ? 'edit-time-right-panel--inactive' : ''}`}>
             <div className="edit-time-section-label">
               <Eye size={25} />
-              <span>VISUAL PREVIEW</span>
+              <span>TEAM PRIME TIME</span>
             </div>
-            <TimelinePreview slotType={formState.slotType} timeSlots={formState.timeSlots} />
+            <TimelinePreview slotType={formState.slotType} timeSlots={formState.timeSlots} teamPrime={teamPrime} />
 
             <div className="edit-time-section-label edit-time-section-label--summary">
-              <ClipboardList size={25} />
+              <CalendarCheck2 size={25} />
               <span>SUMMARY</span>
             </div>
             <Summary slotType={formState.slotType} timeSlots={formState.timeSlots} />

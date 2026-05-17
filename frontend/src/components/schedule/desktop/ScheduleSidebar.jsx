@@ -55,17 +55,6 @@ export default function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = fal
             </a>
           );
         })}
-        <button
-          className={`sf-nav-item ${isFeedbackOpen ? 'sf-nav-item--active' : ''}`}
-          type="button"
-          onClick={onFeedback}
-        >
-          {isFeedbackOpen ? <span className="sf-nav-item-accent" aria-hidden="true" /> : null}
-          <span className="sf-nav-item-surface">
-            <MessageSquareText size={28} strokeWidth={1.8} />
-            <span>Feedback</span>
-          </span>
-        </button>
       </nav>
 
       <div className={`sf-sidebar-profile ${isProfileOpen ? 'sf-sidebar-profile--open' : ''}`}>
@@ -74,6 +63,14 @@ export default function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = fal
             <UserRound size={22} strokeWidth={1.8} />
             <span>Profile</span>
           </a>
+          <button
+            className={`sf-sidebar-profile-action ${isFeedbackOpen ? 'sf-sidebar-profile-action--active' : ''}`}
+            type="button"
+            onClick={onFeedback}
+          >
+            <MessageSquareText size={22} strokeWidth={1.8} />
+            <span>Feedback</span>
+          </button>
           <button className="sf-sidebar-profile-action sf-sidebar-profile-action--exit" type="button" onClick={handleLogout}>
             <LogOut size={23} strokeWidth={1.8} />
             <span>Exit</span>

@@ -148,6 +148,10 @@
   transform: translateX(2px);
 }
 
+.sf-sidebar-profile-action--active {
+  color: #0df29e;
+}
+
 .sf-sidebar-profile-action--exit {
   color: #f20d11;
 }

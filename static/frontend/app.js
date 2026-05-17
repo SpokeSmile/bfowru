@@ -20683,6 +20683,14 @@ const Bug = createLucideIcon("bug", __iconNode$u);
 const __iconNode$t = [
   ["path", { d: "M8 2v4", key: "1cmpym" }],
   ["path", { d: "M16 2v4", key: "4m81vk" }],
+  ["path", { d: "M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8", key: "bce9hv" }],
+  ["path", { d: "M3 10h18", key: "8toen8" }],
+  ["path", { d: "m16 20 2 2 4-4", key: "13tcca" }]
+];
+const CalendarCheck2 = createLucideIcon("calendar-check-2", __iconNode$t);
+const __iconNode$s = [
+  ["path", { d: "M8 2v4", key: "1cmpym" }],
+  ["path", { d: "M16 2v4", key: "4m81vk" }],
   ["rect", { width: "18", height: "18", x: "3", y: "4", rx: "2", key: "1hopcy" }],
   ["path", { d: "M3 10h18", key: "8toen8" }],
   ["path", { d: "M8 14h.01", key: "6423bh" }],
@@ -20692,52 +20700,37 @@ const __iconNode$t = [
   ["path", { d: "M12 18h.01", key: "mhygvu" }],
   ["path", { d: "M16 18h.01", key: "kzsmim" }]
 ];
-const CalendarDays = createLucideIcon("calendar-days", __iconNode$t);
-const __iconNode$s = [
+const CalendarDays = createLucideIcon("calendar-days", __iconNode$s);
+const __iconNode$r = [
   ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16", key: "c24i48" }],
   ["path", { d: "M18 17V9", key: "2bz60n" }],
   ["path", { d: "M13 17V5", key: "1frdt8" }],
   ["path", { d: "M8 17v-3", key: "17ska0" }]
 ];
-const ChartColumn = createLucideIcon("chart-column", __iconNode$s);
-const __iconNode$r = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
-const Check = createLucideIcon("check", __iconNode$r);
-const __iconNode$q = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
-const ChevronRight = createLucideIcon("chevron-right", __iconNode$q);
-const __iconNode$p = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$p);
-const __iconNode$o = [
+const ChartColumn = createLucideIcon("chart-column", __iconNode$r);
+const __iconNode$q = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = createLucideIcon("check", __iconNode$q);
+const __iconNode$p = [["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]];
+const ChevronRight = createLucideIcon("chevron-right", __iconNode$p);
+const __iconNode$o = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$o);
+const __iconNode$n = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const CircleCheck = createLucideIcon("circle-check", __iconNode$o);
-const __iconNode$n = [
+const CircleCheck = createLucideIcon("circle-check", __iconNode$n);
+const __iconNode$m = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3", key: "1u773s" }],
   ["path", { d: "M12 17h.01", key: "p32p05" }]
 ];
-const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$n);
-const __iconNode$m = [
+const CircleQuestionMark = createLucideIcon("circle-question-mark", __iconNode$m);
+const __iconNode$l = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
   ["path", { d: "m9 9 6 6", key: "z0biqf" }]
 ];
-const CircleX = createLucideIcon("circle-x", __iconNode$m);
-const __iconNode$l = [
-  ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1", key: "tgr4d6" }],
-  [
-    "path",
-    {
-      d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",
-      key: "116196"
-    }
-  ],
-  ["path", { d: "M12 11h4", key: "1jrz19" }],
-  ["path", { d: "M12 16h4", key: "n85exb" }],
-  ["path", { d: "M8 11h.01", key: "1dfujw" }],
-  ["path", { d: "M8 16h.01", key: "18s6g9" }]
-];
-const ClipboardList = createLucideIcon("clipboard-list", __iconNode$l);
+const CircleX = createLucideIcon("circle-x", __iconNode$l);
 const __iconNode$k = [
   ["path", { d: "M12 6v6h4", key: "135r8i" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
@@ -21478,6 +21471,9 @@ const SLOT_TYPES = [
   }
 ];
 const INACTIVE_PREVIEW_TYPES = /* @__PURE__ */ new Set(["tentative", "unavailable"]);
+function clampMinutes(value) {
+  return Math.max(0, Math.min(1440, value));
+}
 function formatHours$1(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
@@ -21523,6 +21519,80 @@ function sortSlots(slots) {
     return leftStart - rightStart || left.id - right.id;
   });
 }
+function overlapsHour(slot, hour) {
+  const hourStart = hour * 60;
+  const hourEnd = hourStart + 60;
+  const start = clampMinutes(minutesFromSlot(slot, "startTimeMinutes", 0));
+  const end = clampMinutes(minutesFromSlot(slot, "endTimeMinutes", 1440));
+  return start < hourEnd && end > hourStart;
+}
+function buildTeamPrimeData({ slots, players, currentPlayerId, dayOfWeek }) {
+  const playerIds = new Set(players.map((player) => player.id).filter((playerId) => playerId !== currentPlayerId));
+  const hours = Array.from({ length: 24 }, (_unused, hour) => ({
+    hour,
+    available: /* @__PURE__ */ new Set(),
+    tentative: /* @__PURE__ */ new Set(),
+    unavailable: /* @__PURE__ */ new Set()
+  }));
+  slots.forEach((slot) => {
+    if (slot.dayOfWeek !== dayOfWeek || !playerIds.has(slot.playerId)) return;
+    if (slot.slotType === "full_day_available") {
+      hours.forEach((entry) => entry.available.add(slot.playerId));
+      return;
+    }
+    if (slot.slotType === "tentative") {
+      hours.forEach((entry) => entry.tentative.add(slot.playerId));
+      return;
+    }
+    if (slot.slotType === "unavailable") {
+      hours.forEach((entry) => entry.unavailable.add(slot.playerId));
+      return;
+    }
+    if (slot.slotType === "available") {
+      hours.forEach((entry) => {
+        if (overlapsHour(slot, entry.hour)) entry.available.add(slot.playerId);
+      });
+    }
+  });
+  const segments = hours.map((entry) => ({
+    hour: entry.hour,
+    available: entry.available.size,
+    tentative: entry.tentative.size,
+    unavailable: entry.unavailable.size
+  }));
+  const maxAvailable = Math.max(0, ...segments.map((segment) => segment.available));
+  const maxTentative = Math.max(0, ...segments.map((segment) => segment.tentative));
+  const metricKey = maxAvailable > 0 ? "available" : "tentative";
+  const targetCount = metricKey === "available" ? maxAvailable : maxTentative;
+  let bestWindow = null;
+  if (targetCount > 0) {
+    let runStart = null;
+    let bestRun = null;
+    segments.forEach((segment, index) => {
+      const isMatch2 = segment[metricKey] === targetCount;
+      if (isMatch2 && runStart === null) runStart = index;
+      if ((!isMatch2 || index === segments.length - 1) && runStart !== null) {
+        const runEnd = isMatch2 && index === segments.length - 1 ? index + 1 : index;
+        const run = { start: runStart, end: runEnd, length: runEnd - runStart };
+        if (!bestRun || run.length > bestRun.length) bestRun = run;
+        runStart = null;
+      }
+    });
+    const startSegment = segments[bestRun.start];
+    bestWindow = {
+      startHour: bestRun.start,
+      endHour: bestRun.end,
+      available: startSegment.available,
+      tentative: startSegment.tentative,
+      isTentativeOnly: metricKey === "tentative"
+    };
+  }
+  return {
+    segments,
+    bestWindow,
+    totalPlayers: playerIds.size
+  };
+}
 function DayChip({ day, isSelected, onClick }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: `edit-time-day ${isSelected ? "edit-time-day--active" : ""}`, type: "button", onClick, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: DAY_LABELS[day.value] || day.label.slice(0, 3).toUpperCase() }),
@@ -21535,12 +21605,36 @@ function SelectBox({ value, options, onChange, ariaLabel }) {
     /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 16 })
   ] });
 }
-function TimelinePreview({ slotType, timeSlots }) {
+function TimelinePreview({ slotType, timeSlots, teamPrime }) {
   const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(slotType);
-  const visibleSlots = isInactivePreview ? [] : slotType === "available" ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  const visibleSlots = slotType === "available" ? timeSlots : [{ startTimeMinutes: 0, endTimeMinutes: 1440 }];
+  const bestWindow = teamPrime.bestWindow;
+  const bestWindowLabel = bestWindow ? `${formatHours$1(bestWindow.startHour * 60)}-${formatHours$1(bestWindow.endHour * 60)}` : "No team data yet";
+  const bestWindowMeta = bestWindow ? bestWindow.isTentativeOnly ? `${bestWindow.tentative}/${teamPrime.totalPlayers} not sure` : `${bestWindow.available}/${teamPrime.totalPlayers} available${bestWindow.tentative ? ` · ${bestWindow.tentative} not sure` : ""}` : "Ask teammates to add time";
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `edit-time-preview ${isInactivePreview ? "edit-time-preview--inactive" : ""}`, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-prime-header", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: bestWindowMeta }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: bestWindowLabel })
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-preview-scale", children: ["00:00", "06:00", "12:00", "18:00", "00:00"].map((label) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: label }, label)) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-preview-track", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "edit-time-team-heatmap", "aria-hidden": "true", children: teamPrime.segments.map((segment) => {
+        const strongest = Math.max(segment.available, segment.tentative, segment.unavailable);
+        const color2 = segment.available ? "13, 242, 158" : segment.tentative ? "245, 183, 89" : segment.unavailable ? "255, 105, 116" : "255, 255, 255";
+        const alpha2 = strongest ? Math.min(0.72, 0.12 + strongest / Math.max(1, teamPrime.totalPlayers) * 0.56) : 0.035;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "edit-time-team-hour",
+            style: {
+              "--team-hour-color": color2,
+              "--team-hour-alpha": alpha2
+            },
+            title: `${formatHours$1(segment.hour * 60)} · ${segment.available} available · ${segment.tentative} not sure`
+          },
+          segment.hour
+        );
+      }) }),
       [0, 1, 2, 3, 4].map((tick) => /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "edit-time-preview-tick" }, tick)),
       visibleSlots.map((slot, index) => {
         const start = Math.max(0, Math.min(1440, slot.startTimeMinutes));
@@ -21550,10 +21644,10 @@ function TimelinePreview({ slotType, timeSlots }) {
         return /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
           {
-            className: "edit-time-preview-bar",
+            className: `edit-time-preview-bar edit-time-preview-bar--${slotType}`,
             style: {
               left: `${left}%`,
-              top: `${index % 2 === 0 ? 22 : 102}px`,
+              top: `${index % 2 === 0 ? 72 : 108}px`,
               width: `${width}%`
             }
           },
@@ -21582,6 +21676,7 @@ function EventModal({
   event,
   day,
   days,
+  players = [],
   slots = [],
   currentPlayerId,
   weekStart,
@@ -21698,6 +21793,12 @@ function EventModal({
   const noteLength = Array.from(formState.note).length;
   const hasExistingDaySlots = Boolean((slotsByDay.get(formState.dayOfWeek) || []).length);
   const isInactivePreview = INACTIVE_PREVIEW_TYPES.has(formState.slotType);
+  const teamPrime = reactExports.useMemo(() => buildTeamPrimeData({
+    slots,
+    players,
+    currentPlayerId,
+    dayOfWeek: formState.dayOfWeek
+  }), [slots, players, currentPlayerId, formState.dayOfWeek]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     motion.div,
     {
@@ -21805,11 +21906,11 @@ function EventModal({
               /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: `edit-time-right-panel ${isInactivePreview ? "edit-time-right-panel--inactive" : ""}`, children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { size: 25 }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "VISUAL PREVIEW" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM PRIME TIME" })
                 ] }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(TimelinePreview, { slotType: formState.slotType, timeSlots: formState.timeSlots }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(TimelinePreview, { slotType: formState.slotType, timeSlots: formState.timeSlots, teamPrime }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "edit-time-section-label edit-time-section-label--summary", children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(ClipboardList, { size: 25 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(CalendarCheck2, { size: 25 }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "SUMMARY" })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(Summary, { slotType: formState.slotType, timeSlots: formState.timeSlots })
@@ -47537,43 +47638,38 @@ function ScheduleSidebar({ user, onFeedback, isFeedbackOpen = false }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "TEAM" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "LOGO" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: [
-      NAV_ITEMS.map((item) => {
-        const isActive = item.active && !isFeedbackOpen;
-        const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-        ] });
-        if (!item.href) {
-          return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
-        }
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${isActive ? "sf-nav-item--active" : ""}`, href: item.href, children: [
-          isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
-          content
-        ] }, item.label);
-      }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: `sf-nav-item ${isFeedbackOpen ? "sf-nav-item--active" : ""}`,
-          type: "button",
-          onClick: onFeedback,
-          children: [
-            isFeedbackOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 28, strokeWidth: 1.8 }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
-            ] })
-          ]
-        }
-      )
-    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "sf-nav", "aria-label": "Schedule navigation", children: NAV_ITEMS.map((item) => {
+      const isActive = item.active && !isFeedbackOpen;
+      const content = /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "sf-nav-item-surface", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `/static/img/schedule/icons/${item.icon}`, alt: "" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
+      ] });
+      if (!item.href) {
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "sf-nav-item", type: "button", disabled: true, children: content }, item.label);
+      }
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: `sf-nav-item ${isActive ? "sf-nav-item--active" : ""}`, href: item.href, children: [
+        isActive ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sf-nav-item-accent", "aria-hidden": "true" }) : null,
+        content
+      ] }, item.label);
+    }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isProfileOpen ? "sf-sidebar-profile--open" : ""}`, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isProfileOpen, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 22, strokeWidth: 1.8 }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
         ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: `sf-sidebar-profile-action ${isFeedbackOpen ? "sf-sidebar-profile-action--active" : ""}`,
+            type: "button",
+            onClick: onFeedback,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 22, strokeWidth: 1.8 }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
+            ]
+          }
+        ),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit", type: "button", onClick: handleLogout, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 23, strokeWidth: 1.8 }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
@@ -48763,6 +48859,7 @@ function App() {
         event: slotModal.event,
         day: slotModal.day,
         days: data.days,
+        players: data.players,
         slots: data.slots,
         currentPlayerId: data.user.playerId,
         weekStart: data.selectedWeekStart,

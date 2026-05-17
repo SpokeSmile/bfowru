@@ -366,6 +366,7 @@ export default function App() {
             event={slotModal.event}
             day={slotModal.day}
             days={data.days}
+            players={data.players}
             slots={data.slots}
             currentPlayerId={data.user.playerId}
             weekStart={data.selectedWeekStart}
