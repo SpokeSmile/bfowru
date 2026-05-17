@@ -161,6 +161,21 @@
   transform: translateX(2px);
 }
 
+.sf-sidebar-profile--animating .sf-sidebar-profile-actions {
+  pointer-events: none;
+}
+
+.sf-sidebar-profile--animating .sf-sidebar-profile-action:hover,
+.sf-sidebar-profile-action:disabled:hover,
+.sf-sidebar-profile-action[aria-disabled="true"]:hover {
+  color: inherit;
+  transform: none;
+}
+
+.sf-sidebar-profile-action:disabled {
+  cursor: default;
+}
+
 .sf-sidebar-profile-action--active {
   color: #0df29e;
 }

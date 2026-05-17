@@ -47648,52 +47648,97 @@ function SidebarNav({ isFeedbackOpen }) {
 }
 function SidebarProfileMenu({ user, onFeedback, isFeedbackOpen = false }) {
   const [isOpen, setIsOpen] = reactExports.useState(false);
+  const [isAnimating, setIsAnimating] = reactExports.useState(false);
   async function handleLogout() {
+    if (isAnimating) return;
     const response = await logout();
     window.location.href = response.redirectUrl || "/login/";
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `sf-sidebar-profile ${isOpen ? "sf-sidebar-profile--open" : ""}`, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-actions", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { className: "sf-sidebar-profile-action", href: "/profile/", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 21, strokeWidth: 1.8 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "button",
-        {
-          className: `sf-sidebar-profile-action ${isFeedbackOpen ? "sf-sidebar-profile-action--active" : ""}`,
-          type: "button",
-          onClick: onFeedback,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 21, strokeWidth: 1.8 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit", type: "button", onClick: handleLogout, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 22, strokeWidth: 1.8 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "button",
-      {
-        className: "sf-sidebar-profile-toggle",
-        type: "button",
-        "aria-expanded": isOpen,
-        "aria-label": isOpen ? "Close profile menu" : "Open profile menu",
-        onClick: () => setIsOpen((value) => !value),
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "sf-sidebar-profile-arrow", size: 26, strokeWidth: 2.4 })
-        ]
-      }
-    )
-  ] });
+  function handleFeedback() {
+    if (isAnimating) return;
+    onFeedback();
+  }
+  function handleProfileClick(event) {
+    if (isAnimating) event.preventDefault();
+  }
+  function toggleProfile() {
+    setIsAnimating(true);
+    setIsOpen((value) => !value);
+  }
+  function handleTransitionEnd(event) {
+    if (event.target === event.currentTarget && event.propertyName === "height") {
+      setIsAnimating(false);
+    }
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: `sf-sidebar-profile ${isOpen ? "sf-sidebar-profile--open" : ""} ${isAnimating ? "sf-sidebar-profile--animating" : ""}`,
+      onTransitionEnd: handleTransitionEnd,
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-panel", "aria-hidden": !isOpen, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-sidebar-profile-actions", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "a",
+            {
+              className: "sf-sidebar-profile-action",
+              href: "/profile/",
+              "aria-disabled": isAnimating,
+              tabIndex: isAnimating ? -1 : void 0,
+              onClick: handleProfileClick,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(UserRound, { size: 21, strokeWidth: 1.8 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Profile" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              className: `sf-sidebar-profile-action ${isFeedbackOpen ? "sf-sidebar-profile-action--active" : ""}`,
+              type: "button",
+              disabled: isAnimating,
+              onClick: handleFeedback,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquareText, { size: 21, strokeWidth: 1.8 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Feedback" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              className: "sf-sidebar-profile-action sf-sidebar-profile-action--exit",
+              type: "button",
+              disabled: isAnimating,
+              onClick: handleLogout,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { size: 22, strokeWidth: 1.8 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Exit" })
+              ]
+            }
+          )
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "button",
+          {
+            className: "sf-sidebar-profile-toggle",
+            type: "button",
+            "aria-expanded": isOpen,
+            "aria-label": isOpen ? "Close profile menu" : "Open profile menu",
+            onClick: toggleProfile,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Avatar, { src: user.avatarUrl, alt: user.username, fallbackLabel: user.username, className: "sf-sidebar-avatar" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-name", children: user.username }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "sf-sidebar-profile-subtitle", children: "Team TWIK" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { className: "sf-sidebar-profile-arrow", size: 26, strokeWidth: 2.4 })
+            ]
+          }
+        )
+      ]
+    }
+  );
 }
 function SidebarTeamCard() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sf-team-logo-box", children: [
